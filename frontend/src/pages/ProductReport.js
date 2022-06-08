@@ -139,9 +139,9 @@ export default function ProductReport() {
                     <Typography variant="h4" gutterBottom>
                         Product Report
                     </Typography>
-                    <Button variant="contained" component={RouterLink} to="#" startIcon={<Iconify icon="eva:plus-fill" />}>
+                    {/* <Button variant="contained" component={RouterLink} to="#" startIcon={<Iconify icon="eva:plus-fill" />}>
                         Add Product
-                    </Button>
+                    </Button> */}
                 </Stack>
 
                 <Card>

@@ -135,9 +135,9 @@ export default function CategoryReport() {
                     <Typography variant="h4" gutterBottom>
                         Category Report
                     </Typography>
-                    <Button variant="contained" component={RouterLink} to="#" startIcon={<Iconify icon="eva:plus-fill" />}>
+                    {/* <Button variant="contained" component={RouterLink} to="#" startIcon={<Iconify icon="eva:plus-fill" />}>
                         Add Category
-                    </Button>
+                    </Button> */}
                 </Stack>
 
                 <Card>

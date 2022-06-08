@@ -62,7 +62,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
       <Box sx={{ px: 2.5, py: 3, display: 'inline-flex' }}>
         <Link underline="none" component={RouterLink} to="#">
           <AccountStyle>
-            <Avatar src={account.photoURL} alt="photoURL" />
+            {/* <Avatar src={account.photoURL} alt="photoURL" /> */}
             <Box sx={{ ml: 5, mr: 3 }}>
               <Typography variant="h3" sx={{ color: 'text.primary', align: 'center' }}>
                 OMS

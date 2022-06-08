@@ -13,8 +13,10 @@ import DashboardApp from './pages/DashboardApp';
 
 
 import CustomerReport from './pages/CustomerReport';
+import AddCustomer from './pages/AddCustomer';
 import CategoryReport from './pages/CategoryReport';
 import ProductReport from './pages/ProductReport';
+
 
 // ----------------------------------------------------------------------
 
@@ -29,6 +31,7 @@ export default function Router() {
         // { path: 'products', element: <Products /> },
         // { path: 'blog', element: <Blog /> },
         { path: 'customer_report', element: <CustomerReport /> },
+        { path: 'add_customer', element: <AddCustomer /> },
         { path: 'category_report', element: <CategoryReport /> },
         { path: 'product_report', element: <ProductReport /> },
       ],

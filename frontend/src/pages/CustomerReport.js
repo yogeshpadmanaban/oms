@@ -142,7 +142,7 @@ export default function CustomerReport() {
           <Typography variant="h4" gutterBottom>
             Customer Report
           </Typography>
-          <Button variant="contained" component={RouterLink} to="#" startIcon={<Iconify icon="eva:plus-fill" />}>
+          <Button variant="contained" component={RouterLink} to="/dashboard/add_customer" startIcon={<Iconify icon="eva:plus-fill" />}>
             Add Customer
           </Button>
         </Stack>

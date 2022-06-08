@@ -11,21 +11,21 @@ import account from '../../_mock/account';
 // ----------------------------------------------------------------------
 
 const MENU_OPTIONS = [
-  {
-    label: 'Home',
-    icon: 'eva:home-fill',
-    linkTo: '/',
-  },
+  // {
+  //   label: 'Home',
+  //   icon: 'eva:home-fill',
+  //   linkTo: '/',
+  // },
   {
     label: 'Profile',
     icon: 'eva:person-fill',
     linkTo: '#',
   },
-  {
-    label: 'Settings',
-    icon: 'eva:settings-2-fill',
-    linkTo: '#',
-  },
+  // {
+  //   label: 'Settings',
+  //   icon: 'eva:settings-2-fill',
+  //   linkTo: '#',
+  // },
 ];
 
 // ----------------------------------------------------------------------
@@ -101,7 +101,7 @@ export default function AccountPopover() {
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
-        <MenuItem onClick={handleClose} sx={{ m: 1 }}>
+        <MenuItem to={'/login'} component={RouterLink} onClick={handleClose} sx={{ m: 1 }}>
           Logout
         </MenuItem>
       </MenuPopover>
