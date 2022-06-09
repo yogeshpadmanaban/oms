@@ -19,9 +19,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-// Route::group(['prefix' => 'users', 'middleware' => 'CORS'], function ($router) {
-Route::post('/register', [UserController::class, 'register'])->name('register.user');
-Route::post('/login', 'App\Http\Controllers\UserController@login');
-Route::get('/view-profile', [UserController::class, 'viewProfile'])->name('profile.user');
-Route::get('/logout', [UserController::class, 'logout'])->name('logout.user');
-// });
+Route::group(['prefix' => 'users', 'middleware' => 'CORS'], function ($router) {
+    Route::post('/register', [UserController::class, 'register'])->name('register.user');
+    Route::post('/login', 'App\Http\Controllers\UserController@login');
+    Route::get('/view-profile', [UserController::class, 'viewProfile'])->name('profile.user');
+    Route::get('/logout', [UserController::class, 'logout'])->name('logout.user');
+});
