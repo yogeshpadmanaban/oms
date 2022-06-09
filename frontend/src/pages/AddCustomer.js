@@ -79,10 +79,6 @@ export default function AddCustomer() {
                         <Typography variant="h4" gutterBottom>
                             Add Customer
                         </Typography>
-
-                        <Button variant="contained" color="error" component={RouterLink} to="/dashboard/customer_report">
-                            Cancel
-                        </Button>
                     </Stack>
 
                     <Card>
@@ -94,7 +90,8 @@ export default function AddCustomer() {
                                         fullWidth
                                         type="file"
                                         onSelect={uploadfile}
-                                        // label="Profile Picture"
+                                        InputLabelProps={{ shrink: true }}
+                                        label="Profile Picture"
                                         {...getFieldProps('profilePicture')}
                                         error={Boolean(touched.profilePicture && errors.profilePicture)}
                                         helperText={touched.profilePicture && errors.profilePicture}
@@ -160,16 +157,27 @@ export default function AddCustomer() {
                                     <TextField
                                         fullWidth
                                         type="file"
-                                        // label="Profile Picture"
+                                        label="Other Upload"
+                                        InputLabelProps={{ shrink: true }}
                                         {...getFieldProps('otherUpload')}
                                         error={Boolean(touched.otherUpload && errors.otherUpload)}
                                         helperText={touched.otherUpload && errors.otherUpload}
                                     />
 
+                                    <Stack direction="row" alignItems="center" justifyContent="center" mb={5}>
+
+                                        <LoadingButton size="medium" type="submit" variant="contained" loading={isSubmitting}> Submit </LoadingButton>
+
+                                        <Button sx={{ m: 2 }} variant="contained" color="error" component={RouterLink} to="/dashboard/customer_report">
+                                            Cancel
+                                        </Button>
+
+                                    </Stack>
 
                                 </Stack>
 
-                                <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}> Submit </LoadingButton>
+
+
 
                             </Form>
                         </FormikProvider>
