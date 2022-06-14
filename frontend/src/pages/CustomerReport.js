@@ -32,14 +32,14 @@ import { getData } from '../Services/apiservice';
 
 
 const TABLE_HEAD = [
-  { id: 'profilePic', label: 'Profile Picture', alignRight: false },
-  { id: 'customerName', label: 'Customer Name', alignRight: false },
+  { id: 'profile_picture', label: 'Profile Picture', alignRight: false },
+  { id: 'name', label: 'Customer Name', alignRight: false },
   { id: 'address', label: 'Address', alignRight: false },
   { id: 'city', label: 'City', alignRight: false },
   { id: 'state', label: 'State', alignRight: false },
-  { id: 'gst', label: 'Gst', alignRight: false },
-  { id: 'pan', label: 'Pan', alignRight: false },
-  { id: 'otherupload', label: 'Otherupload', alignRight: false },
+  { id: 'gst_no', label: 'Gst', alignRight: false },
+  { id: 'pan_no', label: 'Pan', alignRight: false },
+  { id: 'other_upload', label: 'Otherupload', alignRight: false },
   { id: 'status', label: 'Status', alignRight: false },
   { id: '', label: 'Action', alignRight: false },
 ];
@@ -47,7 +47,7 @@ const TABLE_HEAD = [
 
 function applySortFilter(array, query) {
   if (query) {
-    return filter(array, (_user) => _user.customerName.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
   }
   else {
     return array;
@@ -65,20 +65,24 @@ export default function CustomerReport() {
 
   const [order, setOrder] = useState('asc');  // asc || dsc
 
-  const [orderBy, setOrderBy] = useState('customerName'); // By Default CustomerName
+  const [orderBy, setOrderBy] = useState('customer_id'); // By Default customer_id
 
-  const [filterName, setFilterName] = useState(''); // search filter name set and it's fun
+  const [filterName, setFilterName] = useState(''); // search filter customer_id set and it's fun
 
   const [rowsPerPage, setRowsPerPage] = useState(5);  // setrowsPerPage
 
-  const [userList, setuserList] = useState([]);
+  const [customerList, setCustomerList] = useState([]);
 
   useEffect(async () => {
-    let data = await getData('customerReport');
-    console.log("sfsdfsdfsdfsdf", data)
-    setuserList(data);
+    await getCustomerRecord();
   }, []);
 
+
+  const getCustomerRecord = async () => {
+    let data = await getData('customer_details');
+    console.log("sfsdfsdfsdfsdf", data)
+    setCustomerList(data.rows);
+  }
 
   // On Table head sort (sort, sortBy)
   const handleRequestSort = (event, property) => {
@@ -90,7 +94,7 @@ export default function CustomerReport() {
   // all checkbox Click
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = userList.map((n) => n.customerName);
+      const newSelecteds = customerList.map((n) => n.customer_id);
       setSelected(newSelecteds);
       return;
     }
@@ -98,11 +102,11 @@ export default function CustomerReport() {
   };
 
   // Single checkbox Click
-  const handleClick = (customerName) => {
-    const selectedIndex = selected.indexOf(customerName);
+  const handleClick = (customer_id) => {
+    const selectedIndex = selected.indexOf(customer_id);
     let newSelected = [];
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, customerName);
+      newSelected = newSelected.concat(selected, customer_id);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -118,6 +122,26 @@ export default function CustomerReport() {
     setPage(newPage);
   };
 
+  // On Delete
+  const ondeleteClick = async (event) => {
+    if (selected && selected.length > 0) {
+      console.log("isDelete Click");
+      let apiUrl;
+      if (selected.length == 1) {
+        apiUrl = 'customer_delete/' + [selected];
+      } else {
+        apiUrl = 'customer_multi_delete/' + [selected];
+      }
+      console.log("apiurl", apiUrl);
+      // let responseData = await getData(apiUrl);
+      // console.log("sfsdfsdfsdfsdf", responseData);
+      // if (responseData) {
+      //   await getCustomerRecord();
+      // }
+
+    }
+  };
+
   // On ChangeRowsperPage
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(Number(event.target.value));
@@ -129,9 +153,9 @@ export default function CustomerReport() {
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - userList.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - customerList.length) : 0;
 
-  const filteredUsers = applySortFilter(userList, filterName);
+  const filteredUsers = applySortFilter(customerList, filterName);
 
   const isUserNotFound = !filteredUsers || filteredUsers.length === 0;
 
@@ -157,7 +181,7 @@ export default function CustomerReport() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={userList ? userList.length : 0}
+                  rowCount={customerList ? customerList.length : 0}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
@@ -166,36 +190,44 @@ export default function CustomerReport() {
                   {filteredUsers &&
                     filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
 
-                      const { id, profilePic, customerName, address, city, state, gst, pan, otherupload, status } = row;
-                      const isItemSelected = selected.indexOf(customerName) !== -1;
+                      const { customer_id, profile_picture, name, address, city, state, gst_no, pan_no, other_upload, status } = row;
+                      const isItemSelected = selected.indexOf(customer_id) !== -1;
+
+                      if (isItemSelected == true) {
+                        console.log("selected", selected);
+                      }
 
                       return (
                         <TableRow
                           hover
-                          key={id}
+                          key={customer_id}
                           tabIndex={-1}
                           role="checkbox"
                           selected={isItemSelected}
                           aria-checked={isItemSelected}
                         >
                           <TableCell padding="checkbox">
-                            <Checkbox checked={isItemSelected} onChange={(event) => handleClick(customerName)} />
+                            <Checkbox checked={isItemSelected} onChange={(event) => handleClick(customer_id)} />
                           </TableCell>
                           <TableCell component="th" scope="row" padding="none">
                             <Stack direction="row" alignItems="center" spacing={2}>
-                              <Avatar alt={customerName} src={profilePic} />
+                              <Avatar alt={name} src={profile_picture} />
                             </Stack>
                           </TableCell>
-                          <TableCell align="left">{customerName}</TableCell>
+                          <TableCell align="left">{name}</TableCell>
                           <TableCell align="left">{address}</TableCell>
                           <TableCell align="left">{city}</TableCell>
                           <TableCell align="left">{state}</TableCell>
-                          <TableCell align="left">{gst}</TableCell>
-                          <TableCell align="left">{pan}</TableCell>
-                          <TableCell align="left">{otherupload}</TableCell>
+                          <TableCell align="left">{gst_no}</TableCell>
+                          <TableCell align="left">{pan_no}</TableCell>
+                          <TableCell align="left">{other_upload}</TableCell>
                           <TableCell align="left">{status ? 'Yes' : 'No'}</TableCell>
                           <TableCell align="right">
-                            <UserMoreMenu />
+                            <UserMoreMenu
+                              url={'/dashboard/edit_customer/' + customer_id}
+                              selectedList={selected}
+                              onDelete={ondeleteClick}
+                            />
                           </TableCell>
                         </TableRow>
                       );
@@ -228,7 +260,7 @@ export default function CustomerReport() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={userList ? userList.length : 0}
+            count={customerList ? customerList.length : 0}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

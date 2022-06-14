@@ -1,125 +1,90 @@
 import axios from "axios";
 let token = 'sdfsdfsdf';
 
-const baseUrl = 'http://localhost:8000/api/v1/';
+const baseUrl = 'http://localhost:8000/api/admin/';
 
 const config = {
     headers: { Authorization: `Bearer ${token}` }
 };
 
 
-const customerReport = [
-    {
-        id: '1',
-        profilePic: `/static/mock-images/avatars/avatar_.jpg`,
-        customerName: 'Customer Name 1',
-        address: 'Sample Address',
-        city: 'Sample City',
-        state: 'Sample State ',
-        gst: 'Sample gst',
-        pan: 'Sample Pan',
-        otherupload: '-',
-        status: true,
-        Action: ''
-    },
+const customerReport = {
+    total: 7,
+    recordsFiltered: 7,
+    rows: [
+        {
+            customer_id: 1,
+            profile_picture: `/static/mock-images/avatars/avatar_.jpg`,
+            name: 'Customer Name 1',
+            address: 'Sample Address',
+            city: 'Sample City',
+            state: 'Sample State ',
+            gst_no: 'Sample gst',
+            pan_no: 'Sample Pan',
+            other_upload: '-',
+            status: true,
+            Action: ''
+        },
+        {
+            customer_id: 2,
+            profile_picture: `/static/mock-images/avatars/avatar_.jpg`,
+            name: 'Customer Name 1',
+            address: 'Sample Address',
+            city: 'Sample City',
+            state: 'Sample State ',
+            gst_no: 'Sample gst',
+            pan_no: 'Sample Pan',
+            other_upload: '-',
+            status: true,
+            Action: ''
+        },
+        {
+            customer_id: 3,
+            profile_picture: `/static/mock-images/avatars/avatar_.jpg`,
+            name: 'Customer Name 1',
+            address: 'Sample Address',
+            city: 'Sample City',
+            state: 'Sample State ',
+            gst_no: 'Sample gst',
+            pan_no: 'Sample Pan',
+            other_upload: '-',
+            status: true,
+            Action: ''
+        },
+        {
+            customer_id: 4,
+            profile_picture: `/static/mock-images/avatars/avatar_.jpg`,
+            name: 'Customer Name 1',
+            address: 'Sample Address',
+            city: 'Sample City',
+            state: 'Sample State ',
+            gst_no: 'Sample gst',
+            pan_no: 'Sample Pan',
+            other_upload: '-',
+            status: true,
+            Action: ''
+        },
+    ]
 
-    {
-        id: '2',
-        profilePic: `/static/mock-images/avatars/avatar_.jpg`,
-        customerName: 'Customer Name 2',
-        address: 'Sample Address 2',
-        city: 'Sample City 2',
-        state: 'Sample State 2 ',
-        gst: 'Sample gst 2',
-        pan: 'Sample Pan 2',
-        otherupload: '-',
-        status: false,
-        Action: ''
-    },
-    {
-        id: '3',
-        profilePic: `/static/mock-images/avatars/avatar_.jpg`,
-        customerName: 'Customer Name 1',
-        address: 'Sample Address',
-        city: 'Sample City',
-        state: 'Sample State ',
-        gst: 'Sample gst',
-        pan: 'Sample Pan',
-        otherupload: '-',
-        status: true,
-        Action: ''
-    },
+};
 
-    {
-        id: '4',
-        profilePic: `/static/mock-images/avatars/avatar_.jpg`,
-        customerName: 'Customer Name 2',
-        address: 'Sample Address 2',
-        city: 'Sample City 2',
-        state: 'Sample State 2 ',
-        gst: 'Sample gst 2',
-        pan: 'Sample Pan 2',
-        otherupload: '-',
-        status: false,
-        Action: ''
+const editCustomerRecord = {
+    "customer": {
+        "customer_id": 23,
+        "profile_picture": "/static/mock-images/avatars/avatar_.jpg",
+        "name": "gokul",
+        "address": "anna nagar",
+        "city": "chennai",
+        "cus_state": "TN",
+        "gst_no": "234433424334",
+        "pan_no": "3423434ER676",
+        "other_upload": "/static/mock-images/avatars/avatar_.jpg",
     },
-    {
-        id: '5',
-        profilePic: `/static/mock-images/avatars/avatar_.jpg`,
-        customerName: 'Customer Name 1',
-        address: 'Sample Address',
-        city: 'Sample City',
-        state: 'Sample State ',
-        gst: 'Sample gst',
-        pan: 'Sample Pan',
-        otherupload: '-',
-        status: true,
-        Action: ''
-    },
-
-    {
-        id: '6',
-        profilePic: `/static/mock-images/avatars/avatar_.jpg`,
-        customerName: 'Customer Name 2',
-        address: 'Sample Address 2',
-        city: 'Sample City 2',
-        state: 'Sample State 2 ',
-        gst: 'Sample gst 2',
-        pan: 'Sample Pan 2',
-        otherupload: '-',
-        status: false,
-        Action: ''
-    },
-    {
-        id: '7',
-        profilePic: `/static/mock-images/avatars/avatar_.jpg`,
-        customerName: 'Customer Name 1',
-        address: 'Sample Address',
-        city: 'Sample City',
-        state: 'Sample State ',
-        gst: 'Sample gst',
-        pan: 'Sample Pan',
-        otherupload: '-',
-        status: true,
-        Action: ''
-    },
-
-    {
-        id: '8',
-        profilePic: `/static/mock-images/avatars/avatar_.jpg`,
-        customerName: 'Customer Name 2',
-        address: 'Sample Address 2',
-        city: 'Sample City 2',
-        state: 'Sample State 2 ',
-        gst: 'Sample gst 2',
-        pan: 'Sample Pan 2',
-        otherupload: '-',
-        status: false,
-        Action: ''
-    }
+    "menu": "customer_list"
+}
 
 
-];
+
 
 const categoryReport = [
     {
@@ -170,36 +135,51 @@ const productReport = [
 
 ];
 
+// export async function getData(apiName) {
+//     console.log("apiName", apiName);
+//     // let apiUrl = baseUrl + apiName;
+//     let apiUrl = 'https://randomuser.me/api/';
+//     let responseData = await axios.get(apiUrl).then((response) => {
+//         if (apiName == 'customer_details') {
+//             return customerReport;
+//         } else if (apiName == 'categoryReport') {
+//             return categoryReport;
+//         } else if (apiName == 'productReport') {
+//             return productReport;
+//         }
+//     }, (error) => {
+//         return error;
+//     });
+//     return responseData;
+// }
+
 export async function getData(apiName) {
     console.log("apiName", apiName);
     // let apiUrl = baseUrl + apiName;
     let apiUrl = 'https://randomuser.me/api/';
-    let responseData = await axios.get(apiUrl).then((response) => {
-        if (apiName == 'categoryReport') {
-            return categoryReport;
-        } else if (apiName == 'customerReport') {
-            return customerReport;
-        } else if (apiName == 'productReport') {
-            return productReport;
-        }
-    }, (error) => {
-        return error;
-    });
-    return responseData;
+    if (apiName == 'customer_details') {
+        return customerReport;
+    } else if (apiName == 'edit_customer/1') {
+        return editCustomerRecord;
+    } else if (apiName == 'categoryReport') {
+        return categoryReport;
+    } else if (apiName == 'productReport') {
+        return productReport;
+    }
 }
 
 
 export async function postData(apiName, params) {
     console.log("apiName", apiName);
     console.log("params", params);
-    // let apiUrl = baseUrl + apiName;
-    let apiUrl = 'https://randomuser.me/api/';
+    let apiUrl = baseUrl + apiName;
     return params;
 
-    // let responseData = await axios.post(apiUrl, params, config).then((response) => {
-    //     return customerReport;
-    // }, (error) => {
-    //     return customerReport;
-    // });
-    // return responseData;
+    let responseData = await axios.post(apiUrl, params, config).then((response) => {
+        return customerReport;
+    }, (error) => {
+        return customerReport;
+    });
+    return responseData;
+
 }
