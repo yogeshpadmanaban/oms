@@ -96,13 +96,13 @@ export default function CustomerForm() {
 
 
     return (
-        <Page title={params && params.id ? "Add Customer" : "Edit Customer"}>
+        <Page title={params && params.id ? "Edit Customer" : "Add Customer"}>
             <RootStyle>
                 <Container>
 
                     <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
                         <Typography variant="h4" gutterBottom>
-                            Add Customer
+                            {params && params.id ? "Edit Customer" : "Add Customer"}
                         </Typography>
                     </Stack>
 

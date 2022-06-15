@@ -61,7 +61,7 @@ const customerReport = {
             gst_no: 'Sample gst',
             pan_no: 'Sample Pan',
             other_upload: '-',
-            status: true,
+            status: false,
             Action: ''
         },
     ]

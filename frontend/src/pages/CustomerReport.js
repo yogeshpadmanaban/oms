@@ -125,14 +125,15 @@ export default function CustomerReport() {
   // On Delete
   const ondeleteClick = async (event) => {
     if (selected && selected.length > 0) {
-      console.log("isDelete Click");
-      let apiUrl;
+      let apiUrl, selectedArray = [];
       if (selected.length == 1) {
-        apiUrl = 'customer_delete/' + [selected];
+        apiUrl = 'customer_delete/' + selected;
       } else {
-        apiUrl = 'customer_multi_delete/' + [selected];
+        selectedArray = selected;
+        apiUrl = 'customer_multi_delete/' + selectedArray;
       }
-      console.log("apiurl", apiUrl);
+      console.log("apiUrl", apiUrl);
+
       // let responseData = await getData(apiUrl);
       // console.log("sfsdfsdfsdfsdf", responseData);
       // if (responseData) {
@@ -152,6 +153,35 @@ export default function CustomerReport() {
   const handleFilterByName = (event) => {
     setFilterName(event.target.value);
   };
+
+  // onStatus Change
+  const handlestatusChange = (customerId) => {
+
+    let apiUrl, selectedArray = [];
+    console.log("customerId", customerId);
+    
+    if (selected && selected.length > 1) {
+      selectedArray = selected;
+      apiUrl = 'customer_bulk_status_change/' + selectedArray;
+    }
+
+    else if (selected && selected.length == 1) {
+      apiUrl = 'customer_change_status/' + selected;
+    }
+
+    else {
+      apiUrl = 'customer_change_status/' + customerId;
+    }
+
+    console.log("apiUrl", apiUrl);
+    // let responseData = await getData(apiUrl);
+    // console.log("sfsdfsdfsdfsdf", responseData);
+    // if (responseData) {
+    //   await getCustomerRecord();
+    // }
+
+
+  }
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - customerList.length) : 0;
 
@@ -221,7 +251,15 @@ export default function CustomerReport() {
                           <TableCell align="left">{gst_no}</TableCell>
                           <TableCell align="left">{pan_no}</TableCell>
                           <TableCell align="left">{other_upload}</TableCell>
-                          <TableCell align="left">{status ? 'Yes' : 'No'}</TableCell>
+
+                          <TableCell align="left" onClick={() => handlestatusChange(customer_id)}>
+                            <Iconify
+                              icon={status ? 'typcn:tick' :
+                                'charm:cross'}
+                              sx={{ width: 25, height: 25, ml: 1 }}
+                            />
+                          </TableCell>
+
                           <TableCell align="right">
                             <UserMoreMenu
                               url={'/dashboard/edit_customer/' + customer_id}
