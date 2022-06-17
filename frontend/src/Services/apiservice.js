@@ -137,20 +137,21 @@ const productReport = [
 
 // export async function getData(apiName) {
 //     console.log("apiName", apiName);
-//     // let apiUrl = baseUrl + apiName;
-//     let apiUrl = 'https://randomuser.me/api/';
+//     let apiUrl = baseUrl + apiName;
+//     // let apiUrl = 'https://randomuser.me/api/';
 //     let responseData = await axios.get(apiUrl).then((response) => {
-//         if (apiName == 'customer_details') {
-//             return customerReport;
-//         } else if (apiName == 'categoryReport') {
-//             return categoryReport;
-//         } else if (apiName == 'productReport') {
-//             return productReport;
-//         }
+//         // if (apiName == 'customer_details') {
+//         //     return customerReport;
+//         // } else if (apiName == 'categoryReport') {
+//         //     return categoryReport;
+//         // } else if (apiName == 'productReport') {
+//         //     return productReport;
+//         // }
+//         console.log(response.data.rows);
+//         return response.data.rows;
 //     }, (error) => {
 //         return error;
 //     });
-//     return responseData;
 // }
 
 export async function getData(apiName) {

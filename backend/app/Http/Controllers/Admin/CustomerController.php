@@ -17,24 +17,26 @@ class CustomerController extends Controller
 	public function listing(Request $request)
 	{
 		$data['menu']="customer_list";
-		return view('admin.customer.list',['menu'=>$data['menu']]);
+		return $data['menu'];
 	}
 
 	//to fetch customer data
 	public function fetch_customer_details(Request $request)
 	{
-		$sort=$_REQUEST['order'];
-		$search=(isset($_REQUEST['search']))?$_REQUEST['search']:'';
-		$limit=(int)$_REQUEST['limit'];
-		$offset=(int)$_REQUEST['offset'];
+		// $sort=$_REQUEST['order'];
+		// $search=(isset($_REQUEST['search']))?$_REQUEST['search']:'';
+		// $limit=(int)$_REQUEST['limit'];
+		// $offset=(int)$_REQUEST['offset'];
 
 		$result =CustomerDetails::where('deleted_at',NULL)->get(); // to get except soft-deleted data
 		$data['totalRecords']=$result->count();
-
-		$result_two=CustomerDetails::limit($limit)->offset($offset)
-					->where('name','LIKE','%'.$search.'%')
-					->where('deleted_at',NULL) // to get except soft-deleted data
-					->orderBy('customer_id',$sort)
+		$result_two=CustomerDetails::
+		
+		
+		// limit($limit)->offset($offset)
+					// ->where('name','LIKE','%'.$search.'%')
+					where('deleted_at',NULL) // to get except soft-deleted data
+					// ->orderBy('customer_id',$sort)
 					->get();
 
 		$data['records']=$result_two;
@@ -56,6 +58,8 @@ class CustomerController extends Controller
 				$file_name = end($file_name_arr);
 
 				$finfo = pathinfo($data['records'][$key]->other_upload);
+
+				$other_upload = '';
 
 				if($finfo['extension'] == 'pdf')
 				{
@@ -95,6 +99,7 @@ class CustomerController extends Controller
 		}
 		$data['table_data']='{"total":'.intval( $data['totalRecords'] ).',"recordsFiltered":'.intval( $data['num_rows'] ).',"rows":'.json_encode($data['records']).'}';
         $data['menu']="product_list";
+		
 		echo $data['table_data'];
 		exit();
 	}
@@ -111,19 +116,19 @@ class CustomerController extends Controller
 	{
 		$data['customer']=CustomerDetails::where('customer_id',base64_decode($request->id))->first();	
 		$data['menu']="customer_list";
-		return view('admin.customer.create',['customer'=>$data['customer'],'menu'=>$data['menu']]);
+		return ['customer'=>$data['customer'],'menu'=>$data['menu']];
 	}
 
 	//to change status of particular id
 	public function status_change($id)
 	{
-		$product_status=CustomerDetails::find(base64_decode($id));
+		$product_status=CustomerDetails::find($id);
 		if($product_status->status=='1')
 			$status='0';
 		else
 			$status='1';
 
-		$row_data=CustomerDetails::find(base64_decode($id));
+		$row_data=CustomerDetails::find($id);
 		$row_data->status=$status;
 		$row_data->save();
 		
@@ -136,8 +141,8 @@ class CustomerController extends Controller
 	//to delete data of particular id
 	public function delete($id)
 	{
-		CustomerDetails::where('customer_id',base64_decode($id))->update(['status' => '2']);	
-		CustomerDetails::find(base64_decode($id))->delete();
+		CustomerDetails::where('customer_id',$id)->update(['status' => '2']);	
+		CustomerDetails::find($id)->delete();
 		return response()->json([
 		'success' => 'Record has been deleted successfully!'
 		]);
@@ -208,7 +213,7 @@ class CustomerController extends Controller
 	}
 
 	//to store customer details 
-	public function store(Request $request)
+	public function store_customer(Request $request)
 	{
 		$customer_id=$request['hdn_id'];
 
@@ -255,9 +260,9 @@ class CustomerController extends Controller
 			'other_upload'=>$other_upl
 		];
 
-		CustomerDetails::updateOrCreate(['customer_id'=>$customer_id],$customer_data); 
-		Session::flash('session_msg','Customer data updated successfully!');
-		return redirect()->to('admin/customer_listing');	
+		$res = CustomerDetails::updateOrCreate(['customer_id'=>$customer_id],$customer_data); 
+		// Session::flash('session_msg','Customer data updated successfully!');
+		return $res;	
 	
 	}
 }
