@@ -83,9 +83,6 @@ const editCustomerRecord = {
     "menu": "customer_list"
 }
 
-
-
-
 const categoryReport = [
     {
         id: '1',
@@ -135,52 +132,50 @@ const productReport = [
 
 ];
 
-// export async function getData(apiName) {
-//     console.log("apiName", apiName);
-//     let apiUrl = baseUrl + apiName;
-//     // let apiUrl = 'https://randomuser.me/api/';
-//     let responseData = await axios.get(apiUrl).then((response) => {
-//         // if (apiName == 'customer_details') {
-//         //     return customerReport;
-//         // } else if (apiName == 'categoryReport') {
-//         //     return categoryReport;
-//         // } else if (apiName == 'productReport') {
-//         //     return productReport;
-//         // }
-//         console.log(response.data.rows);
-//         return response.data.rows;
-//     }, (error) => {
-//         return error;
-//     });
-// }
-
 export async function getData(apiName) {
     console.log("apiName", apiName);
-    // let apiUrl = baseUrl + apiName;
-    let apiUrl = 'https://randomuser.me/api/';
-    if (apiName == 'customer_details') {
-        return customerReport;
-    } else if (apiName == 'edit_customer/1') {
-        return editCustomerRecord;
-    } else if (apiName == 'categoryReport') {
+    // let apiUrl = 'https://randomuser.me/api/';
+    if (apiName == 'categoryReport') {
         return categoryReport;
-    } else if (apiName == 'productReport') {
+    }
+    else if (apiName == 'productReport') {
         return productReport;
+    }
+    else{
+        let apiUrl = baseUrl + apiName;
+        let responseData = await axios.get(apiUrl).then((response) => {
+            return response;
+        },
+        (error) => {
+            return error;
+        });
+        return responseData;  
     }
 }
 
+// export async function getData(apiName) {
+//     console.log("apiName", apiName);
+//     // let apiUrl = baseUrl + apiName;
+//     let apiUrl = 'https://randomuser.me/api/';
+//     if (apiName == 'customer_details') {
+//         return customerReport;
+//     } else if (apiName == 'edit_customer/1') {
+//         return editCustomerRecord;
+//     } else if (apiName == 'categoryReport') {
+//         return categoryReport;
+//     } else if (apiName == 'productReport') {
+//         return productReport;
+//     }
+// }
+
 
 export async function postData(apiName, params) {
-    console.log("apiName", apiName);
-    console.log("params", params);
     let apiUrl = baseUrl + apiName;
-    return params;
-
     let responseData = await axios.post(apiUrl, params, config).then((response) => {
-        return customerReport;
-    }, (error) => {
-        return customerReport;
+        return response;
+    },
+    (error) => {
+       return error;
     });
-    return responseData;
-
+    return responseData;  
 }

@@ -2,6 +2,7 @@ import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
 import React, { useEffect, useState } from "react";
 import { Link as RouterLink } from 'react-router-dom';
+import {decode as base64_decode, encode as base64_encode} from 'base-64';
 
 // material
 import {
@@ -28,7 +29,7 @@ import SearchNotFound from '../components/SearchNotFound'; // Common Page
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/customerReport'; // Sepearte page
 
 // apiservice
-import { getData } from '../Services/apiservice';
+import { postData, getData } from '../Services/apiservice';
 
 
 const TABLE_HEAD = [
@@ -79,9 +80,8 @@ export default function CustomerReport() {
 
 
   const getCustomerRecord = async () => {
-    let data = await getData('customer_details');
-    console.log("sfsdfsdfsdfsdf", data)
-    setCustomerList(data.rows);
+    let response = await getData('customer_details');
+    setCustomerList(response.data.rows);
   }
 
   // On Table head sort (sort, sortBy)
@@ -134,12 +134,11 @@ export default function CustomerReport() {
       }
       console.log("apiUrl", apiUrl);
 
-      // let responseData = await getData(apiUrl);
-      // console.log("sfsdfsdfsdfsdf", responseData);
-      // if (responseData) {
-      //   await getCustomerRecord();
-      // }
-
+      let responseData = await postData(apiUrl);
+      console.log("sfsdfsdfsdfsdf", responseData);
+      if (responseData) {
+        await getCustomerRecord();
+      }
     }
   };
 
@@ -262,7 +261,7 @@ export default function CustomerReport() {
 
                           <TableCell align="right">
                             <UserMoreMenu
-                              url={'/dashboard/edit_customer/' + customer_id}
+                              url={'/dashboard/edit_customer/' + base64_encode(customer_id)}
                               selectedList={selected}
                               onDelete={ondeleteClick}
                             />

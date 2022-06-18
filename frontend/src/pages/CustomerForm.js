@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Link as RouterLink, useNavigate, useParams } from 'react-router-dom';
 import { useFormik, Form, FormikProvider } from 'formik';
 import { LoadingButton } from '@mui/lab';
+import {decode as base64_decode, encode as base64_encode} from 'base-64';
 
 // @mui
 import { styled } from '@mui/material/styles';
@@ -28,14 +29,12 @@ const RootStyle = styled('div')(({ theme }) => ({
 export default function CustomerForm() {
 
     const uploadfile = (event) => {
-        console.log("event", event);
+        // console.log("event", event);
     };
 
 
     const navigate = useNavigate();
     const params = useParams();
-
-    console.log("params", params);
 
     const ustomerformSchema = Yup.object().shape({
         customer_id: '',
@@ -63,12 +62,15 @@ export default function CustomerForm() {
         },
         validationSchema: ustomerformSchema,
         onSubmit: async (values) => {
-            console.log("values", values);
-            let response = await postData('store_custom', values);
-            console.log("response", response);
-            // if (response) {
-            //     navigate('/dashboard/customer_report', { replace: true });
-            // }
+            console.log({ 
+                fileName: values.profile_picture.name, 
+                type: values.profile_picture.type,
+                 size: `${values.profile_picture.size} bytes`
+   })
+            let response = await postData('store_customer', values);
+            if (response) {
+                navigate('/dashboard/customer_report', { replace: true });
+            }
         },
     });
 
@@ -76,9 +78,9 @@ export default function CustomerForm() {
         if (params && params.id) {
             let url = 'edit_customer/' + params.id;
             let responseData = await getData(url);
-            console.log("sfsdfsdfsdfsdf", responseData)
-            if (responseData && responseData.customer) {
-                const { name, address, city, state, gst_no, pan_no, profile_picture, other_upload, customer_id } = responseData.customer;
+            console.log("sfsdfsdfsdfsdf", responseData.data.customer)
+            if (responseData && responseData.data.customer) {
+                const { name, address, city, state, gst_no, pan_no, profile_picture, other_upload, customer_id } = responseData.data.customer;
                 formik.setFieldValue("customer_id", customer_id);
                 formik.setFieldValue("name", name);
                 formik.setFieldValue("address", address);
@@ -94,7 +96,6 @@ export default function CustomerForm() {
 
     const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps, setFieldValue } = formik;
 
-
     return (
         <Page title={params && params.id ? "Edit Customer" : "Add Customer"}>
             <RootStyle>
@@ -108,7 +109,7 @@ export default function CustomerForm() {
 
                     <Card>
                         <FormikProvider value={formik}>
-                            <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
+                            <Form autoComplete="off" encType="multipart/form-data" noValidate onSubmit={handleSubmit}>
                                 <Stack spacing={3} sx={{ my: 4 }}>
 
                                     {/* <TextField

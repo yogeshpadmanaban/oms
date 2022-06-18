@@ -48,9 +48,6 @@ function applySortFilter(array, query) {
     }
 }
 
-
-
-
 export default function CategoryReport() {
 
     const [page, setPage] = useState(0); // By default set page number

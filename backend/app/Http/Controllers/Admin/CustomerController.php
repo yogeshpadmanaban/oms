@@ -215,7 +215,7 @@ class CustomerController extends Controller
 	//to store customer details 
 	public function store_customer(Request $request)
 	{
-		$customer_id=$request['hdn_id'];
+		$customer_id=$request['customer_id'];
 
 		$image=$other_upl=null;
 
@@ -251,10 +251,10 @@ class CustomerController extends Controller
 
 		$customer_data = [
 			'profile_picture'=>$image,
-			'name'=>$request->input('cus_name'),
-			'address'=>$request->input('cus_addr'),
-			'city'=>$request->input('cus_city'),
-			'state'=>$request->input('cus_state'),
+			'name'=>$request->input('name'),
+			'address'=>$request->input('address'),
+			'city'=>$request->input('city'),
+			'state'=>$request->input('state'),
 			'gst_no'=>$request->input('gst_no'),
 			'pan_no'=>$request->input('pan_no'),
 			'other_upload'=>$other_upl
