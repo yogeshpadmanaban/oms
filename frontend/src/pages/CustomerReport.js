@@ -1,8 +1,7 @@
 import { filter } from 'lodash';
-import { sentenceCase } from 'change-case';
 import React, { useEffect, useState } from "react";
 import { Link as RouterLink } from 'react-router-dom';
-import {decode as base64_decode, encode as base64_encode} from 'base-64';
+import { decode as base64_decode, encode as base64_encode } from 'base-64';
 
 // material
 import {
@@ -81,7 +80,10 @@ export default function CustomerReport() {
 
   const getCustomerRecord = async () => {
     let response = await getData('customer_details');
-    setCustomerList(response.data.rows);
+    console.log(response);
+    if (response && response.rows) {
+      setCustomerList(response.rows);
+    }
   }
 
   // On Table head sort (sort, sortBy)
@@ -123,23 +125,30 @@ export default function CustomerReport() {
   };
 
   // On Delete
-  const ondeleteClick = async (event) => {
-    if (selected && selected.length > 0) {
-      let apiUrl, selectedArray = [];
-      if (selected.length == 1) {
+  const ondeleteClick = async (customerId) => {
+
+    let apiUrl, selectedArray = [];
+    if (selected && selected.length > 1 && customerId) {
+      selectedArray = selected;
+      apiUrl = 'customer_multi_delete/' + selectedArray;
+    }
+    else {
+      if (selected && selected.length > 0) {
         apiUrl = 'customer_delete/' + selected;
       } else {
-        selectedArray = selected;
-        apiUrl = 'customer_multi_delete/' + selectedArray;
-      }
-      console.log("apiUrl", apiUrl);
-
-      let responseData = await postData(apiUrl);
-      console.log("sfsdfsdfsdfsdf", responseData);
-      if (responseData) {
-        await getCustomerRecord();
+        apiUrl = 'customer_delete/' + customerId;
       }
     }
+
+    if (apiUrl) {
+      console.log("apiUrl", apiUrl);
+      // let responseData = await postData(apiUrl);
+      // console.log("sfsdfsdfsdfsdf", responseData);
+      // if (responseData) {
+      //   await getCustomerRecord();
+      // }
+    }
+
   };
 
   // On ChangeRowsperPage
@@ -157,28 +166,27 @@ export default function CustomerReport() {
   const handlestatusChange = (customerId) => {
 
     let apiUrl, selectedArray = [];
-    console.log("customerId", customerId);
-    
-    if (selected && selected.length > 1) {
+
+    if (selected && selected.length > 1 && customerId) {
       selectedArray = selected;
       apiUrl = 'customer_bulk_status_change/' + selectedArray;
     }
-
-    else if (selected && selected.length == 1) {
-      apiUrl = 'customer_change_status/' + selected;
-    }
-
     else {
-      apiUrl = 'customer_change_status/' + customerId;
+      if (selected && selected.length > 0) {
+        apiUrl = 'customer_change_status/' + selected;
+      } else {
+        apiUrl = 'customer_change_status/' + customerId;
+      }
     }
 
-    console.log("apiUrl", apiUrl);
-    // let responseData = await getData(apiUrl);
-    // console.log("sfsdfsdfsdfsdf", responseData);
-    // if (responseData) {
-    //   await getCustomerRecord();
-    // }
-
+    if (apiUrl) {
+      console.log("apiUrl", apiUrl);
+      // let responseData = await postData(apiUrl);
+      // console.log("sfsdfsdfsdfsdf", responseData);
+      // if (responseData) {
+      //   await getCustomerRecord();
+      // }
+    }
 
   }
 
@@ -186,7 +194,7 @@ export default function CustomerReport() {
 
   const filteredUsers = applySortFilter(customerList, filterName);
 
-  const isUserNotFound = !filteredUsers || filteredUsers.length === 0;
+  const isDataNotFound = !filteredUsers || filteredUsers.length === 0;
 
   return (
     <Page title="Customer Report">
@@ -201,7 +209,8 @@ export default function CustomerReport() {
         </Stack>
 
         <Card>
-          <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
+          <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} 
+          onDelete={ondeleteClick} onstausChange={handlestatusChange}/>
 
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
@@ -264,6 +273,7 @@ export default function CustomerReport() {
                               url={'/dashboard/edit_customer/' + base64_encode(customer_id)}
                               selectedList={selected}
                               onDelete={ondeleteClick}
+                              customer_id={customer_id}
                             />
                           </TableCell>
                         </TableRow>
@@ -277,10 +287,10 @@ export default function CustomerReport() {
                 </TableBody>
 
                 {/* Not found page */}
-                {isUserNotFound && (
+                {isDataNotFound && (
                   <TableBody>
                     <TableRow>
-                      <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
+                      <TableCell align="center" colSpan={10} sx={{ py: 3 }}>
                         <SearchNotFound searchQuery={filterName} />
                       </TableCell>
                     </TableRow>

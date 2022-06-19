@@ -10,12 +10,14 @@ import Iconify from '../../../components/Iconify';
 
 UserMoreMenu.propTypes = {
   url: PropTypes.string,
-  onDelete: PropTypes.func
+  onDelete: PropTypes.func,
+  customer_id: PropTypes.number
 };
 
 export default function UserMoreMenu({
   url,
-  onDelete
+  onDelete,
+  customer_id
 }) {
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -36,7 +38,7 @@ export default function UserMoreMenu({
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
-        <MenuItem sx={{ color: 'text.secondary' }} onClick={onDelete}>
+        <MenuItem sx={{ color: 'text.secondary' }} onClick={() => onDelete(customer_id)}>
           <ListItemIcon>
             <Iconify icon="eva:trash-2-outline" width={24} height={24} />
           </ListItemIcon>

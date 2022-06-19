@@ -1,5 +1,6 @@
 import axios from "axios";
-let token = 'sdfsdfsdf';
+
+let token = localStorage.getItem("token");
 
 const baseUrl = 'http://localhost:8000/api/admin/';
 
@@ -135,21 +136,26 @@ const productReport = [
 export async function getData(apiName) {
     console.log("apiName", apiName);
     // let apiUrl = 'https://randomuser.me/api/';
+
     if (apiName == 'categoryReport') {
         return categoryReport;
     }
+
     else if (apiName == 'productReport') {
         return productReport;
     }
-    else{
+    else if (apiName == 'customer_details') {
+        return customerReport;
+    }
+    else {
         let apiUrl = baseUrl + apiName;
         let responseData = await axios.get(apiUrl).then((response) => {
             return response;
         },
-        (error) => {
-            return error;
-        });
-        return responseData;  
+            (error) => {
+                return error;
+            });
+        return responseData;
     }
 }
 
@@ -170,12 +176,15 @@ export async function getData(apiName) {
 
 
 export async function postData(apiName, params) {
+    if (apiName == "login") {
+        return 'sampleToken';
+    }
     let apiUrl = baseUrl + apiName;
     let responseData = await axios.post(apiUrl, params, config).then((response) => {
         return response;
     },
-    (error) => {
-       return error;
-    });
-    return responseData;  
+        (error) => {
+            return error;
+        });
+    return responseData;
 }

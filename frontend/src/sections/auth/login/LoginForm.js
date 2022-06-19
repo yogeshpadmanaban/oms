@@ -34,6 +34,7 @@ export default function LoginForm() {
       let response = await postData('login', values);
       console.log("response", response);
       if (response) {
+        localStorage.setItem("token", response)
         navigate('/dashboard/app', { replace: true });
       }
     },
