@@ -31,10 +31,10 @@ export default function LoginForm() {
     validationSchema: LoginSchema,
     onSubmit: async (values) => {
       console.log("values", values);
-      let response = await postData('login', values);
+      let response = await postData('login/admin', values);
       console.log("response", response);
-      if (response) {
-        localStorage.setItem("token", response)
+      if (response.data.token) {
+        localStorage.setItem("token", response.data.token)
         navigate('/dashboard/app', { replace: true });
       }
     },

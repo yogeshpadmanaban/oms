@@ -122,19 +122,20 @@ class CustomerController extends Controller
 	//to change status of particular id
 	public function status_change($id)
 	{
-		$product_status=CustomerDetails::find($id);
-		if($product_status->status=='1')
+		$customer_id = CustomerDetails::find($id);
+		// dd($customer_id);
+		if($customer_id->status=='1')
 			$status='0';
 		else
 			$status='1';
 
-		// $row_data=CustomerDetails::find($id);
-		// $row_data->status=$status;
-		$row_data = "test";
+		$row_data=CustomerDetails::find($id);
+		$row_data->status=$status;
+		$row_data->save();
 		
 		return response()->json([
-		'success' => 'status changed successfully!',
-		'status'=>$row_data
+			'success' => 'status changed successfully!',
+			'status'=>$row_data
 		]);
 	}
 
@@ -173,8 +174,8 @@ class CustomerController extends Controller
 		$data_len=count($data);
 		for($i=0; $i<$data_len; $i++)
 		{
-			$product_status=CustomerDetails::find($data[$i]);
-			if($product_status->status=='1')
+			$customer_id = CustomerDetails::find($data[$i]);
+			if($customer_id->status=='1')
 				$status='0';
 			else
 				$status='1';
@@ -219,6 +220,8 @@ class CustomerController extends Controller
 		$customer_id=$request['customer_id'];
 
 		$image=$other_upl=null;
+
+		// dd($request['profile_picture.name']);	
 
 		if($request->file('profile_picture'))
 		{

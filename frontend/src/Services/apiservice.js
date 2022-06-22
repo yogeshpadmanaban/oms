@@ -2,7 +2,7 @@ import axios from "axios";
 
 let token = localStorage.getItem("token");
 
-const baseUrl = 'http://localhost:8000/api/admin/';
+var baseUrl = 'http://localhost:8000/api/admin/';
 
 const config = {
     headers: { Authorization: `Bearer ${token}` }
@@ -176,8 +176,8 @@ export async function getData(apiName) {
 
 
 export async function postData(apiName, params) {
-    if (apiName == "login") {
-        return 'sampleToken';
+    if (apiName == "login/admin") {
+       var baseUrl = 'http://localhost:8000/api/';
     }
     let apiUrl = baseUrl + apiName;
     let responseData = await axios.post(apiUrl, params, config).then((response) => {

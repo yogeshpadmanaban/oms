@@ -97,7 +97,7 @@ class LoginController extends Controller
             return $res;
         }
         else{
-            return back()->withErrors([
+            return ([
             'message' => 'The email or password is incorrect, please try again'
             ]);
         }

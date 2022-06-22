@@ -2,6 +2,8 @@ import { filter } from 'lodash';
 import React, { useEffect, useState } from "react";
 import { Link as RouterLink } from 'react-router-dom';
 import { decode as base64_decode, encode as base64_encode } from 'base-64';
+import swal from 'sweetalert'; // sweetalert
+import { ToastContainer, toast } from 'react-toastify';
 
 // material
 import {
@@ -19,11 +21,6 @@ import {
   TableContainer,
   TablePagination,
 } from '@mui/material';
-
-import swal from 'sweetalert'; // sweetalert
-import { ToastContainer, toast } from 'react-toastify';
-
-
 
 // components
 import Page from '../components/Page';
@@ -58,9 +55,6 @@ function applySortFilter(array, query) {
     return array;
   }
 }
-
-
-
 
 export default function CustomerReport() {
 
@@ -135,7 +129,7 @@ export default function CustomerReport() {
     let apiUrl, selectedArray = [];
     if (selected && selected.length > 1 && customerId) {
       selectedArray = selected;
-      apiUrl = 'customer_multi_delete/' + selectedArray;
+      apiUrl = 'customer_multi_delete/' + '['+selectedArray+']';
     }
     else {
       if (selected && selected.length > 0) {
@@ -144,38 +138,24 @@ export default function CustomerReport() {
         apiUrl = 'customer_delete/' + customerId;
       }
     }
-
-    if (apiUrl) {
-<<<<<<< HEAD
-      // console.log("apiUrl", apiUrl);
-      let responseData = await postData(apiUrl);
-      if (responseData) {
-        await getCustomerRecord();
+    swal({
+      title: "Are you sure you want to delete?",
+      text: "Once deleted, you will not be able to recover!",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+    .then(async (willDelete) => {
+      if (willDelete) {
+        let responseData = await postData(apiUrl)
+        if (responseData) {
+          toast.success("Deleted Successfully");
+          await getCustomerRecord();
+        } else {
+          toast.error("Oops ! Somewithing wen wrong");
+        }
       }
-=======
-      console.log("apiUrl", apiUrl);
-
-      swal({
-        title: "Are you sure you want to delete?",
-        text: "Once deleted, you will not be able to recover!",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
-      })
-        .then(async (willDelete) => {
-          if (willDelete) {
-            let responseData = await postData(apiUrl)
-            if (responseData) {
-              toast.success("Deleted Successfully");
-              await getCustomerRecord();
-            } else {
-              toast.error("Oops ! Somewithing wen wrong");
-            }
-          }
-        });
->>>>>>> 2f3d976f9d4e239373de5fadf3602db6e113c8f9
-    }
-
+    });
   };
 
   // On ChangeRowsperPage
@@ -190,17 +170,13 @@ export default function CustomerReport() {
   };
 
   // onStatus Change
-<<<<<<< HEAD
-  const onstatusChange = (customerId) => {
+  const onstatusChange = async (customerId) => {
 
-=======
-  const handlestatusChange = (customerId) => {
->>>>>>> 2f3d976f9d4e239373de5fadf3602db6e113c8f9
     let apiUrl, selectedArray = [];
 
     if (selected && selected.length > 1 && customerId) {
       selectedArray = selected;
-      apiUrl = 'customer_bulk_status_change/' + selectedArray;
+      apiUrl = 'customer_bulk_status_change/' + '['+selectedArray+']';
     }
     else {
       if (selected && selected.length > 0) {
@@ -209,43 +185,24 @@ export default function CustomerReport() {
         apiUrl = 'customer_change_status/' + customerId;
       }
     }
-
-    if (apiUrl) {
-      console.log("apiUrl", apiUrl);
-<<<<<<< HEAD
-      let responseData = await postData(apiUrl);
-      console.log("sfsdfsdfsdfsdf", responseData);
-      if (responseData) {
-        await getCustomerRecord();
+    swal({
+      title: "Are you sure you want to change status ?",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+    .then(async (willchangeStatus) => {
+      if (willchangeStatus) {
+        let responseData = await postData(apiUrl);
+        if (responseData) {
+          toast.success("Status Changed Successfully");
+          await getCustomerRecord();
+        } else {
+          toast.error("Oops ! Somewithing wen wrong");
+        }
       }
-=======
-
-      swal({
-        title: "Are you sure you want to change status ?",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
-      })
-        .then(async (willchangeStatus) => {
-          if (willchangeStatus) {
-            let responseData = await postData(apiUrl);
-            console.log("sfsdfsdfsdfsdf", responseData);
-            if (responseData) {
-              toast.success("Status Changed Successfully");
-              await getCustomerRecord();
-            } else {
-              toast.error("Oops ! Somewithing wen wrong");
-            }
-          }
-        });
->>>>>>> 2f3d976f9d4e239373de5fadf3602db6e113c8f9
-    }
-
+    });
   }
-
-
-
-
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - customerList.length) : 0;
 
@@ -266,13 +223,8 @@ export default function CustomerReport() {
         </Stack>
 
         <Card>
-<<<<<<< HEAD
           <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} 
           onDelete={ondeleteClick} onstausChange={onstatusChange}/>
-=======
-          <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName}
-            onDelete={ondeleteClick} onstausChange={handlestatusChange} />
->>>>>>> 2f3d976f9d4e239373de5fadf3602db6e113c8f9
 
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>

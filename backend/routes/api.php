@@ -20,18 +20,21 @@ use App\Http\Controllers\Auth\LoginController;
 //     return $request->user();
 // });
 
-Route::any('/login', function () {
-    return redirect('login/admin');
-});
+// Route::any('/login', function () {
+//     return redirect('login/admin');
+// });
 
-$login_url = array('login_admin'=>'/login/admin');
+// $login_url = array('login_admin'=>'/login/admin');
 
-foreach ($login_url as $key => $value) {
-	Route::get($value, [LoginController::class,'showLoginForm'])->name($key);
-	Route::post($value, [LoginController::class,'login'])->name('login.submit');
-}
+// foreach ($login_url as $key => $value) {
+// 	Route::get($value, [LoginController::class,'showLoginForm'])->name($key);
+// 	Route::post($value, [LoginController::class,'login'])->name('login.submit');
+// }
 
-// Route::group(['middleware' => 'CORS'], function ($router) {
+// Route::get('/login/admin', [LoginController::class,'showLoginForm'])->name('login_admin');
+Route::post('/login/admin', [LoginController::class,'login'])->name('login.submit');
+
+Route::group(['middleware' => 'CORS'], function () {
 
     // Route::get('/admin/customer_listing', [CustomerController::class, 'listing']);
     Route::get('/admin/add_customer',  [CustomerController::class, 'create']);
@@ -54,4 +57,4 @@ foreach ($login_url as $key => $value) {
     Route::post('/admin/category_change_status/{id}', [CategoryController::class, 'status_change']);
     Route::post('/admin/category_bulk_status_change/{data}', [CategoryController::class, 'bulk_status_change']);
     Route::post('/admin/category_multi_delete/{id}', [CategoryController::class, 'multiple_delete']);
-// });
+});

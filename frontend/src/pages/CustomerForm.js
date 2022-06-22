@@ -5,6 +5,7 @@ import { useFormik, Form, FormikProvider } from 'formik';
 import { LoadingButton } from '@mui/lab';
 import { decode as base64_decode, encode as base64_encode } from 'base-64';
 
+
 // @mui
 import { styled } from '@mui/material/styles';
 
@@ -62,13 +63,13 @@ export default function CustomerForm() {
         },
         validationSchema: ustomerformSchema,
         onSubmit: async (values) => {
-            console.log("values", values);
-            console.log({
-                fileName: values.profile_picture.name,
-                type: values.profile_picture.type,
-                size: `${values.profile_picture.size} bytes`,
+            // console.log("values", values);
+            // console.log({
+            //     fileName: values.profile_picture.name,
+            //     type: values.profile_picture.type,
+            //     size: `${values.profile_picture.size} bytes`,
 
-            })
+            // })
             let response = await postData('store_customer', values);
             if (response) {
                 navigate('/dashboard/customer_report', { replace: true });
