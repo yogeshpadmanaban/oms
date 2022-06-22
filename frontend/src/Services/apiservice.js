@@ -176,8 +176,12 @@ export async function getData(apiName) {
 
 
 export async function postData(apiName, params) {
+    console.log(apiName);
     if (apiName == "login/admin") {
        var baseUrl = 'http://localhost:8000/api/';
+    }
+    else{
+        var baseUrl = 'http://localhost:8000/api/admin/';
     }
     let apiUrl = baseUrl + apiName;
     let responseData = await axios.post(apiUrl, params, config).then((response) => {

@@ -39,14 +39,18 @@ export default function CustomerForm() {
 
     const ustomerformSchema = Yup.object().shape({
         customer_id: '',
-        profile_picture: Yup.string().required('Profile Picture is required'),
+//         profile_picture: Yup.object().shape({
+//             files: Yup.array()
+//               .nullable()
+//               .required('VALIDATION_FIELD_REQUIRED')
+// }),
         name: Yup.string().required('Name is required'),
         address: Yup.string().required('Address is required'),
         city: Yup.string().required('City is required'),
         state: Yup.string().required('State is required'),
         gst_no: Yup.string().required('Gst is required'),
         pan_no: Yup.string().required('Pan is required'),
-        other_upload: '',
+        // other_upload: '',
     });
 
     const formik = useFormik({
@@ -58,8 +62,8 @@ export default function CustomerForm() {
             state: '',
             gst_no: '',
             pan_no: '',
-            profile_picture: '',
-            other_upload: ''
+            // profile_picture: '',
+            // other_upload: ''
         },
         validationSchema: ustomerformSchema,
         onSubmit: async (values) => {
@@ -126,10 +130,8 @@ export default function CustomerForm() {
                                         helperText={touched.profile_picture && errors.profile_picture}
                                     /> */}
 
-                                    <label>
-                                        Profile Picture
-                                    </label>
-                                    <input id="file" name="profile_picture" type="file" onChange={(event) => {
+                                    <label style={{'margin-top':"inherit",'color':"#637381",'padding-left':'15px'}}>Profile Picture</label>
+                                    <TextField id="file" name="profile_picture" type="file" onChange={(event) => {
                                         setFieldValue("profile_picture", event.currentTarget.files[0]);
                                     }} />
 
@@ -199,15 +201,12 @@ export default function CustomerForm() {
                                         error={Boolean(touched.other_upload && errors.other_upload)}
                                         helperText={touched.other_upload && errors.other_upload}
                                     /> */}
+<label style={{'margin-top':"inherit",'color':"#637381",'padding-left':'15px'}}>Other Upload</label>
 
-                                    <label>
-                                        Other Upload
-                                    </label>
-                                    <input id="file" name="profile_picture" type="file" onChange={(event) => {
+                                    <TextField id="file" name="other_upload" type="file" onChange={(event) => {
                                         setFieldValue("other_upload", event.currentTarget.files[0]);
                                     }} />
-
-
+                                   
                                     <Stack direction="row" alignItems="center" justifyContent="center" mb={5}>
 
                                         <LoadingButton size="medium" type="submit" variant="contained" loading={isSubmitting}> Submit </LoadingButton>
