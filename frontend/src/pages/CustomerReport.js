@@ -20,6 +20,11 @@ import {
   TablePagination,
 } from '@mui/material';
 
+import swal from 'sweetalert'; // sweetalert
+import { ToastContainer, toast } from 'react-toastify';
+
+
+
 // components
 import Page from '../components/Page';
 import Scrollbar from '../components/Scrollbar';
@@ -141,11 +146,34 @@ export default function CustomerReport() {
     }
 
     if (apiUrl) {
+<<<<<<< HEAD
       // console.log("apiUrl", apiUrl);
       let responseData = await postData(apiUrl);
       if (responseData) {
         await getCustomerRecord();
       }
+=======
+      console.log("apiUrl", apiUrl);
+
+      swal({
+        title: "Are you sure you want to delete?",
+        text: "Once deleted, you will not be able to recover!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+        .then(async (willDelete) => {
+          if (willDelete) {
+            let responseData = await postData(apiUrl)
+            if (responseData) {
+              toast.success("Deleted Successfully");
+              await getCustomerRecord();
+            } else {
+              toast.error("Oops ! Somewithing wen wrong");
+            }
+          }
+        });
+>>>>>>> 2f3d976f9d4e239373de5fadf3602db6e113c8f9
     }
 
   };
@@ -162,8 +190,12 @@ export default function CustomerReport() {
   };
 
   // onStatus Change
+<<<<<<< HEAD
   const onstatusChange = (customerId) => {
 
+=======
+  const handlestatusChange = (customerId) => {
+>>>>>>> 2f3d976f9d4e239373de5fadf3602db6e113c8f9
     let apiUrl, selectedArray = [];
 
     if (selected && selected.length > 1 && customerId) {
@@ -180,14 +212,40 @@ export default function CustomerReport() {
 
     if (apiUrl) {
       console.log("apiUrl", apiUrl);
+<<<<<<< HEAD
       let responseData = await postData(apiUrl);
       console.log("sfsdfsdfsdfsdf", responseData);
       if (responseData) {
         await getCustomerRecord();
       }
+=======
+
+      swal({
+        title: "Are you sure you want to change status ?",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+        .then(async (willchangeStatus) => {
+          if (willchangeStatus) {
+            let responseData = await postData(apiUrl);
+            console.log("sfsdfsdfsdfsdf", responseData);
+            if (responseData) {
+              toast.success("Status Changed Successfully");
+              await getCustomerRecord();
+            } else {
+              toast.error("Oops ! Somewithing wen wrong");
+            }
+          }
+        });
+>>>>>>> 2f3d976f9d4e239373de5fadf3602db6e113c8f9
     }
 
   }
+
+
+
+
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - customerList.length) : 0;
 
@@ -208,8 +266,13 @@ export default function CustomerReport() {
         </Stack>
 
         <Card>
+<<<<<<< HEAD
           <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} 
           onDelete={ondeleteClick} onstausChange={onstatusChange}/>
+=======
+          <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName}
+            onDelete={ondeleteClick} onstausChange={handlestatusChange} />
+>>>>>>> 2f3d976f9d4e239373de5fadf3602db6e113c8f9
 
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
