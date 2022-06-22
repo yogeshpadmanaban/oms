@@ -28,14 +28,14 @@ class CustomerController extends Controller
 		// $limit=(int)$_REQUEST['limit'];
 		// $offset=(int)$_REQUEST['offset'];
 
-		$result =CustomerDetails::where('deleted_at',NULL)->get(); // to get except soft-deleted data
+		$result =CustomerDetails::where('status','!=','2')->get(); // to get except soft-deleted data
 		$data['totalRecords']=$result->count();
 		$result_two=CustomerDetails::
 		
 		
 		// limit($limit)->offset($offset)
 					// ->where('name','LIKE','%'.$search.'%')
-					where('deleted_at',NULL) // to get except soft-deleted data
+					where('status','!=','2') // to get except soft-deleted data
 					// ->orderBy('customer_id',$sort)
 					->get();
 
@@ -128,23 +128,24 @@ class CustomerController extends Controller
 		else
 			$status='1';
 
-		$row_data=CustomerDetails::find($id);
-		$row_data->status=$status;
-		$row_data->save();
+		// $row_data=CustomerDetails::find($id);
+		// $row_data->status=$status;
+		$row_data = "test";
 		
 		return response()->json([
 		'success' => 'status changed successfully!',
-		'status'=>$status
+		'status'=>$row_data
 		]);
 	}
 
 	//to delete data of particular id
 	public function delete($id)
 	{
-		CustomerDetails::where('customer_id',$id)->update(['status' => '2']);	
-		CustomerDetails::find($id)->delete();
+		$row_data = CustomerDetails::where('customer_id',$id)->update(['status' => '2']);	
+		// CustomerDetails::find($id)->delete();
 		return response()->json([
-		'success' => 'Record has been deleted successfully!'
+			'success' => 'Record has been deleted successfully!',
+			'status' => $row_data
 		]);
 	}
 
@@ -161,8 +162,8 @@ class CustomerController extends Controller
 			$row_data->delete();
 		}
 		return response()->json([
-		'success' => 'status changed successfully!',
-		'status'=>$row_data
+			'success' => 'status changed successfully!',
+			'status'=>$row_data
 		]);
 	}
 
@@ -183,8 +184,8 @@ class CustomerController extends Controller
 			$row_data->save();
 		}
 		return response()->json([
-		'success' => 'status changed successfully!',
-		'status'=>$status
+			'success' => 'status changed successfully!',
+			'status'=>$row_data
 		]);
 	}
 

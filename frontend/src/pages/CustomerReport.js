@@ -81,8 +81,8 @@ export default function CustomerReport() {
   const getCustomerRecord = async () => {
     let response = await getData('customer_details');
     console.log(response);
-    if (response && response.rows) {
-      setCustomerList(response.rows);
+    if (response && response.data.rows) {
+      setCustomerList(response.data.rows);
     }
   }
 
@@ -141,12 +141,11 @@ export default function CustomerReport() {
     }
 
     if (apiUrl) {
-      console.log("apiUrl", apiUrl);
-      // let responseData = await postData(apiUrl);
-      // console.log("sfsdfsdfsdfsdf", responseData);
-      // if (responseData) {
-      //   await getCustomerRecord();
-      // }
+      // console.log("apiUrl", apiUrl);
+      let responseData = await postData(apiUrl);
+      if (responseData) {
+        await getCustomerRecord();
+      }
     }
 
   };
@@ -163,7 +162,7 @@ export default function CustomerReport() {
   };
 
   // onStatus Change
-  const handlestatusChange = (customerId) => {
+  const onstatusChange = (customerId) => {
 
     let apiUrl, selectedArray = [];
 
@@ -181,11 +180,11 @@ export default function CustomerReport() {
 
     if (apiUrl) {
       console.log("apiUrl", apiUrl);
-      // let responseData = await postData(apiUrl);
-      // console.log("sfsdfsdfsdfsdf", responseData);
-      // if (responseData) {
-      //   await getCustomerRecord();
-      // }
+      let responseData = await postData(apiUrl);
+      console.log("sfsdfsdfsdfsdf", responseData);
+      if (responseData) {
+        await getCustomerRecord();
+      }
     }
 
   }
@@ -210,7 +209,7 @@ export default function CustomerReport() {
 
         <Card>
           <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} 
-          onDelete={ondeleteClick} onstausChange={handlestatusChange}/>
+          onDelete={ondeleteClick} onstausChange={onstatusChange}/>
 
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
@@ -260,7 +259,7 @@ export default function CustomerReport() {
                           <TableCell align="left">{pan_no}</TableCell>
                           <TableCell align="left">{other_upload}</TableCell>
 
-                          <TableCell align="left" onClick={() => handlestatusChange(customer_id)}>
+                          <TableCell align="left" onClick={() => onstatusChange(customer_id)}>
                             <Iconify
                               icon={status ? 'typcn:tick' :
                                 'charm:cross'}

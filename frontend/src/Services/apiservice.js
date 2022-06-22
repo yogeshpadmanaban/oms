@@ -144,9 +144,9 @@ export async function getData(apiName) {
     else if (apiName == 'productReport') {
         return productReport;
     }
-    else if (apiName == 'customer_details') {
-        return customerReport;
-    }
+    // else if (apiName == 'customer_details') {
+    //     return customerReport;
+    // }
     else {
         let apiUrl = baseUrl + apiName;
         let responseData = await axios.get(apiUrl).then((response) => {
@@ -183,8 +183,8 @@ export async function postData(apiName, params) {
     let responseData = await axios.post(apiUrl, params, config).then((response) => {
         return response;
     },
-        (error) => {
-            return error;
-        });
+    (error) => {
+        return error;
+    });
     return responseData;
 }
