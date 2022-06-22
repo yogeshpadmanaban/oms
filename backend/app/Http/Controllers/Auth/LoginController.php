@@ -106,11 +106,18 @@ class LoginController extends Controller
 
     public function logout()
     { 
-        $user_role =  request()->session()->get('sess_arr')['user_role'];
-        Session::flush();
-        $user_role = ($user_role!='')?$user_role:'admin';
-        // echo $user_role;exit;
-        Auth::guard($user_role)->logout();
-        return redirect('/login/'.$user_role);
+        $user = Auth::guard("api")->user()->token();
+        $user->revoke();
+        $responseMessage = "successfully logged out";
+        return response()->json([
+            'success' => true,
+            'message' => $responseMessage
+        ], 200);
+        // $user_role =  request()->session()->get('sess_arr')['user_role'];
+        // Session::flush();
+        // $user_role = ($user_role!='')?$user_role:'admin';
+        // // echo $user_role;exit;
+        // Auth::guard($user_role)->logout();
+        // return redirect('/login/'.$user_role);
     }
 }
