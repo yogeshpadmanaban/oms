@@ -22,12 +22,18 @@ import ProductReport from './pages/ProductReport';
 // ----------------------------------------------------------------------
 
 export default function Router() {
+  let isLoggedIn = localStorage.getItem("token");
+  console.log("token", isLoggedIn);
+
   return useRoutes([
     {
       path: '/dashboard',
-      element: <DashboardLayout />,
+      element: isLoggedIn ? <DashboardLayout /> : <Navigate to="/login" />,
       children: [
-        { path: 'app', element: <DashboardApp /> },
+        {
+          path: 'app',
+          element: <DashboardApp />
+        },
         { path: 'user', element: <User /> },
 
         // { path: 'products', element: <Products /> },

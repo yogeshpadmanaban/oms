@@ -129,7 +129,7 @@ export default function CustomerReport() {
     let apiUrl, selectedArray = [];
     if (selected && selected.length > 1 && customerId) {
       selectedArray = selected;
-      apiUrl = 'customer_multi_delete/' + '['+selectedArray+']';
+      apiUrl = 'customer_multi_delete/' + '[' + selectedArray + ']';
     }
     else {
       if (selected && selected.length > 0) {
@@ -145,17 +145,18 @@ export default function CustomerReport() {
       buttons: true,
       dangerMode: true,
     })
-    .then(async (willDelete) => {
-      if (willDelete) {
-        let responseData = await postData(apiUrl)
-        if (responseData) {
-          toast.success("Deleted Successfully");
-          await getCustomerRecord();
-        } else {
-          toast.error("Oops ! Somewithing wen wrong");
+      .then(async (willDelete) => {
+        if (willDelete) {
+          let responseData = await postData(apiUrl)
+          if (responseData) {
+            toast.success("Deleted Successfully");
+            await getCustomerRecord();
+            await handletableReset();
+          } else {
+            toast.error("Oops ! Somewithing wen wrong");
+          }
         }
-      }
-    });
+      });
   };
 
   // On ChangeRowsperPage
@@ -176,7 +177,7 @@ export default function CustomerReport() {
 
     if (selected && selected.length > 1 && customerId) {
       selectedArray = selected;
-      apiUrl = 'customer_bulk_status_change/' + '['+selectedArray+']';
+      apiUrl = 'customer_bulk_status_change/' + '[' + selectedArray + ']';
     }
     else {
       if (selected && selected.length > 0) {
@@ -191,17 +192,25 @@ export default function CustomerReport() {
       buttons: true,
       dangerMode: true,
     })
-    .then(async (willchangeStatus) => {
-      if (willchangeStatus) {
-        let responseData = await postData(apiUrl);
-        if (responseData) {
-          toast.success("Status Changed Successfully");
-          await getCustomerRecord();
-        } else {
-          toast.error("Oops ! Somewithing wen wrong");
+      .then(async (willchangeStatus) => {
+        if (willchangeStatus) {
+          let responseData = await postData(apiUrl);
+          if (responseData) {
+            toast.success("Status Changed Successfully");
+            await getCustomerRecord();
+            await handletableReset();
+          } else {
+            toast.error("Oops ! Somewithing wen wrong");
+          }
         }
-      }
-    });
+      });
+  }
+
+  const handletableReset = () => {
+    setRowsPerPage(Number(5));
+    setPage(0);
+    setSelected([]);
+    setFilterName('');
   }
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - customerList.length) : 0;
@@ -223,8 +232,8 @@ export default function CustomerReport() {
         </Stack>
 
         <Card>
-          <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} 
-          onDelete={ondeleteClick} onstausChange={onstatusChange}/>
+          <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName}
+            onDelete={ondeleteClick} onstausChange={onstatusChange} />
 
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
@@ -276,7 +285,7 @@ export default function CustomerReport() {
 
                           <TableCell align="left" onClick={() => onstatusChange(customer_id)}>
                             <Iconify
-                              icon={status ? 'typcn:tick' :
+                              icon={status == true ? 'typcn:tick' :
                                 'charm:cross'}
                               sx={{ width: 25, height: 25, ml: 1 }}
                             />

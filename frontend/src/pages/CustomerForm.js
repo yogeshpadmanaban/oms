@@ -29,28 +29,19 @@ const RootStyle = styled('div')(({ theme }) => ({
 
 export default function CustomerForm() {
 
-    const uploadfile = (event) => {
-        // console.log("event", event);
-    };
-
-
     const navigate = useNavigate();
     const params = useParams();
 
     const ustomerformSchema = Yup.object().shape({
         customer_id: '',
-//         profile_picture: Yup.object().shape({
-//             files: Yup.array()
-//               .nullable()
-//               .required('VALIDATION_FIELD_REQUIRED')
-// }),
+        profile_picture: Yup.string().required('Profile picture is required'),
         name: Yup.string().required('Name is required'),
         address: Yup.string().required('Address is required'),
         city: Yup.string().required('City is required'),
         state: Yup.string().required('State is required'),
         gst_no: Yup.string().required('Gst is required'),
         pan_no: Yup.string().required('Pan is required'),
-        // other_upload: '',
+        other_upload: '',
     });
 
     const formik = useFormik({
@@ -62,12 +53,12 @@ export default function CustomerForm() {
             state: '',
             gst_no: '',
             pan_no: '',
-            // profile_picture: '',
-            // other_upload: ''
+            profile_picture: '',
+            other_upload: ''
         },
         validationSchema: ustomerformSchema,
         onSubmit: async (values) => {
-            // console.log("values", values);
+            console.log("values", values);
             // console.log({
             //     fileName: values.profile_picture.name,
             //     type: values.profile_picture.type,
@@ -95,8 +86,8 @@ export default function CustomerForm() {
                 formik.setFieldValue("state", state);
                 formik.setFieldValue("gst_no", gst_no);
                 formik.setFieldValue("pan_no", pan_no);
-                // formik.setFieldValue("profile_picture", profile_picture);
-                // formik.setFieldValue("other_upload", other_upload);
+                formik.setFieldValue("profile_picture", profile_picture);
+                formik.setFieldValue("other_upload", other_upload);
             }
         }
     }, []);
@@ -119,21 +110,18 @@ export default function CustomerForm() {
                             <Form autoComplete="off" encType="multipart/form-data" noValidate onSubmit={handleSubmit}>
                                 <Stack spacing={3} sx={{ my: 4 }}>
 
-                                    {/* <TextField
+                                    <TextField
                                         fullWidth
                                         type="file"
-                                        onSelect={uploadfile}
                                         InputLabelProps={{ shrink: true }}
                                         label="Profile Picture"
-                                        {...getFieldProps('profile_picture')}
+                                        name="profile_picture"
+                                        onChange={(event) => {
+                                            setFieldValue("profile_picture", event.currentTarget.files[0])
+                                        }}
                                         error={Boolean(touched.profile_picture && errors.profile_picture)}
                                         helperText={touched.profile_picture && errors.profile_picture}
-                                    /> */}
-
-                                    <label style={{'margin-top':"inherit",'color':"#637381",'padding-left':'15px'}}>Profile Picture</label>
-                                    <TextField id="file" name="profile_picture" type="file" onChange={(event) => {
-                                        setFieldValue("profile_picture", event.currentTarget.files[0]);
-                                    }} />
+                                    />
 
                                     <TextField
                                         fullWidth
@@ -192,21 +180,19 @@ export default function CustomerForm() {
                                     />
 
 
-                                    {/* <TextField
+                                    <TextField
                                         fullWidth
                                         type="file"
                                         label="Other Upload"
+                                        name="other_upload"
                                         InputLabelProps={{ shrink: true }}
-                                        {...getFieldProps('other_upload')}
+                                        onChange={(event) => {
+                                            setFieldValue("other_upload", event.currentTarget.files[0])
+                                        }}
                                         error={Boolean(touched.other_upload && errors.other_upload)}
                                         helperText={touched.other_upload && errors.other_upload}
-                                    /> */}
-<label style={{'margin-top':"inherit",'color':"#637381",'padding-left':'15px'}}>Other Upload</label>
+                                    />
 
-                                    <TextField id="file" name="other_upload" type="file" onChange={(event) => {
-                                        setFieldValue("other_upload", event.currentTarget.files[0]);
-                                    }} />
-                                   
                                     <Stack direction="row" alignItems="center" justifyContent="center" mb={5}>
 
                                         <LoadingButton size="medium" type="submit" variant="contained" loading={isSubmitting}> Submit </LoadingButton>

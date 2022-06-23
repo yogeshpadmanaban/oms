@@ -9,7 +9,7 @@ import { LoadingButton } from '@mui/lab';
 import Iconify from '../../../components/Iconify';
 // Serive
 import { postData } from '../../../Services/apiservice';
-
+import { ToastContainer, toast } from 'react-toastify';
 // ----------------------------------------------------------------------
 
 export default function LoginForm() {
@@ -32,10 +32,11 @@ export default function LoginForm() {
     onSubmit: async (values) => {
       console.log("values", values);
       let response = await postData('login/admin', values);
-      console.log("response", response);
-      if (response.data.token) {
+      if (response.status == 200 && response.data) {
         localStorage.setItem("token", response.data.token)
         navigate('/dashboard/app', { replace: true });
+      } else {
+        toast.error(response.msg);
       }
     },
   });
