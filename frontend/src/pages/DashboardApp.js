@@ -16,9 +16,6 @@ import { postData, getData } from '../Services/apiservice';
 
 // ----------------------------------------------------------------------
 
-
-
-
 export default function DashboardApp() {
   const theme = useTheme();
 
@@ -28,17 +25,13 @@ export default function DashboardApp() {
     await getDashboardCount();
   }, []);
 
-
   const getDashboardCount = async () => {
     let response = await getData('dashboard');
-    console.log("dashboardresponse", response);
+    // console.log("dashboardresponse", response);
     if (response) {
-      setCount(response);
+      setCount(response.data);
     }
   }
-
-
-
 
   return (
     <Page title="Dashboard">
@@ -65,8 +58,6 @@ export default function DashboardApp() {
           <Grid item xs={12} sm={6} md={3}>
             <AppWidgetSummary title="Product Report" path="/admin/product_report" total={count.tot_products} color="warning" icon={'arcticons:user-manual'} />
           </Grid>
-
-
 
         </Grid>
       </Container>

@@ -285,15 +285,15 @@ export default function CustomerReport() {
 
                           <TableCell align="left" onClick={() => onstatusChange(customer_id)}>
                             <Iconify
-                              icon={status == 1 ? 'typcn:tick' :
-                                'charm:cross'}
+                              icon={status == 1 ? 'charm:cross' :
+                                'typcn:tick'}
                               sx={{ width: 25, height: 25, ml: 1 }}
                             />
                           </TableCell>
 
                           <TableCell align="right">
                             <UserMoreMenu
-                              url={'/admin/dashboard/edit_customer/' + base64_encode(customer_id)}
+                              url={'/admin/edit_customer/' + base64_encode(customer_id)}
                               selectedList={selected}
                               onDelete={ondeleteClick}
                               customer_id={customer_id}
