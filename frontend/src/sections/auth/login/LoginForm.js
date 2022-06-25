@@ -32,11 +32,11 @@ export default function LoginForm() {
     onSubmit: async (values) => {
       console.log("values", values);
       let response = await postData('login/admin', values);
-      if (response.status == 200 && response.data) {
+      if (response.status == 200 && response.data.token) {
         localStorage.setItem("token", response.data.token)
         navigate('/dashboard/app', { replace: true });
       } else {
-        toast.error(response.msg);
+        toast.error(response.data.message);
       }
     },
   });

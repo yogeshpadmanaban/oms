@@ -80,15 +80,15 @@ class CustomerController extends Controller
 
 			$data['records'][$key]->profile_picture="<img class='img_enlarge' src='".url($profile_picture)."'style='width:50px;height:50px'>";	
 
-			if($data['records'][$key]->status=='1')
-			{
-				$data['records'][$key]->status="<i class='fa fa-close change_status' style='font-size:20px;color:red;cursor:pointer' data-url='/admin/customer_change_status/' data-id='".base64_encode($data['records'][$key]->customer_id)."' name='status".$data['records'][$key]->customer_id."' data-status='status".$data['records'][$key]->customer_id."'></i>";
+			// if($data['records'][$key]->status=='1')
+			// {
+			// 	$data['records'][$key]->status="<i class='fa fa-close change_status' style='font-size:20px;color:red;cursor:pointer' data-url='/admin/customer_change_status/' data-id='".base64_encode($data['records'][$key]->customer_id)."' name='status".$data['records'][$key]->customer_id."' data-status='status".$data['records'][$key]->customer_id."'></i>";
 
-			}
-			else{
-				$data['records'][$key]->status="<i class='fa fa-check change_status' style='font-size:20px;color:green;cursor:pointer' aria-hidden='true' data-url='/admin/customer_change_status/' data-id='".base64_encode($data['records'][$key]->customer_id)."' name='status".$data['records'][$key]->customer_id."' data-status='status".$data['records'][$key]->customer_id."' value='Active'></i>";	
+			// }
+			// else{
+			// 	$data['records'][$key]->status="<i class='fa fa-check change_status' style='font-size:20px;color:green;cursor:pointer' aria-hidden='true' data-url='/admin/customer_change_status/' data-id='".base64_encode($data['records'][$key]->customer_id)."' name='status".$data['records'][$key]->customer_id."' data-status='status".$data['records'][$key]->customer_id."' value='Active'></i>";	
 		
-			}
+			// }
 			$data['records'][$key]->check_box="<input type='checkbox'  class='checkbox' onclick='multi_select()' value='".$data['records'][$key]->customer_id."' name='data' style='width:20px;height:20px'>";	
 			
 			$data['records'][$key]->action="<a href='/admin/edit_customer/".base64_encode($data['records'][$key]->customer_id)."'>
@@ -135,7 +135,7 @@ class CustomerController extends Controller
 		
 		return response()->json([
 			'success' => 'status changed successfully!',
-			'status'=>$row_data
+			'status'=>$row_data->status
 		]);
 	}
 

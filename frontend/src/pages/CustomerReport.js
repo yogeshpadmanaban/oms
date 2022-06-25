@@ -285,7 +285,7 @@ export default function CustomerReport() {
 
                           <TableCell align="left" onClick={() => onstatusChange(customer_id)}>
                             <Iconify
-                              icon={status == true ? 'typcn:tick' :
+                              icon={status == 1 ? 'typcn:tick' :
                                 'charm:cross'}
                               sx={{ width: 25, height: 25, ml: 1 }}
                             />
