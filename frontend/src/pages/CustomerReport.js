@@ -226,7 +226,7 @@ export default function CustomerReport() {
           <Typography variant="h4" gutterBottom>
             Customer Report
           </Typography>
-          <Button variant="contained" component={RouterLink} to="/dashboard/add_customer" startIcon={<Iconify icon="eva:plus-fill" />}>
+          <Button variant="contained" component={RouterLink} to="/admin/add_customer" startIcon={<Iconify icon="eva:plus-fill" />}>
             Add Customer
           </Button>
         </Stack>
@@ -293,7 +293,7 @@ export default function CustomerReport() {
 
                           <TableCell align="right">
                             <UserMoreMenu
-                              url={'/dashboard/edit_customer/' + base64_encode(customer_id)}
+                              url={'/admin/dashboard/edit_customer/' + base64_encode(customer_id)}
                               selectedList={selected}
                               onDelete={ondeleteClick}
                               customer_id={customer_id}

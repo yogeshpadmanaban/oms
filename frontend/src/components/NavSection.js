@@ -37,7 +37,9 @@ NavItem.propTypes = {
 function NavItem({ item, active }) {
   const theme = useTheme();
 
-  const isActiveRoot = active(item.path);
+  const isActiveRoot = active(item.activePath);
+
+  console.log("isActiveRoot", isActiveRoot)
 
   const { title, path, icon, info, children } = item;
 
@@ -142,7 +144,20 @@ NavSection.propTypes = {
 export default function NavSection({ navConfig, ...other }) {
   const { pathname } = useLocation();
 
-  const match = (path) => (path ? !!matchPath({ path, end: false }, pathname) : false);
+  // const match = (path) => (path ? !!matchPath({ path, end: false }, pathname) : false);
+
+  const match = (activePath) => {
+    console.log("activePath", activePath);
+    console.log("pathname", pathname);
+    if (activePath.indexOf(pathname) != -1) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+
+
 
   return (
     <Box {...other}>

@@ -8,54 +8,43 @@ const getIcon = (name) => <Iconify icon={name} width={22} height={22} />;
 const navConfig = [
   {
     title: 'dashboard',
-    path: '/dashboard/app',
+    path: '/admin/dashboard',
+    activePath: ['/admin/dashboard'],
     icon: getIcon('eva:pie-chart-2-fill'),
   },
   {
     title: 'Customer Report',
-    path: '/dashboard/customer_report',
+    path: '/admin/customer_report',
+    activePath: ['/admin/customer_report', '/admin/add_customer', '/admin/edit_customer'],
     icon: getIcon('eva:people-fill'),
   },
   {
     title: 'Category Report',
-    path: '/dashboard/category_report',
+    path: '/admin/category_report',
+    activePath: ['/admin/category_report'],
     icon: getIcon('eva:people-fill'),
   },
   {
     title: 'Product Report',
-    path: '/dashboard/product_report',
+    path: '/admin/product_report',
+    activePath: ['/admin/product_report'],
     icon: getIcon('eva:people-fill'),
   },
   // {
   //   title: 'user',
-  //   path: '/dashboard/user',
+  //   path: '/admin/user',
   //   icon: getIcon('eva:people-fill'),
   // },
   // {
   //   title: 'product',
-  //   path: '/dashboard/products',
+  //   path: '/admin/products',
   //   icon: getIcon('eva:shopping-bag-fill'),
   // },
   // {
   //   title: 'blog',
-  //   path: '/dashboard/blog',
+  //   path: '/admin/blog',
   //   icon: getIcon('eva:file-text-fill'),
-  // },
-  // {
-  //   title: 'login',
-  //   path: '/login',
-  //   icon: getIcon('eva:lock-fill'),
-  // },
-  // {
-  //   title: 'register',
-  //   path: '/register',
-  //   icon: getIcon('eva:person-add-fill'),
-  // },
-  // {
-  //   title: 'Not found',
-  //   path: '/404',
-  //   icon: getIcon('eva:alert-triangle-fill'),
-  // },
+  // }
 ];
 
 export default navConfig;

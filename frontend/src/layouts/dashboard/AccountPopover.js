@@ -53,9 +53,9 @@ export default function AccountPopover() {
     setOpen(null);
     let response = await postData('logout', { authToken: token });
     if (response.status == 200) {
-      localStorage.removeItem("token", response.data.token);
+      localStorage.removeItem("token", '');
       toast.success("logout Successfully");
-      navigate('/login', { replace: true });
+      navigate('/admin/login', { replace: true });
     } else {
       toast.error(response.msg);
     }

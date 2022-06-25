@@ -1,15 +1,44 @@
 // @mui
 import { useTheme } from '@mui/material/styles';
 import { Grid, Container, Typography } from '@mui/material';
+
+import React, { useEffect, useState } from "react";
+import { Link as RouterLink } from 'react-router-dom';
+
 // components
 import Page from '../components/Page';
 // sections
 import { AppWidgetSummary } from '../sections/@dashboard/app';
 
+// apiservice
+import { postData, getData } from '../Services/apiservice';
+
+
 // ----------------------------------------------------------------------
+
+
+
 
 export default function DashboardApp() {
   const theme = useTheme();
+
+  const [count, setCount] = useState({});
+
+  useEffect(async () => {
+    await getDashboardCount();
+  }, []);
+
+
+  const getDashboardCount = async () => {
+    let response = await getData('dashboard');
+    console.log("dashboardresponse", response);
+    if (response) {
+      setCount(response);
+    }
+  }
+
+
+
 
   return (
     <Page title="Dashboard">
@@ -19,21 +48,24 @@ export default function DashboardApp() {
         </Typography>
 
         <Grid container spacing={3}>
+
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Customer Report" total={714000} icon={'ant-design:android-filled'} />
+            <AppWidgetSummary title="User Report" path="/admin/customer_report" total={count.user_count} color="error" icon={'ant-design:user-switch-outlined'} />
+          </Grid>
+
+
+          <Grid item xs={12} sm={6} md={3}>
+            <AppWidgetSummary title="Customer Report" path="/admin/customer_report" total={count.tot_customers} icon={'carbon:user-activity'} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Category Report" total={1352831} color="info" icon={'ant-design:apple-filled'} />
+            <AppWidgetSummary title="Category Report" path="/admin/category_report" total={count.tot_orders} color="info" icon={'bx:category-alt'} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Product Report" total={1723315} color="warning" icon={'ant-design:windows-filled'} />
+            <AppWidgetSummary title="Product Report" path="/admin/product_report" total={count.tot_products} color="warning" icon={'arcticons:user-manual'} />
           </Grid>
 
-          <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Order Report" total={234} color="error" icon={'ant-design:bug-filled'} />
-          </Grid>
 
 
         </Grid>

@@ -38,7 +38,7 @@ export default function RegisterForm() {
       let response = await postData('register', values);
       console.log("response", response);
       if (response) {
-        navigate('/login', { replace: true });
+        navigate('/admin/login', { replace: true });
       }
     },
 

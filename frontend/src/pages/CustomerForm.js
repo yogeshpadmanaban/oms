@@ -31,10 +31,12 @@ export default function CustomerForm() {
 
     const navigate = useNavigate();
     const params = useParams();
+    const [profile_picture, setProfile_picture] = useState('');
+
 
     const ustomerformSchema = Yup.object().shape({
         customer_id: '',
-        profile_picture: Yup.string().required('Profile picture is required'),
+        profile_picture: '',
         name: Yup.string().required('Name is required'),
         address: Yup.string().required('Address is required'),
         city: Yup.string().required('City is required'),
@@ -58,17 +60,34 @@ export default function CustomerForm() {
         },
         validationSchema: ustomerformSchema,
         onSubmit: async (values) => {
-            console.log("values", values);
-            // console.log({
-            //     fileName: values.profile_picture.name,
-            //     type: values.profile_picture.type,
-            //     size: `${values.profile_picture.size} bytes`,
 
-            // })
+            let profile_picture = {};
+            let other_upload = {};
+
+            // params = values;
+            // params.profile_picture = initialValues.profile_picture;
+
+            if (values.profile_picture) {
+                profile_picture.name = values.profile_picture.name;
+                profile_picture.type = values.profile_picture.type;
+                profile_picture.size = `${values.profile_picture.size} bytes`;
+                values.profile_picture = profile_picture;
+            }
+
+            if (values.other_upload) {
+                other_upload.name = values.other_upload.name;
+                other_upload.type = values.other_upload.type;
+                other_upload.size = `${values.other_upload.size} bytes`;
+                values.other_upload = other_upload;
+            }
+
+            console.log("values", values);
+
             let response = await postData('store_customer', values);
             if (response) {
-                navigate('/dashboard/customer_report', { replace: true });
+                navigate('/admin/customer_report', { replace: true });
             }
+
         },
     });
 
@@ -92,8 +111,7 @@ export default function CustomerForm() {
         }
     }, []);
 
-    const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps, setFieldValue } = formik;
-
+    const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps, setFieldValue, initialValues } = formik;
     return (
         <Page title={params && params.id ? "Edit Customer" : "Add Customer"}>
             <RootStyle>
@@ -117,6 +135,8 @@ export default function CustomerForm() {
                                         label="Profile Picture"
                                         name="profile_picture"
                                         onChange={(event) => {
+                                            // initialValues.profile_picture = event.currentTarget.files[0]
+                                            // setProfile_picture(event.currentTarget.files[0]);
                                             setFieldValue("profile_picture", event.currentTarget.files[0])
                                         }}
                                         error={Boolean(touched.profile_picture && errors.profile_picture)}
@@ -197,7 +217,7 @@ export default function CustomerForm() {
 
                                         <LoadingButton size="medium" type="submit" variant="contained" loading={isSubmitting}> Submit </LoadingButton>
 
-                                        <Button sx={{ m: 2 }} variant="contained" color="error" component={RouterLink} to="/dashboard/customer_report">
+                                        <Button sx={{ m: 2 }} variant="contained" color="error" component={RouterLink} to="/admin/dashboard/customer_report">
                                             Cancel
                                         </Button>
 

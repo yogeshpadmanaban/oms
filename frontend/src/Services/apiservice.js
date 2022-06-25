@@ -133,14 +133,12 @@ const productReport = [
 
 ];
 
+
 export async function getData(apiName) {
     console.log("apiName", apiName);
-    // let apiUrl = 'https://randomuser.me/api/';
-
     if (apiName == 'categoryReport') {
         return categoryReport;
     }
-
     else if (apiName == 'productReport') {
         return productReport;
     }
@@ -158,21 +156,6 @@ export async function getData(apiName) {
         return responseData;
     }
 }
-
-// export async function getData(apiName) {
-//     console.log("apiName", apiName);
-//     // let apiUrl = baseUrl + apiName;
-//     let apiUrl = 'https://randomuser.me/api/';
-//     if (apiName == 'customer_details') {
-//         return customerReport;
-//     } else if (apiName == 'edit_customer/1') {
-//         return editCustomerRecord;
-//     } else if (apiName == 'categoryReport') {
-//         return categoryReport;
-//     } else if (apiName == 'productReport') {
-//         return productReport;
-//     }
-// }
 
 
 export async function postData(apiName, params) {

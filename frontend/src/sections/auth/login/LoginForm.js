@@ -34,7 +34,7 @@ export default function LoginForm() {
       let response = await postData('login/admin', values);
       if (response.status == 200 && response.data.token) {
         localStorage.setItem("token", response.data.token)
-        navigate('/dashboard/app', { replace: true });
+        navigate('/admin/dashboard', { replace: true });
       } else {
         toast.error(response.data.message);
       }

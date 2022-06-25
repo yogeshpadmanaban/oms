@@ -27,11 +27,12 @@ export default function Router() {
 
   return useRoutes([
     {
-      path: '/dashboard',
-      element: isLoggedIn ? <DashboardLayout /> : <Navigate to="/login" />,
+      path: '/admin',
+      element: <DashboardLayout />,
+      // element: isLoggedIn ? <DashboardLayout /> : <Navigate to="/admin/login" />,
       children: [
         {
-          path: 'app',
+          path: 'dashboard',
           element: <DashboardApp />
         },
         { path: 'user', element: <User /> },
@@ -51,9 +52,9 @@ export default function Router() {
       path: '/',
       element: <LogoOnlyLayout />,
       children: [
-        { path: '/', element: <Navigate to="/login" /> },
-        { path: 'login', element: <Login /> },
-        { path: 'register', element: <Register /> },
+        { path: '/', element: <Navigate to="/admin/login" /> },
+        { path: '/admin/login', element: <Login /> },
+        { path: '/admin/register', element: <Register /> },
         { path: '404', element: <NotFound /> },
         { path: '*', element: <Navigate to="/404" /> },
       ],
