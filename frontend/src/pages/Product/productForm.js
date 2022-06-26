@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 import React, { useEffect, useState } from "react";
 import { Link as RouterLink, useNavigate, useParams } from 'react-router-dom';
-import { useFormik, Form, FormikProvider } from 'formik';
+import { useFormik, Form, FormikProvider, Field } from 'formik';
 import { LoadingButton } from '@mui/lab';
 import { decode as base64_decode, encode as base64_encode } from 'base-64';
 
@@ -33,50 +33,80 @@ export default function ProductForm() {
     const navigate = useNavigate();
     const params = useParams();
 
+    const [category, setCategoryList] = useState([]);
+
+    const radioOptions = [
+        { label: 'Vigat Product', value: 'Vigat Product' },
+        { label: 'Customized product', value: 'Customized product' },
+    ];
+
 
     const ustomerformSchema = Yup.object().shape({
         product_id: '',
+        product_type: Yup.string(),
+        category: Yup.string(),
         name: Yup.string().required('Name is required'),
-        product_details: Yup.string(),
         product_image: '',
+        product_details: Yup.string()
     });
 
     const formik = useFormik({
         initialValues: {
             product_id: '',
+            product_type: params && params.id ? '' : radioOptions[0].value,
+            category: '',
             name: '',
-            product_details: '',
-            product_image: ''
+            product_image: '',
+            product_details: ''
         },
         validationSchema: ustomerformSchema,
         onSubmit: async (values) => {
             console.log("values", values);
 
-            // let response = await postData('store_product', values);
-            // if (response) {
-            //     toast.success(response.data.message);
-            //     navigate('/admin/customer_report', { replace: true });
-            // } else {
-            //     toast.error(response.data.message);
-            // }
+            let response = await postData('store_product', values);
+            if (response) {
+                toast.success(response.data.message);
+                navigate('/admin/customer_report', { replace: true });
+            } else {
+                toast.error(response.data.message);
+            }
 
         },
     });
 
     useEffect(async () => {
+        await getcategory();
         if (params && params.id) {
             let url = 'edit_product/' + params.id;
             let responseData = await getData(url);
-            console.log("sfsdfsdfsdfsdf", responseData.data.customer)
             if (responseData && responseData.data.customer) {
-                const { name, product_details, product_image, product_id } = responseData.data.customer;
+                const { name, product_details, product_image, product_id, product_type, category } = responseData.data.customer;
                 formik.setFieldValue("product_id", product_id);
+                formik.setFieldValue("product_type", product_type);
+                formik.setFieldValue("category", category);
                 formik.setFieldValue("name", name);
-                formik.setFieldValue("product_details", product_details);
                 formik.setFieldValue("product_image", product_image);
+                formik.setFieldValue("product_details", product_details);
             }
         }
     }, []);
+
+    const getcategory = () => {
+        const categoryList = [
+            { label: 'Category 1', value: '1' },
+            { label: 'Category 2', value: '2' },
+            { label: 'Category 3', value: '3' },
+            { label: 'Category 4', value: '4' }
+        ];
+        if (params.id == null || params.id == '') {
+            formik.setFieldValue("category", categoryList[0].value);
+        }
+        setCategoryList(categoryList);
+    }
+
+    const handleCategoryChange = (event) => {
+        console.log('selectedCategory', event.target.value);
+    }
 
     const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps, setFieldValue, initialValues } = formik;
     return (
@@ -95,6 +125,42 @@ export default function ProductForm() {
                             <Form autoComplete="off" encType="multipart/form-data" noValidate onSubmit={handleSubmit}>
                                 <Stack spacing={3} sx={{ my: 4 }}>
 
+                                    <div style={{ "marginLeft": "10px" }}>Product Type:</div>
+                                    <div role="group" aria-labelledby="my-radio-group">
+                                        {
+                                            radioOptions &&
+                                            radioOptions.map((option, index) => {
+                                                return (
+                                                    <div style={{ "marginLeft": "10px" }}>
+                                                        <label className='mb-2'><Field key={index} type="radio" name="product_type" value={option.value} /> {option.label}</label>
+                                                    </div>
+                                                )
+                                            })
+                                        }
+                                    </div>
+
+                                    <div style={{ "marginLeft": "10px" }}>Product Category:</div>
+                                    <select name="category" value={values.category}
+
+                                        // onChange={(event) => handleCategoryChange(event)}
+                                        onChange={(event) => {
+                                            setFieldValue("category", event.target.value)
+                                        }}
+
+                                        style={{ display: "block", padding: "15px" }}
+                                    >
+                                        {
+                                            category &&
+                                            category.map((list, index) => {
+                                                return (
+                                                    <option value={list.value} label={list.label}> {" "}red </option>
+                                                )
+                                            })
+                                        }
+
+                                    </select>
+
+
                                     <TextField
                                         fullWidth
                                         type="text"
@@ -103,7 +169,6 @@ export default function ProductForm() {
                                         error={Boolean(touched.name && errors.name)}
                                         helperText={touched.name && errors.name}
                                     />
-
 
                                     <TextField
                                         fullWidth
