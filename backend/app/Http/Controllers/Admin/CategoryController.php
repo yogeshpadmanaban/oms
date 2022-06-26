@@ -25,32 +25,34 @@ class CategoryController extends Controller
 	//to fetch cad data
 	public function fetch_category_details(Request $request)
 	{
-		$sort=$_REQUEST['order'];
-		$search=(isset($_REQUEST['search']))?$_REQUEST['search']:'';
-		$limit=(int)$_REQUEST['limit'];
-		$offset=(int)$_REQUEST['offset'];
+		// $sort=$_REQUEST['order'];
+		// $search=(isset($_REQUEST['search']))?$_REQUEST['search']:'';
+		// $limit=(int)$_REQUEST['limit'];
+		// $offset=(int)$_REQUEST['offset'];
 
 		$result =CategoryDetails::where('deleted_at',NULL)->get(); // to get except soft-deleted data
 		$data['totalRecords']=$result->count();
 
-		$result_two=CategoryDetails::limit($limit)->offset($offset)
-					->where('category_name','LIKE','%'.$search.'%')
-					->where('deleted_at',NULL) // to get except soft-deleted data
-					->orderBy('category_id',$sort)
+		$result_two=CategoryDetails::
+		
+		// limit($limit)->offset($offset)
+					// where('category_name','LIKE','%'.$search.'%')
+					where('deleted_at',NULL) // to get except soft-deleted data
+					// ->orderBy('category_id',$sort)
 					->get();
 		$data['records']=$result_two;
 		$data['num_rows'] = $result_two->count();
 
 		foreach ($data['records'] as $key => $value)
 		{
-			if($data['records'][$key]->status=='1')
-			{
-				$data['records'][$key]->status="<i class='fa fa-close change_status' style='font-size:20px;color:red;cursor:pointer' data-url='/admin/category_change_status/' data-id='".base64_encode($data['records'][$key]->category_id)."' name='status".$data['records'][$key]->category_id."' data-status='status".$data['records'][$key]->category_id."' style=color:red></i>";
-			}
-			else{
-				$data['records'][$key]->status="<i class='fa fa-check change_status' style='font-size:20px;color:green;cursor:pointer' aria-hidden='true' data-url='/admin/category_change_status/' data-id='".base64_encode($data['records'][$key]->category_id)."' name='status".$data['records'][$key]->category_id."' data-status='status".$data['records'][$key]->category_id."' class='btn' style=color:green></i>";	
+			// if($data['records'][$key]->status=='1')
+			// {
+			// 	$data['records'][$key]->status="<i class='fa fa-close change_status' style='font-size:20px;color:red;cursor:pointer' data-url='/admin/category_change_status/' data-id='".base64_encode($data['records'][$key]->category_id)."' name='status".$data['records'][$key]->category_id."' data-status='status".$data['records'][$key]->category_id."' style=color:red></i>";
+			// }
+			// else{
+			// 	$data['records'][$key]->status="<i class='fa fa-check change_status' style='font-size:20px;color:green;cursor:pointer' aria-hidden='true' data-url='/admin/category_change_status/' data-id='".base64_encode($data['records'][$key]->category_id)."' name='status".$data['records'][$key]->category_id."' data-status='status".$data['records'][$key]->category_id."' class='btn' style=color:green></i>";	
 		
-			}
+			// }
 			$data['records'][$key]->check_box="<input type='checkbox' class='checkbox' onclick='multi_select()' value='".$data['records'][$key]->category_id."' name='data' style='width:20px;height:20px'>";	
 			
 			$data['records'][$key]->action=" <i class='fa fa-edit'  onclick='ajx_category_edit(this.id)' style='font-size:18px;cursor:pointer' data-toggle='tooltip' data-placement='top' title='Edit'  id='".base64_encode($data['records'][$key]->category_id)."'></i></a>&nbsp;
@@ -72,9 +74,9 @@ class CategoryController extends Controller
 	}
 
 	//to get data of particular id for update
-	public function update($id)
+	public function edit_category($id)
 	{
-		$data['category']=CategoryDetails::where('category_id',base64_decode($id))->first();	
+		$data['category']=CategoryDetails::where('category_id',$id)->first();	
 		$data['menu']="category_list";
 		return ['category' => $data['category'],'menu'=>$data['menu']];
 		exit();
@@ -94,18 +96,19 @@ class CategoryController extends Controller
 		$row_data->save();
 		
 		return response()->json([
-		'success' => 'status changed successfully!',
-		'status'=>$status
+			'success' => 'status changed successfully!',
+			'status'=>$row_data->status
 		]);
 	}
 
 	//to delete data of particular id
 	public function delete($id)
 	{
-		CategoryDetails::where('category_id',base64_decode($id))->update(['status' => '2']);	
-		CategoryDetails::find(base64_decode($id))->delete();
+		CategoryDetails::where('category_id',$id)->update(['status' => '2']);	
+		CategoryDetails::find($id)->delete();
 		return response()->json([
-		'success' => 'Record has been deleted successfully!'
+			'success' => 'Record has been deleted successfully!',
+			'status' => $row_data
 		]);
 	}
 
@@ -122,8 +125,8 @@ class CategoryController extends Controller
 			$row_data->delete();
 		}
 		return response()->json([
-		'success' => 'status changed successfully!',
-		'status'=>$row_data
+			'success' => 'status changed successfully!',
+			'status'=>$row_data
 		]);
 	}
 
@@ -144,8 +147,8 @@ class CategoryController extends Controller
 			$row_data->save();
 		}
 		return response()->json([
-		'success' => 'status changed successfully!',
-		'status'=>$status
+			'success' => 'status changed successfully!',
+			'status'=>$status
 		]);
 	}
 
@@ -161,7 +164,7 @@ class CategoryController extends Controller
 	}
 
 	//to store category details 
-	public function store(Request $request)
+	public function store_category(Request $request)
 	{
 		$category_id=$request['hdn_id'];
 
@@ -169,9 +172,8 @@ class CategoryController extends Controller
 			'category_name'=>$request->input('category_name')
 		];
 
-		CategoryDetails::updateOrCreate(['category_id'=>$category_id],$category_data); 
-		Session::flash('session_msg','Category data updated successfully!');
-		return redirect()->to('admin/category_listing');	
-	
+		$res = CategoryDetails::updateOrCreate(['category_id'=>$category_id],$category_data); 
+		// Session::flash('session_msg','Category data updated successfully!');
+		return $res;	
 	}
 }

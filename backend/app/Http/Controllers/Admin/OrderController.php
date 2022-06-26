@@ -56,7 +56,7 @@ class OrderController extends Controller
 		$data['customers'] = CustomerDetails::where('status','=','0')->get();
 		$data['cads'] = Cad::where('status','=','0')->get();
 		// $data['order_img'] = DB::table('order_images')->select('*')->get()->toArray();
-		return view('admin.order.create',['products' => $data['products'] ,'customers' => $data['customers'],'cads' => $data['cads'],'order_img' => NULL,'menu'=>$data['menu']]);
+		return ['products' => $data['products'] ,'customers' => $data['customers'],'cads' => $data['cads'],'order_img' => NULL,'menu'=>$data['menu']];
 	}
 
 	//to get data of particular id for update
@@ -69,7 +69,7 @@ class OrderController extends Controller
 		$data['cads'] = Cad::where('status','=','0')->get();
 		$data['order_img'] = OrderImages::where('order_id','=',$data['orders']['order_id'])->get()->toArray();	
 		// echo "<pre>";  print_r($data['orders']);exit();
-		return view('admin.order.create',['orders'=>$data['orders'],'products' => $data['products'],'customers' => $data['customers'],'cads' => $data['cads'],'order_img' => $data['order_img'],'menu'=>$data['menu']]);
+		return ['orders'=>$data['orders'],'products' => $data['products'],'customers' => $data['customers'],'cads' => $data['cads'],'order_img' => $data['order_img'],'menu'=>$data['menu']];
 	}
 
 	//to change status of particular id
@@ -86,8 +86,8 @@ class OrderController extends Controller
 		$row_data->save();
 		
 		return response()->json([
-		'success' => 'status changed successfully!',
-		'status'=>$status
+			'success' => 'status changed successfully!',
+			'status'=>$row_data->status
 		]);
 	}
 
@@ -97,7 +97,8 @@ class OrderController extends Controller
 		OrderDetails::where('id',base64_decode($id))->update(['status' => '2']);	
 		OrderDetails::find(base64_decode($id))->delete();
 		return response()->json([
-		'success' => 'Record has been deleted successfully!'
+			'success' => 'Record has been deleted successfully!',
+			'status' => $row_data
 		]);
 	}
 
@@ -136,8 +137,8 @@ class OrderController extends Controller
 			$row_data->save();
 		}
 		return response()->json([
-		'success' => 'status changed successfully!',
-		'status'=>$status
+			'success' => 'status changed successfully!',
+			'status'=>$status
 		]);
 	}
 

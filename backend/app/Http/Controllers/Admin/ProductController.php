@@ -26,10 +26,10 @@ class ProductController extends Controller
 	//to fetch cad data
 	public function fetch_product_details(Request $request)
 	{
-		$sort=$_REQUEST['order'];
-		$search=(isset($_REQUEST['search']))?$_REQUEST['search']:'';
-		$limit=(int)$_REQUEST['limit'];
-		$offset=(int)$_REQUEST['offset'];
+		// $sort=$_REQUEST['order'];
+		// $search=(isset($_REQUEST['search']))?$_REQUEST['search']:'';
+		// $limit=(int)$_REQUEST['limit'];
+		// $offset=(int)$_REQUEST['offset'];
 
 		$result =ProductDetails::where('deleted_at',NULL)->get(); // to get except soft-deleted data
 		$data['totalRecords']=$result->count();
@@ -37,11 +37,11 @@ class ProductController extends Controller
 		$result_two= DB::table('product_details',  'pd')
 			->select('pd.*','cd.category_name')
 			->leftJoin('category_details AS cd', 'cd.category_id', '=', 'pd.category')
-			->where('pd.name','LIKE','%'.$search.'%')
+			// ->where('pd.name','LIKE','%'.$search.'%')
 			->where('pd.deleted_at',NULL) // to get except soft-deleted data
 			->where('pd.status','!=','2')
-			->limit($limit)->offset($offset)
-			->orderBy('pd.product_id',$sort)
+			// ->limit($limit)->offset($offset)
+			// ->orderBy('pd.product_id',$sort)
 			->get();
 
 		$data['records']=$result_two;
@@ -72,14 +72,14 @@ class ProductController extends Controller
 				$data['records'][$key]->product_details='-';	
 			} 
 
-			if($data['records'][$key]->status=='1')
-			{
-				$data['records'][$key]->status="<i class='fa fa-close change_status' style='font-size:20px;color:red;cursor:pointer' data-url='/admin/product_change_status/' data-id='".base64_encode($data['records'][$key]->product_id)."' name='status".$data['records'][$key]->product_id."' data-status='status".$data['records'][$key]->product_id."' style=color:red></i>";
-			}
-			else{
-				$data['records'][$key]->status="<i class='fa fa-check change_status' style='font-size:20px;color:green;cursor:pointer' aria-hidden='true' data-url='/admin/product_change_status/' data-id='".base64_encode($data['records'][$key]->product_id)."' name='status".$data['records'][$key]->product_id."' data-status='status".$data['records'][$key]->product_id."' class='btn' style=color:green></i>";	
+			// if($data['records'][$key]->status=='1')
+			// {
+			// 	$data['records'][$key]->status="<i class='fa fa-close change_status' style='font-size:20px;color:red;cursor:pointer' data-url='/admin/product_change_status/' data-id='".base64_encode($data['records'][$key]->product_id)."' name='status".$data['records'][$key]->product_id."' data-status='status".$data['records'][$key]->product_id."' style=color:red></i>";
+			// }
+			// else{
+			// 	$data['records'][$key]->status="<i class='fa fa-check change_status' style='font-size:20px;color:green;cursor:pointer' aria-hidden='true' data-url='/admin/product_change_status/' data-id='".base64_encode($data['records'][$key]->product_id)."' name='status".$data['records'][$key]->product_id."' data-status='status".$data['records'][$key]->product_id."' class='btn' style=color:green></i>";	
 		
-			}
+			// }
 			$data['records'][$key]->check_box="<input type='checkbox'  class='checkbox' onclick='multi_select()'  value='".$data['records'][$key]->product_id."' name='data' style='width:20px;height:20px'>";	
 			
 			$data['records'][$key]->action="<a href='/admin/edit_product/".base64_encode($data['records'][$key]->product_id)."'>
@@ -108,7 +108,7 @@ class ProductController extends Controller
 		$data['product']=ProductDetails::where('product_id',base64_decode($request->id))->first();	
 		$data['category']=CategoryDetails::where('status','=','0')->get();
 		$data['menu']="product_list";
-		return view('admin.product.create', ['products'=>$data['product'],'menu'=>$data['menu'],'category'=>$data['category']]);
+		return ['products'=>$data['product'],'menu'=>$data['menu'],'category'=>$data['category']];
 	}
 
 	//to change status of particular id
@@ -125,8 +125,8 @@ class ProductController extends Controller
 		$row_data->save();
 		
 		return response()->json([
-		'success' => 'status changed successfully!',
-		'status'=>$status
+			'success' => 'status changed successfully!',
+			'status'=>$row_data->status
 		]);
 	}
 
@@ -136,7 +136,8 @@ class ProductController extends Controller
 		ProductDetails::where('product_id',base64_decode($id))->update(['status' => '2']);	
 		ProductDetails::find(base64_decode($id))->delete();
 		return response()->json([
-		'success' => 'Record has been deleted successfully!'
+			'success' => 'Record has been deleted successfully!',
+			'status' => $row_data
 		]);
 	}
 
@@ -153,8 +154,8 @@ class ProductController extends Controller
 			$row_data->delete();
 		}
 		return response()->json([
-		'success' => 'status changed successfully!',
-		'status'=>$row_data
+			'success' => 'status changed successfully!',
+			'status'=>$row_data
 		]);
 	}
 
@@ -175,8 +176,8 @@ class ProductController extends Controller
 			$row_data->save();
 		}
 		return response()->json([
-		'success' => 'status changed successfully!',
-		'status'=>$status
+			'success' => 'status changed successfully!',
+			'status'=>$row_data
 		]);
 	}
 
@@ -227,9 +228,9 @@ class ProductController extends Controller
 		#echo "<pre>"; 
 		#print_r($product_data);exit();
 
-		ProductDetails::updateOrCreate(['product_id'=>$product_id],$product_data); 
-		Session::flash('session_msg','Product data updated successfully!');
-		return redirect()->to('admin/product_listing');	
+		$res = ProductDetails::updateOrCreate(['product_id'=>$product_id],$product_data); 
+		// Session::flash('session_msg','Product data updated successfully!');
+		return $res;
 	
 	}
 }

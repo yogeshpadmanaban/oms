@@ -71,6 +71,7 @@ export default function CustomerForm() {
                 profile_picture.name = values.profile_picture.name;
                 profile_picture.type = values.profile_picture.type;
                 profile_picture.size = `${values.profile_picture.size} bytes`;
+                // profile_picture.data = RNFetchBlob.wrap(fileContent)
                 values.profile_picture = profile_picture;
             }
 

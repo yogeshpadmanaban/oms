@@ -143,7 +143,7 @@ class CustomerController extends Controller
 	public function delete($id)
 	{
 		$row_data = CustomerDetails::where('customer_id',$id)->update(['status' => '2']);	
-		// CustomerDetails::find($id)->delete();
+		CustomerDetails::find($id)->delete();
 		return response()->json([
 			'success' => 'Record has been deleted successfully!',
 			'status' => $row_data
@@ -223,12 +223,12 @@ class CustomerController extends Controller
 
 		// dd($request['profile_picture.name']);	
 
-		if($request->file('profile_picture'))
+		if($request['profile_picture'])
 		{
 			$destinationPath = 'uploads/customer/profile_picture/'; // upload path
 			$files = $request->file('profile_picture');
 			$profile_path = date('YmdHis') . "." . $files->getClientOriginalExtension();
-			$files->move($destinationPath, $profile_path);
+			$files->move(public_path($destinationPath),$profile_path);
 			$image=$destinationPath.$profile_path;
 		}
 
