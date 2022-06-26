@@ -33,11 +33,14 @@ UserListToolbar.propTypes = {
   numSelected: PropTypes.number,
   filterName: PropTypes.string,
   onFilterName: PropTypes.func,
+  onDelete: PropTypes.func,
+  onstausChange: PropTypes.func
 };
 
-export default function UserListToolbar({ numSelected, filterName, onFilterName }) {
+export default function UserListToolbar({ numSelected, filterName, onFilterName, onDelete, onstausChange }) {
   return (
-    
+
+
     <RootStyle
       sx={{
         ...(numSelected > 0 && {
@@ -50,20 +53,44 @@ export default function UserListToolbar({ numSelected, filterName, onFilterName 
         <Typography component="div" variant="subtitle1">
           {numSelected} selected
         </Typography>
-      ) : 
-      
-      (
-        <SearchStyle
-          value={filterName}
-          onChange={onFilterName}
-          placeholder="Search user..."
-          startAdornment={
-            <InputAdornment position="start">
-              <Iconify icon="eva:search-fill" sx={{ color: 'text.disabled', width: 20, height: 20 }} />
-            </InputAdornment>
-          }
-        />
+      ) :
+
+        (
+          <SearchStyle
+            value={filterName}
+            onChange={onFilterName}
+            placeholder="Search user..."
+            startAdornment={
+              <InputAdornment position="start">
+                <Iconify icon="eva:search-fill" sx={{ color: 'text.disabled', width: 20, height: 20 }} />
+              </InputAdornment>
+            }
+          />
+        )}
+
+      {numSelected > 0 ? (
+        <div>
+          <Tooltip title="Bulk Status Change">
+            <IconButton onClick={onstausChange}>
+              <Iconify icon="el:lock" />
+            </IconButton>
+          </Tooltip>
+
+          <Tooltip title="Bulk Delete">
+            <IconButton onClick={onDelete}>
+              <Iconify icon="eva:trash-2-fill" />
+            </IconButton>
+          </Tooltip>
+        </div>
+
+      ) : (
+        <Tooltip title="Filter list">
+          <IconButton>
+            <Iconify icon="ic:round-filter-list" />
+          </IconButton>
+        </Tooltip>
       )}
+
     </RootStyle>
   );
 }

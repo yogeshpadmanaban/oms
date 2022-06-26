@@ -69,42 +69,27 @@ const customerReport = {
 
 };
 
-const editCustomerRecord = {
-    "customer": {
-        "customer_id": 23,
-        "profile_picture": "/static/mock-images/avatars/avatar_.jpg",
-        "name": "gokul",
-        "address": "anna nagar",
-        "city": "chennai",
-        "cus_state": "TN",
-        "gst_no": "234433424334",
-        "pan_no": "3423434ER676",
-        "other_upload": "/static/mock-images/avatars/avatar_.jpg",
-    },
-    "menu": "customer_list"
+
+const categoryReport = {
+    total: 13,
+    recordsFiltered: 13,
+    data: {
+        rows: [
+            {
+                "category_id": 1,
+                "category_name": "vigat rings",
+                "status": "0",
+            },
+            {
+                "category_id": 2,
+                "category_name": "vigat ringsssss",
+                "status": "1",
+            }
+        ]
+    }
+
 }
 
-const categoryReport = [
-    {
-        id: '1',
-        categoryName: 'categoryName 1',
-        status: true,
-        Action: ''
-    },
-    {
-        id: '2',
-        categoryName: 'categoryName 21',
-        status: false,
-        Action: ''
-    },
-    {
-        id: '3',
-        categoryName: 'categoryName 3',
-        status: true,
-        Action: ''
-    },
-
-];
 
 const productReport = [
 
@@ -136,7 +121,7 @@ const productReport = [
 
 export async function getData(apiName) {
     console.log("apiName", apiName);
-    if (apiName == 'categoryReport') {
+    if (apiName == 'category_details') {
         return categoryReport;
     }
     else if (apiName == 'productReport') {
@@ -161,17 +146,17 @@ export async function getData(apiName) {
 export async function postData(apiName, params) {
     console.log(apiName);
     if (apiName == "login/admin") {
-       var baseUrl = 'http://localhost:8000/api/';
+        var baseUrl = 'http://localhost:8000/api/';
     }
-    else{
+    else {
         var baseUrl = 'http://localhost:8000/api/admin/';
     }
     let apiUrl = baseUrl + apiName;
     let responseData = await axios.post(apiUrl, params, config).then((response) => {
         return response;
     },
-    (error) => {
-        return error;
-    });
+        (error) => {
+            return error;
+        });
     return responseData;
 }

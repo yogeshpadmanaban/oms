@@ -23,28 +23,13 @@ const navConfig = [
     path: '/admin/category_report',
     activePath: ['/admin/category_report'],
     icon: getIcon('eva:people-fill'),
-  },
-  {
-    title: 'Product Report',
-    path: '/admin/product_report',
-    activePath: ['/admin/product_report'],
-    icon: getIcon('eva:people-fill'),
-  },
+  }
   // {
-  //   title: 'user',
-  //   path: '/admin/user',
+  //   title: 'Product Report',
+  //   path: '/admin/product_report',
+  //   activePath: ['/admin/product_report'],
   //   icon: getIcon('eva:people-fill'),
   // },
-  // {
-  //   title: 'product',
-  //   path: '/admin/products',
-  //   icon: getIcon('eva:shopping-bag-fill'),
-  // },
-  // {
-  //   title: 'blog',
-  //   path: '/admin/blog',
-  //   icon: getIcon('eva:file-text-fill'),
-  // }
 ];
 
 export default navConfig;

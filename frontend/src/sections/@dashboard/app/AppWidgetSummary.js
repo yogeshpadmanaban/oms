@@ -2,7 +2,7 @@
 import PropTypes from 'prop-types';
 import { alpha, styled } from '@mui/material/styles';
 import { Card, Typography } from '@mui/material';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate, useParams } from 'react-router-dom';
 // utils
 import { fShortenNumber } from '../../../utils/formatNumber';
 // components
@@ -28,11 +28,20 @@ AppWidgetSummary.propTypes = {
   icon: PropTypes.string,
   title: PropTypes.string.isRequired,
   path: PropTypes.string.isRequired,
-  total: PropTypes.number.isRequired,
+  total: PropTypes.number,
   sx: PropTypes.object,
 };
 
+
+
 export default function AppWidgetSummary({ title, total, path, icon, color = 'primary', sx, ...other }) {
+  const navigate = useNavigate();
+
+  const onNavigate = (path) => {
+    console.log("path", path);
+    navigate(path, { replace: true });
+  }
+
   return (
     <Card
       sx={{
@@ -60,9 +69,10 @@ export default function AppWidgetSummary({ title, total, path, icon, color = 'pr
 
       <Typography variant="h3">{fShortenNumber(total)}</Typography>
 
-      <Typography variant="subtitle2" component={RouterLink} to={path} sx={{ opacity: 0.72 }}>
+      <Typography onClick={(event) => onNavigate(path)} variant="subtitle2" sx={{ opacity: 0.72 }}>
         {title}
       </Typography>
+
 
     </Card>
   );

@@ -18,6 +18,7 @@ import Iconify from '../components/Iconify';
 
 // Serive
 import { postData, getData } from '../Services/apiservice';
+import { ToastContainer, toast } from 'react-toastify';
 
 // ----------------------------------------------------------------------
 
@@ -86,7 +87,10 @@ export default function CustomerForm() {
 
             let response = await postData('store_customer', values);
             if (response) {
+                toast.success(response.data.message);
                 navigate('/admin/customer_report', { replace: true });
+            } else {
+                toast.error(response.data.message);
             }
 
         },

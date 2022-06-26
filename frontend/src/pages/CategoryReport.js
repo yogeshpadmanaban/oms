@@ -1,7 +1,9 @@
 import { filter } from 'lodash';
-import { sentenceCase } from 'change-case';
 import React, { useEffect, useState } from "react";
 import { Link as RouterLink } from 'react-router-dom';
+import { decode as base64_decode, encode as base64_encode } from 'base-64';
+import swal from 'sweetalert'; // sweetalert
+import { ToastContainer, toast } from 'react-toastify';
 
 // material
 import {
@@ -25,15 +27,14 @@ import Page from '../components/Page';
 import Scrollbar from '../components/Scrollbar';
 import Iconify from '../components/Iconify';
 import SearchNotFound from '../components/SearchNotFound'; // Common Page
-
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/categoryReport'; // Sepearte page
 
 // apiservice
-import { getData } from '../Services/apiservice';
+import { postData, getData } from '../Services/apiservice';
 
 
 const TABLE_HEAD = [
-    { id: 'categoryName', label: 'Category Name', alignRight: false },
+    { id: 'category_name', label: 'Category Name', alignRight: false },
     { id: 'status', label: 'Status', alignRight: false },
     { id: '', label: 'Action', alignRight: false },
 ];
@@ -41,7 +42,7 @@ const TABLE_HEAD = [
 
 function applySortFilter(array, query) {
     if (query) {
-        return filter(array, (_user) => _user.categoryName.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+        return filter(array, (_user) => _user.category_name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
     }
     else {
         return array;
@@ -56,19 +57,26 @@ export default function CategoryReport() {
 
     const [order, setOrder] = useState('asc');  // asc || dsc
 
-    const [orderBy, setOrderBy] = useState('categoryName'); // By Default CustomerName
+    const [orderBy, setOrderBy] = useState('category_id'); // By Default category_id
 
-    const [filterName, setFilterName] = useState(''); // search filter name set and it's fun
+    const [filterName, setFilterName] = useState(''); // search filter category_id set and it's fun
 
     const [rowsPerPage, setRowsPerPage] = useState(5);  // setrowsPerPage
 
-    const [userList, setuserList] = useState([]);
+    const [list, setList] = useState([]);
 
     useEffect(async () => {
-        let data = await getData('categoryReport');
-        setuserList(data);
+        await getRecord();
     }, []);
 
+
+    const getRecord = async () => {
+        let response = await getData('category_details');
+        console.log(response);
+        if (response && response.data.rows) {
+            setList(response.data.rows);
+        }
+    }
 
     // On Table head sort (sort, sortBy)
     const handleRequestSort = (event, property) => {
@@ -80,7 +88,7 @@ export default function CategoryReport() {
     // all checkbox Click
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelecteds = userList.map((n) => n.categoryName);
+            const newSelecteds = list.map((n) => n.category_id);
             setSelected(newSelecteds);
             return;
         }
@@ -88,11 +96,11 @@ export default function CategoryReport() {
     };
 
     // Single checkbox Click
-    const handleClick = (categoryName) => {
-        const selectedIndex = selected.indexOf(categoryName);
+    const handleClick = (category_id) => {
+        const selectedIndex = selected.indexOf(category_id);
         let newSelected = [];
         if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, categoryName);
+            newSelected = newSelected.concat(selected, category_id);
         } else if (selectedIndex === 0) {
             newSelected = newSelected.concat(selected.slice(1));
         } else if (selectedIndex === selected.length - 1) {
@@ -108,6 +116,43 @@ export default function CategoryReport() {
         setPage(newPage);
     };
 
+    // On Delete
+    const ondeleteClick = async (category_id) => {
+
+        let apiUrl, selectedArray = [];
+        if (selected && selected.length > 1 && category_id) {
+            selectedArray = selected;
+            apiUrl = 'category_bulk_status_change/' + '[' + selectedArray + ']';
+        }
+        else {
+            if (selected && selected.length > 0) {
+                apiUrl = 'category_delete/' + selected;
+            } else {
+                apiUrl = 'category_delete/' + category_id;
+            }
+        }
+        swal({
+            title: "Are you sure you want to delete?",
+            text: "Once deleted, you will not be able to recover!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then(async (willDelete) => {
+                if (willDelete) {
+                    console.log("apiUrl", apiUrl);
+                    // let responseData = await postData(apiUrl)
+                    // if (responseData) {
+                    //     toast.success("Deleted Successfully");
+                    //     await getRecord();
+                    //     await handletableReset();
+                    // } else {
+                    //     toast.error("Oops ! Somewithing wen wrong");
+                    // }
+                }
+            });
+    };
+
     // On ChangeRowsperPage
     const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(Number(event.target.value));
@@ -119,11 +164,55 @@ export default function CategoryReport() {
         setFilterName(event.target.value);
     };
 
-    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - userList.length) : 0;
+    // onStatus Change
+    const onstatusChange = async (category_id) => {
 
-    const filteredUsers = applySortFilter(userList, filterName);
+        let apiUrl, selectedArray = [];
 
-    const isUserNotFound = !filteredUsers || filteredUsers.length === 0;
+        if (selected && selected.length > 1 && category_id) {
+            selectedArray = selected;
+            apiUrl = 'category_bulk_status_change/' + '[' + selectedArray + ']';
+        }
+        else {
+            if (selected && selected.length > 0) {
+                apiUrl = 'category_change_status/' + selected;
+            } else {
+                apiUrl = 'category_change_status/' + category_id;
+            }
+        }
+        swal({
+            title: "Are you sure you want to change status ?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then(async (willchangeStatus) => {
+                if (willchangeStatus) {
+                    console.log("apiurl", apiUrl)
+                    let responseData = await postData(apiUrl);
+                    if (responseData) {
+                        toast.success("Status Changed Successfully");
+                        await getRecord();
+                        await handletableReset();
+                    } else {
+                        toast.error("Oops ! Somewithing wen wrong");
+                    }
+                }
+            });
+    }
+
+    const handletableReset = () => {
+        setRowsPerPage(Number(5));
+        setPage(0);
+        setSelected([]);
+        setFilterName('');
+    }
+
+    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - list.length) : 0;
+
+    const filteredUsers = applySortFilter(list, filterName);
+
+    const isDataNotFound = !filteredUsers || filteredUsers.length === 0;
 
     return (
         <Page title="Category Report">
@@ -132,13 +221,14 @@ export default function CategoryReport() {
                     <Typography variant="h4" gutterBottom>
                         Category Report
                     </Typography>
-                    {/* <Button variant="contained" component={RouterLink} to="#" startIcon={<Iconify icon="eva:plus-fill" />}>
+                    <Button variant="contained" component={RouterLink} to="/admin/add_customer" startIcon={<Iconify icon="eva:plus-fill" />}>
                         Add Category
-                    </Button> */}
+                    </Button>
                 </Stack>
 
                 <Card>
-                    <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
+                    <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName}
+                        onDelete={ondeleteClick} onstausChange={onstatusChange} />
 
                     <Scrollbar>
                         <TableContainer sx={{ minWidth: 800 }}>
@@ -147,7 +237,7 @@ export default function CategoryReport() {
                                     order={order}
                                     orderBy={orderBy}
                                     headLabel={TABLE_HEAD}
-                                    rowCount={userList ? userList.length : 0}
+                                    rowCount={list ? list.length : 0}
                                     numSelected={selected.length}
                                     onRequestSort={handleRequestSort}
                                     onSelectAllClick={handleSelectAllClick}
@@ -156,25 +246,43 @@ export default function CategoryReport() {
                                     {filteredUsers &&
                                         filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
 
-                                            const { id, categoryName, status } = row;
-                                            const isItemSelected = selected.indexOf(categoryName) !== -1;
+                                            const { category_id, status, category_name } = row;
+                                            const isItemSelected = selected.indexOf(category_id) !== -1;
+
+                                            if (isItemSelected == true) {
+                                                console.log("selected", selected);
+                                            }
 
                                             return (
                                                 <TableRow
                                                     hover
-                                                    key={id}
+                                                    key={category_id}
                                                     tabIndex={-1}
                                                     role="checkbox"
                                                     selected={isItemSelected}
                                                     aria-checked={isItemSelected}
                                                 >
+
                                                     <TableCell padding="checkbox">
-                                                        <Checkbox checked={isItemSelected} onChange={(event) => handleClick(categoryName)} />
+                                                        <Checkbox checked={isItemSelected} onChange={(event) => handleClick(category_id)} />
                                                     </TableCell>
-                                                    <TableCell align="left">{categoryName}</TableCell>
-                                                    <TableCell align="left">{status ? 'Yes' : 'No'}</TableCell>
-                                                    <TableCell align="left">
-                                                        <UserMoreMenu />
+
+                                                    <TableCell align="left">{category_name}</TableCell>
+                                                    <TableCell align="left" onClick={() => onstatusChange(category_id)}>
+                                                        <Iconify
+                                                            icon={status == 1 ? 'charm:cross' :
+                                                                'typcn:tick'}
+                                                            sx={{ width: 25, height: 25, ml: 1 }}
+                                                        />
+                                                    </TableCell>
+
+                                                    <TableCell>
+                                                        <UserMoreMenu
+                                                            url={'/admin/edit_customer/' + base64_encode(category_id)}
+                                                            selectedList={selected}
+                                                            onDelete={ondeleteClick}
+                                                            rowId={category_id}
+                                                        />
                                                     </TableCell>
                                                 </TableRow>
                                             );
@@ -187,10 +295,10 @@ export default function CategoryReport() {
                                 </TableBody>
 
                                 {/* Not found page */}
-                                {isUserNotFound && (
+                                {isDataNotFound && (
                                     <TableBody>
                                         <TableRow>
-                                            <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
+                                            <TableCell align="center" colSpan={10} sx={{ py: 3 }}>
                                                 <SearchNotFound searchQuery={filterName} />
                                             </TableCell>
                                         </TableRow>
@@ -207,7 +315,7 @@ export default function CategoryReport() {
                     <TablePagination
                         rowsPerPageOptions={[5, 10, 25]}
                         component="div"
-                        count={userList ? userList.length : 0}
+                        count={list ? list.length : 0}
                         rowsPerPage={rowsPerPage}
                         page={page}
                         onPageChange={handleChangePage}
