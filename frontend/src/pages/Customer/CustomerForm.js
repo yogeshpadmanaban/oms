@@ -222,7 +222,7 @@ export default function CustomerForm() {
 
                                         <LoadingButton size="medium" type="submit" variant="contained" loading={isSubmitting}> Submit </LoadingButton>
 
-                                        <Button sx={{ m: 2 }} variant="contained" color="error" component={RouterLink} to="/admin/dashboard/customer_report">
+                                        <Button sx={{ m: 2 }} variant="contained" color="error" component={RouterLink} to="/admin/customer_report">
                                             Cancel
                                         </Button>
 

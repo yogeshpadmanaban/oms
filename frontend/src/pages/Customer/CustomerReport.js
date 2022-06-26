@@ -296,7 +296,7 @@ export default function CustomerReport() {
                               url={'/admin/edit_customer/' + base64_encode(customer_id)}
                               selectedList={selected}
                               onDelete={ondeleteClick}
-                              customer_id={customer_id}
+                              rowId={customer_id}
                             />
                           </TableCell>
                         </TableRow>

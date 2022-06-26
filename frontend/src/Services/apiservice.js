@@ -94,32 +94,36 @@ const categoryReport = {
 }
 
 
-const productReport = [
+const productReport = {
+    total: 12,
+    recordsFiltered: 12,
+    data: {
+        rows: [
+            {
+                "product_id": 1,
+                "category": "1",
+                "name": "ladies ring",
+                "product_image": "-",
+                "product_details": "-",
+                "product_type": "Customized product",
+                "status": "0",
+                "category_name": "rings",
+            },
+            {
+                "product_id": 2,
+                "category": "2",
+                "name": "ladies ring",
+                "product_image": "-",
+                "product_details": "-",
+                "product_type": "Customized product",
+                "status": "1",
+                "category_name": "ringssss",
+            }
+        ]
+    }
 
-    {
-        id: '1',
-        productType: 'productType 1',
-        productCategory: 'productCategory 1',
-        productName: 'productName 1',
-        productImage: '`/static/mock-images/avatars/avatar_.jpg`',
-        productDetails: 'productDetails 1',
-        status: true,
-        Action: ''
-    },
+}
 
-    {
-        id: '2',
-        productType: 'productType 2',
-        productCategory: 'productCategory 2',
-        productName: 'productName 2',
-        productImage: '`/static/mock-images/avatars/avatar_.jpg`',
-        productDetails: 'productDetails 2',
-        status: true,
-        Action: ''
-    },
-
-
-];
 
 
 export async function getData(apiName) {
@@ -127,7 +131,7 @@ export async function getData(apiName) {
     if (apiName == 'category_details') {
         return categoryReport;
     }
-    else if (apiName == 'productReport') {
+    else if (apiName == 'product_datails') {
         return productReport;
     }
     // else if (apiName == 'customer_details') {

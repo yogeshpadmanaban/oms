@@ -23,13 +23,13 @@ const navConfig = [
     path: '/admin/category_report',
     activePath: ['/admin/category_report'],
     icon: getIcon('eva:people-fill'),
-  }
-  // {
-  //   title: 'Product Report',
-  //   path: '/admin/product_report',
-  //   activePath: ['/admin/product_report'],
-  //   icon: getIcon('eva:people-fill'),
-  // },
+  },
+  {
+    title: 'Product Report',
+    path: '/admin/product_report',
+    activePath: ['/admin/product_report'],
+    icon: getIcon('eva:people-fill'),
+  },
 ];
 
 export default navConfig;
