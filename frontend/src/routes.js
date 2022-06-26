@@ -12,10 +12,10 @@ import Register from './pages/Register';
 // Main pages
 import DashboardApp from './pages/DashboardApp';
 
-import CustomerReport from './pages/CustomerReport';
-import CustomerForm from './pages/CustomerForm';
+import CustomerReport from './pages/Customer/CustomerReport';
+import CustomerForm from './pages/Customer/CustomerForm';
 
-import CategoryReport from './pages/CategoryReport';
+import CategoryReport from './pages/Category/CategoryReport';
 // import ProductReport from './pages/ProductReport';
 
 

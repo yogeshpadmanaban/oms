@@ -13,11 +13,11 @@ import { styled } from '@mui/material/styles';
 import { Link, Stack, Card, Container, TextField, IconButton, FormControlLabel, Typography, Button } from '@mui/material';
 
 // components
-import Page from '../components/Page';
-import Iconify from '../components/Iconify';
+import Page from '../../components/Page';
+import Iconify from '../../components/Iconify';
 
 // Serive
-import { postData, getData } from '../Services/apiservice';
+import { postData, getData } from '../../Services/apiservice';
 import { ToastContainer, toast } from 'react-toastify';
 
 // ----------------------------------------------------------------------

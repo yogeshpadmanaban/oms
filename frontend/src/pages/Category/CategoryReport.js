@@ -23,14 +23,14 @@ import {
 } from '@mui/material';
 
 // components
-import Page from '../components/Page';
-import Scrollbar from '../components/Scrollbar';
-import Iconify from '../components/Iconify';
-import SearchNotFound from '../components/SearchNotFound'; // Common Page
-import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/categoryReport'; // Sepearte page
+import Page from '../../components/Page';
+import Scrollbar from '../../components/Scrollbar';
+import Iconify from '../../components/Iconify';
+import SearchNotFound from '../../components/SearchNotFound'; // Common Page
+import { UserListHead, UserListToolbar, UserMoreMenu } from '../../sections/@dashboard/categoryReport'; // Sepearte page
 
 // apiservice
-import { postData, getData } from '../Services/apiservice';
+import { postData, getData } from '../../Services/apiservice';
 
 
 const TABLE_HEAD = [
@@ -141,14 +141,14 @@ export default function CategoryReport() {
             .then(async (willDelete) => {
                 if (willDelete) {
                     console.log("apiUrl", apiUrl);
-                    // let responseData = await postData(apiUrl)
-                    // if (responseData) {
-                    //     toast.success("Deleted Successfully");
-                    //     await getRecord();
-                    //     await handletableReset();
-                    // } else {
-                    //     toast.error("Oops ! Somewithing wen wrong");
-                    // }
+                    let responseData = await postData(apiUrl)
+                    if (responseData) {
+                        toast.success("Deleted Successfully");
+                        await getRecord();
+                        await handletableReset();
+                    } else {
+                        toast.error("Oops ! Somewithing wen wrong");
+                    }
                 }
             });
     };
@@ -221,9 +221,15 @@ export default function CategoryReport() {
                     <Typography variant="h4" gutterBottom>
                         Category Report
                     </Typography>
-                    <Button variant="contained" component={RouterLink} to="/admin/add_customer" startIcon={<Iconify icon="eva:plus-fill" />}>
+
+                    {/* <Button variant="contained" component={RouterLink} to="/admin/add_customer" startIcon={<Iconify icon="eva:plus-fill" />}>
+                        Add Category
+                    </Button> */}
+
+                    <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
                         Add Category
                     </Button>
+
                 </Stack>
 
                 <Card>

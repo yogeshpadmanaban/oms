@@ -12,60 +12,63 @@ const config = {
 const customerReport = {
     total: 7,
     recordsFiltered: 7,
-    rows: [
-        {
-            customer_id: 1,
-            profile_picture: `/static/mock-images/avatars/avatar_.jpg`,
-            name: 'Customer Name 1',
-            address: 'Sample Address',
-            city: 'Sample City',
-            state: 'Sample State ',
-            gst_no: 'Sample gst',
-            pan_no: 'Sample Pan',
-            other_upload: '-',
-            status: true,
-            Action: ''
-        },
-        {
-            customer_id: 2,
-            profile_picture: `/static/mock-images/avatars/avatar_.jpg`,
-            name: 'Customer Name 1',
-            address: 'Sample Address',
-            city: 'Sample City',
-            state: 'Sample State ',
-            gst_no: 'Sample gst',
-            pan_no: 'Sample Pan',
-            other_upload: '-',
-            status: true,
-            Action: ''
-        },
-        {
-            customer_id: 3,
-            profile_picture: `/static/mock-images/avatars/avatar_.jpg`,
-            name: 'Customer Name 1',
-            address: 'Sample Address',
-            city: 'Sample City',
-            state: 'Sample State ',
-            gst_no: 'Sample gst',
-            pan_no: 'Sample Pan',
-            other_upload: '-',
-            status: true,
-            Action: ''
-        },
-        {
-            customer_id: 4,
-            profile_picture: `/static/mock-images/avatars/avatar_.jpg`,
-            name: 'Customer Name 1',
-            address: 'Sample Address',
-            city: 'Sample City',
-            state: 'Sample State ',
-            gst_no: 'Sample gst',
-            pan_no: 'Sample Pan',
-            other_upload: '-',
-            status: false,
-            Action: ''
-        },
-    ]
+    data: {
+        rows: [
+            {
+                customer_id: 1,
+                profile_picture: `/static/mock-images/avatars/avatar_.jpg`,
+                name: 'Customer Name 1',
+                address: 'Sample Address',
+                city: 'Sample City',
+                state: 'Sample State ',
+                gst_no: 'Sample gst',
+                pan_no: 'Sample Pan',
+                other_upload: '-',
+                status: true,
+                Action: ''
+            },
+            {
+                customer_id: 2,
+                profile_picture: `/static/mock-images/avatars/avatar_.jpg`,
+                name: 'Customer Name 1',
+                address: 'Sample Address',
+                city: 'Sample City',
+                state: 'Sample State ',
+                gst_no: 'Sample gst',
+                pan_no: 'Sample Pan',
+                other_upload: '-',
+                status: true,
+                Action: ''
+            },
+            {
+                customer_id: 3,
+                profile_picture: `/static/mock-images/avatars/avatar_.jpg`,
+                name: 'Customer Name 1',
+                address: 'Sample Address',
+                city: 'Sample City',
+                state: 'Sample State ',
+                gst_no: 'Sample gst',
+                pan_no: 'Sample Pan',
+                other_upload: '-',
+                status: true,
+                Action: ''
+            },
+            {
+                customer_id: 4,
+                profile_picture: `/static/mock-images/avatars/avatar_.jpg`,
+                name: 'Customer Name 1',
+                address: 'Sample Address',
+                city: 'Sample City',
+                state: 'Sample State ',
+                gst_no: 'Sample gst',
+                pan_no: 'Sample Pan',
+                other_upload: '-',
+                status: false,
+                Action: ''
+            },
+        ]
+    }
+
 
 };
 

@@ -23,14 +23,14 @@ import {
 } from '@mui/material';
 
 // components
-import Page from '../components/Page';
-import Scrollbar from '../components/Scrollbar';
-import Iconify from '../components/Iconify';
-import SearchNotFound from '../components/SearchNotFound'; // Common Page
-import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/customerReport'; // Sepearte page
+import Page from '../../components/Page';
+import Scrollbar from '../../components/Scrollbar';
+import Iconify from '../../components/Iconify';
+import SearchNotFound from '../../components/SearchNotFound'; // Common Page
+import { UserListHead, UserListToolbar, UserMoreMenu } from '../../sections/@dashboard/customerReport'; // Sepearte page
 
 // apiservice
-import { postData, getData } from '../Services/apiservice';
+import { postData, getData } from '../../Services/apiservice';
 
 
 const TABLE_HEAD = [
