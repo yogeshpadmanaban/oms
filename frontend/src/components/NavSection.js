@@ -144,14 +144,19 @@ NavSection.propTypes = {
 export default function NavSection({ navConfig, ...other }) {
   const { pathname } = useLocation();
 
-  // const match = (path) => (path ? !!matchPath({ path, end: false }, pathname) : false);
-
   const match = (activePath) => {
-    console.log("activePath", activePath);
-    console.log("pathname", pathname);
-    if (activePath.indexOf(pathname) != -1) {
+    let editUrl, splitURL;
+    splitURL = pathname.toString().split("/");
+    if (splitURL.length > 3) {
+      editUrl = splitURL[2];
+    }
+    if (activePath.indexOf(pathname) != -1 && !editUrl) {
       return true;
-    } else {
+    }
+    else if (editUrl && activePath.indexOf(editUrl) != -1) {
+      return true;
+    }
+    else {
       return false;
     }
   }

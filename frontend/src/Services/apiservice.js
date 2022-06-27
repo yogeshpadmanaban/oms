@@ -128,16 +128,16 @@ const productReport = {
 
 export async function getData(apiName) {
     console.log("apiName", apiName);
-    // if (apiName == 'category_details') {
-    //     return categoryReport;
-    // }
-    // else if (apiName == 'product_datails') {
-    //     return productReport;
-    // }
-    // else if (apiName == 'customer_details') {
-    //     return customerReport;
-    // }
-    // else {
+    if (apiName == 'category_details') {
+        return categoryReport;
+    }
+    else if (apiName == 'product_details') {
+        return productReport;
+    }
+    else if (apiName == 'customer_details') {
+        return customerReport;
+    }
+    else {
         let apiUrl = baseUrl + apiName;
         let responseData = await axios.get(apiUrl).then((response) => {
             return response;
@@ -146,7 +146,7 @@ export async function getData(apiName) {
                 return error;
             });
         return responseData;
-    // }
+    }
 }
 
 

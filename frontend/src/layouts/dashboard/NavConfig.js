@@ -15,20 +15,20 @@ const navConfig = [
   {
     title: 'Customer Report',
     path: '/admin/customer_report',
-    activePath: ['/admin/customer_report', '/admin/add_customer', '/admin/edit_customer'],
-    icon: getIcon('eva:people-fill'),
+    activePath: ['/admin/customer_report', '/admin/add_customer', 'edit_customer'],
+    icon: getIcon('ant-design:unordered-list-outlined'),
   },
   {
     title: 'Category Report',
     path: '/admin/category_report',
     activePath: ['/admin/category_report'],
-    icon: getIcon('eva:people-fill'),
+    icon: getIcon('ant-design:unordered-list-outlined'),
   },
   {
     title: 'Product Report',
     path: '/admin/product_report',
-    activePath: ['/admin/product_report'],
-    icon: getIcon('eva:people-fill'),
+    activePath: ['/admin/product_report', '/admin/add_product', 'edit_product'],
+    icon: getIcon('ant-design:unordered-list-outlined'),
   },
 ];
 
