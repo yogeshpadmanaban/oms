@@ -75,7 +75,7 @@ export default function ProductReport() {
 
 
     const getRecord = async () => {
-        let response = await getData('product_datails');
+        let response = await getData('product_details');
         console.log(response);
         if (response && response.data.rows) {
             setList(response.data.rows);
@@ -145,14 +145,14 @@ export default function ProductReport() {
             .then(async (willDelete) => {
                 if (willDelete) {
                     console.log("apiUrl", apiUrl);
-                    // let responseData = await postData(apiUrl)
-                    // if (responseData) {
-                    //     toast.success("Deleted Successfully");
-                    //     await getRecord();
-                    //     await handletableReset();
-                    // } else {
-                    //     toast.error("Oops ! Somewithing wen wrong");
-                    // }
+                    let responseData = await postData(apiUrl)
+                    if (responseData) {
+                        toast.success("Deleted Successfully");
+                        await getRecord();
+                        await handletableReset();
+                    } else {
+                        toast.error("Oops ! Somewithing wen wrong");
+                    }
                 }
             });
     };
@@ -193,14 +193,14 @@ export default function ProductReport() {
             .then(async (willchangeStatus) => {
                 if (willchangeStatus) {
                     console.log("apiurl", apiUrl)
-                    // let responseData = await postData(apiUrl);
-                    // if (responseData) {
-                    //     toast.success("Status Changed Successfully");
-                    //     await getRecord();
-                    //     await handletableReset();
-                    // } else {
-                    //     toast.error("Oops ! Somewithing wen wrong");
-                    // }
+                    let responseData = await postData(apiUrl);
+                    if (responseData) {
+                        toast.success("Status Changed Successfully");
+                        await getRecord();
+                        await handletableReset();
+                    } else {
+                        toast.error("Oops ! Somewithing wen wrong");
+                    }
                 }
             });
     }

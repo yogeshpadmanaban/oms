@@ -114,13 +114,13 @@ class ProductController extends Controller
 	//to change status of particular id
 	public function status_change($id)
 	{
-		$product_status=ProductDetails::find(base64_decode($id));
+		$product_status=ProductDetails::find($id);
 		if($product_status->status=='1')
 			$status='0';
 		else
 			$status='1';
 
-		$row_data=ProductDetails::find(base64_decode($id));
+		$row_data=ProductDetails::find($id);
 		$row_data->status=$status;
 		$row_data->save();
 		
@@ -133,8 +133,8 @@ class ProductController extends Controller
 	//to delete data of particular id
 	public function delete($id)
 	{
-		ProductDetails::where('product_id',base64_decode($id))->update(['status' => '2']);	
-		ProductDetails::find(base64_decode($id))->delete();
+		ProductDetails::where('product_id',$id)->update(['status' => '2']);	
+		ProductDetails::find($id)->delete();
 		return response()->json([
 			'success' => 'Record has been deleted successfully!',
 			'status' => $row_data

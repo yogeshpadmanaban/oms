@@ -79,8 +79,8 @@ export default function ProductForm() {
         if (params && params.id) {
             let url = 'edit_product/' + params.id;
             let responseData = await getData(url);
-            if (responseData && responseData.data.customer) {
-                const { name, product_details, product_image, product_id, product_type, category } = responseData.data.customer;
+            if (responseData && responseData.data.products) {
+                const { name, product_details, product_image, product_id, product_type, category } = responseData.data.products;
                 formik.setFieldValue("product_id", product_id);
                 formik.setFieldValue("product_type", product_type);
                 formik.setFieldValue("category", category);

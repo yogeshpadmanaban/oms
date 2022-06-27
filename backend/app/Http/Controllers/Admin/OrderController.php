@@ -28,14 +28,23 @@ class OrderController extends Controller
 	public function fetch_order_details(Request $request)
 	{
 		$arr_data = [
-						'user_id' => session()->get('sess_arr')['user_id'],
-						'user_role' => session()->get('sess_arr')['user_role'],
-						'sort' => $_REQUEST['order'],
-						'search' => (isset($_REQUEST['search']))?$_REQUEST['search']:'',
-						'limit' => (int)$_REQUEST['limit'],
-						'offset' => (int)$_REQUEST['offset'],
-						'from_date' => (isset($_REQUEST['from_date']))?$_REQUEST['from_date']:'',
-						'to_date' => (isset($_REQUEST['to_date']))?$_REQUEST['to_date']:''
+						// 'user_id' => session()->get('sess_arr')['user_id'],
+						// 'user_role' => session()->get('sess_arr')['user_role'],
+						// 'sort' => $_REQUEST['order'],
+						// 'search' => (isset($_REQUEST['search']))?$_REQUEST['search']:'',
+						// 'limit' => (int)$_REQUEST['limit'],
+						// 'offset' => (int)$_REQUEST['offset'],
+						// 'from_date' => (isset($_REQUEST['from_date']))?$_REQUEST['from_date']:'',
+						// 'to_date' => (isset($_REQUEST['to_date']))?$_REQUEST['to_date']:'',
+
+						'user_id' => '',
+						'user_role' => '',
+						'sort' => 'desc',
+						'search' => '',
+						'limit' => '',
+						'offset' => '',
+						'from_date' => '',
+						'to_date' => ''
 
 					];
 		$fetch_data = OrderDetails::fetchdata($arr_data);
@@ -75,13 +84,13 @@ class OrderController extends Controller
 	//to change status of particular id
 	public function status_change($id)
 	{
-		$order_status=OrderDetails::find(base64_decode($id));
+		$order_status=OrderDetails::find($id);
 		if($order_status->status=='1')
 			$status='0';
 		else
 			$status='1';
 
-		$row_data=OrderDetails::find(base64_decode($id));
+		$row_data=OrderDetails::find($id);
 		$row_data->status=$status;
 		$row_data->save();
 		
@@ -94,8 +103,8 @@ class OrderController extends Controller
 	//to delete data of particular id
 	public function delete($id)
 	{
-		OrderDetails::where('id',base64_decode($id))->update(['status' => '2']);	
-		OrderDetails::find(base64_decode($id))->delete();
+		OrderDetails::where('id',$id)->update(['status' => '2']);	
+		OrderDetails::find($id)->delete();
 		return response()->json([
 			'success' => 'Record has been deleted successfully!',
 			'status' => $row_data
@@ -115,8 +124,8 @@ class OrderController extends Controller
 			$row_data->delete();
 		}
 		return response()->json([
-		'success' => 'Records has been deleted successfully!',
-		'status'=>$row_data
+			'success' => 'Records has been deleted successfully!',
+			'status'=>$row_data
 		]);
 	}
 

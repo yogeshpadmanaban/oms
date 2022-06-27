@@ -85,13 +85,13 @@ class CategoryController extends Controller
 	//to change status of particular id
 	public function status_change($id)
 	{
-		$category_status=CategoryDetails::find(base64_decode($id));
+		$category_status=CategoryDetails::find($id);
 		if($category_status->status=='1')
 			$status='0';
 		else
 			$status='1';
 
-		$row_data=CategoryDetails::find(base64_decode($id));
+		$row_data=CategoryDetails::find($id);
 		$row_data->status=$status;
 		$row_data->save();
 		
