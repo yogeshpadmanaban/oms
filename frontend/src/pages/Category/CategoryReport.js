@@ -4,8 +4,9 @@ import { Link as RouterLink } from 'react-router-dom';
 import { decode as base64_decode, encode as base64_encode } from 'base-64';
 import swal from 'sweetalert'; // sweetalert
 import { ToastContainer, toast } from 'react-toastify';
-import { Modal, Box } from '@mui/material';
-
+import { useFormik, Form, FormikProvider } from 'formik';
+import * as Yup from 'yup';
+import { LoadingButton } from '@mui/lab';
 // material
 import {
     Card,
@@ -21,7 +22,12 @@ import {
     Typography,
     TableContainer,
     TablePagination,
+    TextField
 } from '@mui/material';
+
+
+// import { Link, Stack, Card, Container, , IconButton, FormControlLabel, Typography, Button } from '@mui/material';
+
 
 // components
 import Page from '../../components/Page';
@@ -33,6 +39,8 @@ import { UserListHead, UserListToolbar, UserMoreMenu } from '../../sections/@das
 // apiservice
 import { postData, getData } from '../../Services/apiservice';
 
+import "react-responsive-modal/styles.css";
+import { Modal } from "react-responsive-modal";
 
 const TABLE_HEAD = [
     { id: 'category_name', label: 'Category Name', alignRight: false },
@@ -50,29 +58,97 @@ function applySortFilter(array, query) {
     }
 }
 
-function ChildModal() {
+
+function CategoryModal({ open, handleClose, getRecord, oneditedId }) {
+    const categorySchema = Yup.object().shape({
+        id: Yup.number(),
+        category_name: Yup.string().required('Category Name is required')
+    });
+
+    const formik = useFormik({
+        initialValues: {
+            id: '',
+            category_name: '',
+        },
+        validationSchema: categorySchema,
+        onSubmit: async (values, { resetForm }) => {
+            console.log("values", values);
+
+            handleClose(); // Modal close
+            resetForm(); // Reset form
+            getRecord(); // Record Get
+
+            // let response = await postData('store_category', values);
+            // if (response.status == 200) {
+            //     handleClose(); // Modal close
+            //     resetForm(); // Reset form
+            //     toast.success(response.data.message);
+            //     getRecord(); // Record Get
+            // } else {
+            //     toast.error(response.data.message);
+            // }
+
+        },
+    });
+
+    useEffect(async () => {
+        if (oneditedId) {
+            let url = 'edit_category/' + oneditedId;
+            console.log("url", url);
+            let responseData = await getData(url);
+            console.log("sfsdfsdfsdfsdf", responseData.data.category)
+            if (responseData && responseData.data.category) {
+                const { id, category_name } = responseData.data.category;
+                formik.setFieldValue("id", id);
+                formik.setFieldValue("category_name", category_name);
+            }
+        } else {
+            formik.setFieldValue("id", '');
+            formik.setFieldValue("category_name", '');
+        }
+    }, []);
+
+    const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps, setFieldValue, initialValues } = formik;
 
     return (
-        <React.Fragment>
-            {/* <Button onClick={handleOpen}>Open Child Modal</Button> */}
-            <Modal
-                hideBackdrop
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="child-modal-title"
-                aria-describedby="child-modal-description"
-            >
-                <Box sx={{ ...style, width: 200 }}>
-                    <h2 id="child-modal-title">Text in a child modal</h2>
-                    <p id="child-modal-description">
-                        Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                    </p>
-                    <Button onClick={handleClose}>Close Child Modal</Button>
-                </Box>
+
+        <div>
+            <Modal center open={open} onClose={handleClose}>
+                <h2>{oneditedId ? 'Edit Category' : 'Add Category'}</h2>
+
+                {/* <Card> */}
+                <FormikProvider value={formik}>
+                    <Form autoComplete="off" encType="multipart/form-data" noValidate onSubmit={handleSubmit}>
+                        <Stack spacing={2} sx={{ my: 1 }}>
+                            <TextField
+                                type="text"
+                                label="Category Name"
+                                {...getFieldProps('category_name')}
+                                error={Boolean(touched.category_name && errors.category_name)}
+                                helperText={touched.category_name && errors.category_name}
+                            />
+
+                            <Stack direction="row" alignItems="center" justifyContent="center">
+                                <LoadingButton size="medium" type="submit" variant="contained" loading={isSubmitting}> Submit </LoadingButton>
+                                <Button sx={{ m: 2 }} variant="contained" color="error" onClick={handleClose}>
+                                    Cancel
+                                </Button>
+                            </Stack>
+
+                        </Stack>
+                    </Form>
+                </FormikProvider>
+                {/* </Card> */}
+
             </Modal>
-        </React.Fragment>
-    );
+        </div>
+
+    )
 }
+
+
+
+
 
 export default function CategoryReport() {
 
@@ -92,22 +168,12 @@ export default function CategoryReport() {
 
     const [open, setOpen] = useState(false);
 
-    const style = {
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: 400,
-        bgcolor: 'background.paper',
-        border: '2px solid #000',
-        boxShadow: 24,
-        pt: 2,
-        px: 4,
-        pb: 3,
-      };
+    const [oneditedId, setoneditedId] = useState('');
 
-    const handleOpen = () => {
-        setOpen(true);
+
+    const handleOpen = async () => {
+        await setoneditedId('');
+        await setOpen(true);
     };
     const handleClose = () => {
         setOpen(false);
@@ -202,6 +268,18 @@ export default function CategoryReport() {
             });
     };
 
+    // On Edit
+
+    const oneditClick = async (category_id) => {
+        console.log("oneditClick", category_id);
+        await setoneditedId(category_id);
+        await setOpen(true);
+        // setTimeout(async () => {
+
+        // }, 1500);
+
+
+    }
     // On ChangeRowsperPage
     const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(Number(event.target.value));
@@ -256,6 +334,7 @@ export default function CategoryReport() {
         setSelected([]);
         setFilterName('');
     }
+
 
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - list.length) : 0;
 
@@ -333,9 +412,9 @@ export default function CategoryReport() {
 
                                                     <TableCell>
                                                         <UserMoreMenu
-                                                            url={'/admin/edit_customer/' + base64_encode(category_id)}
                                                             selectedList={selected}
                                                             onDelete={ondeleteClick}
+                                                            onEdit={oneditClick}
                                                             rowId={category_id}
                                                         />
                                                     </TableCell>
@@ -380,21 +459,14 @@ export default function CategoryReport() {
                 </Card>
             </Container>
 
-            <Modal
-                hideBackdrop
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="transition-modal-title"
-                aria-describedby="transition-modal-description"
-            >
-                <Box sx={{ ...style, width: 600 }}>
-                    <h2 id="child-modal-title">Text in a child modal</h2>
-                    <p id="child-modal-description">
-                        Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                    </p>
-                    <Button onClick={handleClose}>Close Child Modal</Button>
-                </Box>
-            </Modal>
+            {
+                open && <CategoryModal
+                    open={open}
+                    handleClose={handleClose}
+                    getRecord={getRecord}
+                    oneditedId={oneditedId}
+                />
+            }
 
         </Page>
 

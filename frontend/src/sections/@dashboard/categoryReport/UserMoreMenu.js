@@ -9,13 +9,13 @@ import Iconify from '../../../components/Iconify';
 // ----------------------------------------------------------------------
 
 UserMoreMenu.propTypes = {
-  url: PropTypes.string,
+  onEdit: PropTypes.func,
   onDelete: PropTypes.func,
   rowId: PropTypes.number
 };
 
 export default function UserMoreMenu({
-  url,
+  onEdit,
   onDelete,
   rowId
 }) {
@@ -45,7 +45,7 @@ export default function UserMoreMenu({
           <ListItemText primary="Delete" primaryTypographyProps={{ variant: 'body2' }} />
         </MenuItem>
 
-        <MenuItem component={RouterLink} to={url} sx={{ color: 'text.secondary' }}>
+        <MenuItem onClick={() => onEdit(rowId)} sx={{ color: 'text.secondary' }}>
           <ListItemIcon>
             <Iconify icon="eva:edit-fill" width={24} height={24} />
           </ListItemIcon>
