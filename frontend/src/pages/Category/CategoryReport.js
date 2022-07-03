@@ -42,6 +42,13 @@ import { postData, getData } from '../../Services/apiservice';
 import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
 
+
+import jsPDF from "jspdf";
+import autoTable from 'jspdf-autotable';
+
+const doc = new jsPDF()
+
+
 const TABLE_HEAD = [
     { id: 'category_name', label: 'Category Name', alignRight: false },
     { id: 'status', label: 'Status', alignRight: false },
@@ -107,6 +114,7 @@ function CategoryModal({ open, handleClose, getRecord, oneditedId }) {
             formik.setFieldValue("category_name", '');
         }
     }, []);
+
 
     const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps, setFieldValue, initialValues } = formik;
 
@@ -336,6 +344,34 @@ export default function CategoryReport() {
     }
 
 
+
+    const exportPDF = () => {
+        const unit = "pt";
+        const size = "A4"; // Use A1, A2, A3 or A4
+        const orientation = "portrait"; // portrait or landscape
+
+        const marginLeft = 40;
+        const doc = new jsPDF(orientation, unit, size);
+
+        doc.setFontSize(15);
+
+        const title = "Category Report";
+        const headers = [['Id', "Category Name", "Status"]];
+
+        const data = list.map(elt => [elt.category_id, elt.category_name, elt.status]);
+
+        let content = {
+            startY: 50,
+            head: headers,
+            body: data
+        };
+
+        doc.text(title, marginLeft, 40);
+        doc.autoTable(content);
+        doc.save("categoryreport.pdf")
+    }
+
+
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - list.length) : 0;
 
     const filteredUsers = applySortFilter(list, filterName);
@@ -350,10 +386,6 @@ export default function CategoryReport() {
                         Category Report
                     </Typography>
 
-                    {/* <Button variant="contained" component={RouterLink} to="/admin/add_customer" startIcon={<Iconify icon="eva:plus-fill" />}>
-                        Add Category
-                    </Button> */}
-
                     <Button variant="contained" onClick={handleOpen} startIcon={<Iconify icon="eva:plus-fill" />}>
                         Add Category
                     </Button>
@@ -362,7 +394,7 @@ export default function CategoryReport() {
 
                 <Card>
                     <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName}
-                        onDelete={ondeleteClick} onstausChange={onstatusChange} />
+                        onDelete={ondeleteClick} onstausChange={onstatusChange} onexport={exportPDF} />
 
                     <Scrollbar>
                         <TableContainer sx={{ minWidth: 800 }}>

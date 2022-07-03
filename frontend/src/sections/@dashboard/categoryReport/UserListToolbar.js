@@ -34,10 +34,11 @@ UserListToolbar.propTypes = {
   filterName: PropTypes.string,
   onFilterName: PropTypes.func,
   onDelete: PropTypes.func,
+  onexport: PropTypes.func,
   onstausChange: PropTypes.func
 };
 
-export default function UserListToolbar({ numSelected, filterName, onFilterName, onDelete, onstausChange }) {
+export default function UserListToolbar({ numSelected, filterName, onFilterName, onDelete, onstausChange, onexport }) {
   return (
 
 
@@ -84,9 +85,9 @@ export default function UserListToolbar({ numSelected, filterName, onFilterName,
         </div>
 
       ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <Iconify icon="ic:round-filter-list" />
+        <Tooltip title="Export PDF">
+          <IconButton onClick={onexport}>
+            <Iconify icon="foundation:page-export-pdf" />
           </IconButton>
         </Tooltip>
       )}
