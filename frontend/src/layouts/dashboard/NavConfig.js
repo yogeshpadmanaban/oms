@@ -30,6 +30,12 @@ const navConfig = [
     activePath: ['/admin/product_report', '/admin/add_product', 'edit_product'],
     icon: getIcon('ant-design:unordered-list-outlined'),
   },
+  {
+    title: 'Order Report',
+    path: '/admin/order_report',
+    activePath: ['/admin/order_report', '/admin/add_order', 'edit_order'],
+    icon: getIcon('ant-design:unordered-list-outlined'),
+  },
 ];
 
 export default navConfig;

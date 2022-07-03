@@ -124,6 +124,50 @@ const productReport = {
 
 }
 
+const orderReport = {
+    total: 12,
+    recordsFiltered: 12,
+    data: {
+        rows: [
+            {
+                "order_id": 1,
+                "jc_number": 2678,
+                "product_type": "Customized product",
+                "product_category": "dollar",
+                "product_name": 'dollar',
+                "customer_name": 'gokul',
+                "purity": 92,
+                "product_weight": 6,
+                "quantity": 1,
+                "design_by": "sample designed by",
+                "order_details": "sdfsf",
+                "order_image": "---",
+                "delivery_date": "29/07/2020",
+                "user_status": '0',
+                "status": '0'
+            },
+
+            {
+                "order_id": 2,
+                "jc_number": 2678,
+                "product_type": "Customized product",
+                "product_category": "dollar",
+                "product_name": 'dollar',
+                "customer_name": 'gokulsssss',
+                "purity": 92,
+                "product_weight": 6,
+                "quantity": 1,
+                "design_by": "sample designed by",
+                "order_details": "sdfsf",
+                "order_image": "---",
+                "delivery_date": "29/07/2020",
+                "user_status": '0',
+                "status": '0'
+            }
+        ]
+    }
+}
+
 
 
 export async function getData(apiName) {
@@ -136,6 +180,9 @@ export async function getData(apiName) {
     }
     else if (apiName == 'customer_details') {
         return customerReport;
+    }
+    else if (apiName == 'order_datails') {
+        return orderReport;
     }
     else {
         let apiUrl = baseUrl + apiName;
