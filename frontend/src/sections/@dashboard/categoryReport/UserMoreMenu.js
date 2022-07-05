@@ -45,7 +45,8 @@ export default function UserMoreMenu({
           <ListItemText primary="Delete" primaryTypographyProps={{ variant: 'body2' }} />
         </MenuItem>
 
-        <MenuItem onClick={() => onEdit(rowId)} sx={{ color: 'text.secondary' }}>
+
+        <MenuItem onClick={() => { onEdit(rowId); setIsOpen(false) }} sx={{ color: 'text.secondary' }}>
           <ListItemIcon>
             <Iconify icon="eva:edit-fill" width={24} height={24} />
           </ListItemIcon>
