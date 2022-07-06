@@ -166,7 +166,7 @@ class CategoryController extends Controller
 	//to store category details 
 	public function store_category(Request $request)
 	{
-		$category_id=$request['hdn_id'];
+		$category_id=$request['id'];
 
 		$category_data = [
 			'category_name'=>$request->input('category_name')

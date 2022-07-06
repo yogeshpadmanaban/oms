@@ -172,19 +172,19 @@ const orderReport = {
 
 export async function getData(apiName) {
     console.log("apiName", apiName);
-    if (apiName == 'category_details') {
-        return categoryReport;
-    }
-    else if (apiName == 'product_details') {
-        return productReport;
-    }
-    else if (apiName == 'customer_details') {
-        return customerReport;
-    }
-    else if (apiName == 'order_datails') {
-        return orderReport;
-    }
-    else {
+    // if (apiName == 'category_details') {
+    //     return categoryReport;
+    // }
+    // else if (apiName == 'product_details') {
+    //     return productReport;
+    // }
+    // else if (apiName == 'customer_details') {
+    //     return customerReport;
+    // }
+    // else if (apiName == 'order_datails') {
+    //     return orderReport;
+    // }
+    // else {
         let apiUrl = baseUrl + apiName;
         let responseData = await axios.get(apiUrl).then((response) => {
             return response;
@@ -193,7 +193,7 @@ export async function getData(apiName) {
                 return error;
             });
         return responseData;
-    }
+    // }
 }
 
 
@@ -209,8 +209,8 @@ export async function postData(apiName, params) {
     let responseData = await axios.post(apiUrl, params, config).then((response) => {
         return response;
     },
-        (error) => {
-            return error;
-        });
+    (error) => {
+        return error;
+    });
     return responseData;
 }

@@ -68,13 +68,13 @@ export default function CustomerForm() {
             // params = values;
             // params.profile_picture = initialValues.profile_picture;
 
-            if (values.profile_picture) {
-                profile_picture.name = values.profile_picture.name;
-                profile_picture.type = values.profile_picture.type;
-                profile_picture.size = `${values.profile_picture.size} bytes`;
-                // profile_picture.data = RNFetchBlob.wrap(fileContent)
-                values.profile_picture = profile_picture;
-            }
+            // if (values.profile_picture) {
+            //     profile_picture.name = values.profile_picture.name;
+            //     profile_picture.type = values.profile_picture.type;
+            //     profile_picture.size = `${values.profile_picture.size} bytes`;
+            //     // profile_picture.data = RNFetchBlob.wrap(fileContent)
+            //     values.profile_picture = profile_picture;
+            // }
 
             if (values.other_upload) {
                 other_upload.name = values.other_upload.name;
@@ -133,10 +133,10 @@ export default function CustomerForm() {
                             <Form autoComplete="off" encType="multipart/form-data" noValidate onSubmit={handleSubmit}>
                                 <Stack spacing={3} sx={{ my: 4 }}>
 
-                                    <TextField
-                                        fullWidth
+                                    <input
+                                        
                                         type="file"
-                                        InputLabelProps={{ shrink: true }}
+                                        
                                         label="Profile Picture"
                                         name="profile_picture"
                                         onChange={(event) => {
@@ -144,8 +144,7 @@ export default function CustomerForm() {
                                             // setProfile_picture(event.currentTarget.files[0]);
                                             setFieldValue("profile_picture", event.currentTarget.files[0])
                                         }}
-                                        error={Boolean(touched.profile_picture && errors.profile_picture)}
-                                        helperText={touched.profile_picture && errors.profile_picture}
+                                        
                                     />
 
                                     <TextField

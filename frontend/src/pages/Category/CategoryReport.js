@@ -43,10 +43,10 @@ import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
 
 
-import jsPDF from "jspdf";
-import autoTable from 'jspdf-autotable';
+// import jsPDF from "jspdf";
+// import autoTable from 'jspdf-autotable';
 
-const doc = new jsPDF()
+// const doc = new jsPDF()
 
 
 const TABLE_HEAD = [
@@ -68,7 +68,7 @@ function applySortFilter(array, query) {
 
 function CategoryModal({ open, handleClose, getRecord, oneditedId }) {
     const categorySchema = Yup.object().shape({
-        id: Yup.number(),
+        category_id: Yup.number(),
         category_name: Yup.string().required('Category Name is required')
     });
 
@@ -85,15 +85,15 @@ function CategoryModal({ open, handleClose, getRecord, oneditedId }) {
             resetForm(); // Reset form
             getRecord(); // Record Get
 
-            // let response = await postData('store_category', values);
-            // if (response.status == 200) {
-            //     handleClose(); // Modal close
-            //     resetForm(); // Reset form
-            //     toast.success(response.data.message);
-            //     getRecord(); // Record Get
-            // } else {
-            //     toast.error(response.data.message);
-            // }
+            let response = await postData('store_category', values);
+            if (response.status == 200) {
+                handleClose(); // Modal close
+                resetForm(); // Reset form
+                toast.success(response.data.message);
+                getRecord(); // Record Get
+            } else {
+                toast.error(response.data.message);
+            }
 
         },
     });
@@ -105,8 +105,8 @@ function CategoryModal({ open, handleClose, getRecord, oneditedId }) {
             let responseData = await getData(url);
             console.log("sfsdfsdfsdfsdf", responseData.data.category)
             if (responseData && responseData.data.category) {
-                const { id, category_name } = responseData.data.category;
-                formik.setFieldValue("id", id);
+                const { category_id, category_name } = responseData.data.category;
+                formik.setFieldValue("id", category_id);
                 formik.setFieldValue("category_name", category_name);
             }
         } else {
@@ -286,7 +286,6 @@ export default function CategoryReport() {
 
         // }, 1500);
 
-
     }
     // On ChangeRowsperPage
     const handleChangeRowsPerPage = (event) => {
@@ -321,19 +320,19 @@ export default function CategoryReport() {
             buttons: true,
             dangerMode: true,
         })
-            .then(async (willchangeStatus) => {
-                if (willchangeStatus) {
-                    console.log("apiurl", apiUrl)
-                    let responseData = await postData(apiUrl);
-                    if (responseData) {
-                        toast.success("Status Changed Successfully");
-                        await getRecord();
-                        await handletableReset();
-                    } else {
-                        toast.error("Oops ! Somewithing wen wrong");
-                    }
+        .then(async (willchangeStatus) => {
+            if (willchangeStatus) {
+                console.log("apiurl", apiUrl)
+                let responseData = await postData(apiUrl);
+                if (responseData) {
+                    toast.success("Status Changed Successfully");
+                    await getRecord();
+                    await handletableReset();
+                } else {
+                    toast.error("Oops ! Somewithing wen wrong");
                 }
-            });
+            }
+        });
     }
 
     const handletableReset = () => {
@@ -343,34 +342,31 @@ export default function CategoryReport() {
         setFilterName('');
     }
 
+    // const exportPDF = () => {
+    //     const unit = "pt";
+    //     const size = "A4"; // Use A1, A2, A3 or A4
+    //     const orientation = "portrait"; // portrait or landscape
 
+    //     const marginLeft = 40;
+    //     const doc = new jsPDF(orientation, unit, size);
 
-    const exportPDF = () => {
-        const unit = "pt";
-        const size = "A4"; // Use A1, A2, A3 or A4
-        const orientation = "portrait"; // portrait or landscape
+    //     doc.setFontSize(15);
 
-        const marginLeft = 40;
-        const doc = new jsPDF(orientation, unit, size);
+    //     const title = "Category Report";
+    //     const headers = [['Id', "Category Name", "Status"]];
 
-        doc.setFontSize(15);
+    //     const data = list.map(elt => [elt.category_id, elt.category_name, elt.status]);
 
-        const title = "Category Report";
-        const headers = [['Id', "Category Name", "Status"]];
+    //     let content = {
+    //         startY: 50,
+    //         head: headers,
+    //         body: data
+    //     };
 
-        const data = list.map(elt => [elt.category_id, elt.category_name, elt.status]);
-
-        let content = {
-            startY: 50,
-            head: headers,
-            body: data
-        };
-
-        doc.text(title, marginLeft, 40);
-        doc.autoTable(content);
-        doc.save("categoryreport.pdf")
-    }
-
+    //     doc.text(title, marginLeft, 40);
+    //     doc.autoTable(content);
+    //     doc.save("categoryreport.pdf")
+    // }
 
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - list.length) : 0;
 
@@ -394,7 +390,7 @@ export default function CategoryReport() {
 
                 <Card>
                     <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName}
-                        onDelete={ondeleteClick} onstausChange={onstatusChange} onexport={exportPDF} />
+                        onDelete={ondeleteClick} onstausChange={onstatusChange} />
 
                     <Scrollbar>
                         <TableContainer sx={{ minWidth: 800 }}>

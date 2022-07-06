@@ -218,15 +218,12 @@ class ProductController extends Controller
 		}
 
 		$product_data = [
-			'category'=>$request->input('pdt_category'),
+			'category'=>$request->input('category'),
 			'product_image'=>$image,
-			'name'=>$request->input('pdt_name'),
-			'product_details'=>$request->input('pdt_details'),
+			'name'=>$request->input('name'),
+			'product_details'=>$request->input('product_details'),
 			'product_type'=>$request->input('product_type'),
 		];
-
-		#echo "<pre>"; 
-		#print_r($product_data);exit();
 
 		$res = ProductDetails::updateOrCreate(['product_id'=>$product_id],$product_data); 
 		// Session::flash('session_msg','Product data updated successfully!');
