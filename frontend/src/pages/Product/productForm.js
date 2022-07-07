@@ -53,7 +53,8 @@ export default function ProductForm() {
     const formik = useFormik({
         initialValues: {
             product_id: '',
-            product_type: params && params.id ? '' : radioOptions[0].value,
+            // product_type: params && params.id ? '' : radioOptions[0].value,
+            product_type: '',
             category: '',
             name: '',
             product_image: '',
@@ -94,6 +95,10 @@ export default function ProductForm() {
     const getcategory = async () => {
         let responseData = await getData("add_product");
         let categoryList = responseData.category;
+        categoryList.unshift( {
+            "category_id": 0,
+            "category_name": "select_category",
+        },)
         if (params.id == null || params.id == '') {
             formik.setFieldValue("category", categoryList[0].category_id);
         }

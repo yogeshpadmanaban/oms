@@ -117,8 +117,13 @@ export default function OrderForm() {
 
         let responseData = await getData("add_order");
         let productnameList = responseData.products;
-        
+        productnameList.unshift({
+            "product_id": 0,
+            "name": "select_product",
+        })
+
         const customernameList = [
+            { label: 'select_customer', value: '0' },
             { label: 'CustomerName 1', value: '1' },
             { label: 'CustomerName 2', value: '2' },
             { label: 'CustomerName 3', value: '3' },
@@ -244,7 +249,7 @@ export default function OrderForm() {
                                             design_options.map((option, index) => {
                                                 return (
                                                     <div style={{ "marginLeft": "10px" }}>
-                                                        <label className='mb-2'><Field  type="radio" name="designed_by" value={option.value} /> {option.label}</label>
+                                                        <label className='mb-2'><Field type="radio" name="designed_by" value={option.value} /> {option.label}</label>
                                                     </div>
                                                 )
                                             })
