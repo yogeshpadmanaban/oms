@@ -98,7 +98,8 @@ class ProductController extends Controller
 	{
 		$data['menu']="product_list";
 		$data['category']=CategoryDetails::where('status','=','0')->get();
-		return view('admin.product.create',['menu'=>$data['menu'],'category'=>$data['category']]);
+
+		return ['menu'=>$data['menu'],'category'=>$data['category']];
 	}
 
 	//to get data of particular id for update

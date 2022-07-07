@@ -15,7 +15,7 @@ use App\CustomerDetails;
 use App\OrderDetails;
 use App\OrderImages;
 
-class OrderController extends Controller
+	class OrderController extends Controller
 {
 	//to view order listing
 	public function listing(Request $request)
@@ -63,9 +63,9 @@ class OrderController extends Controller
 		$data['menu']="order_list";
 		$data['products'] = ProductDetails::where('status','=','0')->get();
 		$data['customers'] = CustomerDetails::where('status','=','0')->get();
-		$data['cads'] = Cad::where('status','=','0')->get();
+		// $data['cads'] = Cad::where('status','=','0')->get();
 		// $data['order_img'] = DB::table('order_images')->select('*')->get()->toArray();
-		return ['products' => $data['products'] ,'customers' => $data['customers'],'cads' => $data['cads'],'order_img' => NULL,'menu'=>$data['menu']];
+		return ['products' => $data['products'] ,'customers' => $data['customers'],'order_img' => NULL,'menu'=>$data['menu']];
 	}
 
 	//to get data of particular id for update

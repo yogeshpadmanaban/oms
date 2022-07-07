@@ -50,6 +50,9 @@ class OrderDetails extends Model
     public static function fetchdata($req_arr = '')
     {
         $user_role = $req_arr['user_role'];
+
+dd($user_role);
+
         $user_id = $req_arr['user_id'];
         $sort = $req_arr['sort'];
         $search = $req_arr['search'];
@@ -80,7 +83,7 @@ class OrderDetails extends Model
             ->leftJoin('product_details AS pd', 'pd.product_id', '=', 'od.product_id')
             ->leftJoin('customer_details AS cd', 'cd.customer_id', '=', 'od.customer_id')
             ->leftJoin('category_details AS cat', 'cat.category_id', '=', 'pd.category')
-            ->leftJoin('cads AS cad', 'cad.id', '=', 'od.cad_id')
+            ->leftJoin('cads AS cad', 'cad.id', '=', 'od.cad_id')   
             
             ->when($search != "" , function($result_two) use ($search){
                 return $result_two->where('pd.name','LIKE','%'.$search.'%');
@@ -282,6 +285,6 @@ class OrderDetails extends Model
             }
         $data['table_data']='{"total":'.intval( $data['totalRecords'] ).',"recordsFiltered":'.intval( $data['num_rows'] ).',"rows":'.json_encode($data['records']).'}';
         $data['menu']="order_list";
-		return ($data['table_data']);
+		echo ($data['table_data']);
     }
 }

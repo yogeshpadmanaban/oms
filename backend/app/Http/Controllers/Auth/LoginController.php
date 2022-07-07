@@ -91,8 +91,8 @@ class LoginController extends Controller
 
             $accessToken = auth()->user()->createToken('authToken')->accessToken;
             $res = ['user_id'=>auth()->user()->id,'user_role'=>$this->role,'email'=>$request->email,'token'=>$accessToken];
-            // $request->session()->put('sess_arr', $sess_arr);
-
+            $request->session()->put('sess_arr', $res);
+            // dd(session()->get('sess_arr')['user_role']);
             // return redirect()->to('/'.$this->role.'/dashboard');
             return $res;
         }

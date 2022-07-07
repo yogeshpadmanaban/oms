@@ -87,7 +87,7 @@ export default function OrderReport() {
 
 
     const getRecord = async () => {
-        let response = await getData('order_datails');
+        let response = await getData('order_details');
         console.log(response);
         if (response && response.data.rows) {
             setList(response.data.rows);

@@ -81,15 +81,13 @@ export default function OrderForm() {
         validationSchema: ustomerformSchema,
         onSubmit: async (values) => {
             console.log("values", values);
-
-            // let response = await postData('store_product', values);
-            // if (response) {
-            //     toast.success(response.data.message);
-            //     navigate('/admin/customer_report', { replace: true });
-            // } else {
-            //     toast.error(response.data.message);
-            // }
-
+            let response = await postData('store_order', values);
+            if (response) {
+                toast.success(response.data.message);
+                navigate('/admin/order_report', { replace: true });
+            } else {
+                toast.error(response.data.message);
+            }
         },
     });
 

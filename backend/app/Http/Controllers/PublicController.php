@@ -119,11 +119,13 @@ class PublicController extends Controller
     public function store(Request $request)
     {
         $id = $request->input('hdn_id');    
-        $user_id = session()->get('sess_arr')['user_id'];
-        $user_role = session()->get('sess_arr')['user_role'];
+        // $user_id = session()->get('sess_arr')['user_id'];
+        // $user_role = session()->get('sess_arr')['user_role'];
         $user_status = '';
         $pdt_id = $request->input('product_id');
         $user_status = '0';
+
+        // dd($user_role);
 
         $image=[];
 
@@ -187,7 +189,7 @@ class PublicController extends Controller
 
         $order_data = [
             'order_id' => $rdm_order_id,
-            'product_type' => $product_type['product_type'],
+            // 'product_type' => $product_type['product_type'],
             'product_id' => $request->input('product_id'),
             'customer_id' => $request->input('customer_id'),
             'mould_id' => $request->input('mould_name'),
@@ -201,8 +203,8 @@ class PublicController extends Controller
             'order_image' => NULL,
             'order_details' => $request->input('order_details'),
             'user_status' => $user_status,
-            'order_creator_role' => $user_role,
-            'order_creator_id'=> $user_id, 
+            // 'order_creator_role' => $user_role,
+            // 'order_creator_id'=> $user_id, 
         ];
 
 
@@ -214,9 +216,11 @@ class PublicController extends Controller
             }
         }
 
-        OrderDetails::updateOrCreate(['id'=>$id],$order_data); 
-        Session::flash('session_msg','Order data updated successfully!');
-        return redirect()->to($user_role.'/order_listing');   
+        $res = OrderDetails::updateOrCreate(['id'=>$id],$order_data); 
+
+        // dd($res);
+        // Session::flash('session_msg','Order data updated successfully!');
+        return $res;   
     
     }
 
