@@ -38,7 +38,7 @@ use App\Http\Controllers\Auth\LoginController;
 // Route::get('/login/admin', [LoginController::class,'showLoginForm'])->name('login_admin');
 Route::post('/login/admin', [LoginController::class,'login'])->name('login.submit');
 
-// Route::group(['middleware' => 'CORS'], function () {
+Route::group(['middleware' => 'CORS'], function () {
 
 
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard']);
@@ -85,6 +85,6 @@ Route::post('/login/admin', [LoginController::class,'login'])->name('login.submi
     Route::post('/store_order', [PublicController::class,'store'])->name('store_order');
 
    
-// });
+});
 
 Route::post('/admin/logout/', [LoginController::class,'logout']);

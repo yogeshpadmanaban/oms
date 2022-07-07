@@ -62,8 +62,7 @@ class CategoryController extends Controller
 		}
 		$data['table_data']='{"total":'.intval( $data['totalRecords'] ).',"recordsFiltered":'.intval( $data['num_rows'] ).',"rows":'.json_encode($data['records']).'}';
         $data['menu']="cad_list";
-		echo $data['table_data'];
-		exit();
+		return ($data['table_data']);
 	}
 
 	//to create category 

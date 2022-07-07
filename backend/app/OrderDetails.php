@@ -282,7 +282,6 @@ class OrderDetails extends Model
             }
         $data['table_data']='{"total":'.intval( $data['totalRecords'] ).',"recordsFiltered":'.intval( $data['num_rows'] ).',"rows":'.json_encode($data['records']).'}';
         $data['menu']="order_list";
-        echo $data['table_data'];
-        exit();
+		return ($data['table_data']);
     }
 }

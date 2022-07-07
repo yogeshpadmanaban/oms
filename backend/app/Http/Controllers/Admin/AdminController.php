@@ -11,6 +11,7 @@ use App\Admin;
 use App\ProductDetails;
 use App\CustomerDetails;
 use App\OrderDetails;
+use Config;
 
 class AdminController extends Controller
 {
