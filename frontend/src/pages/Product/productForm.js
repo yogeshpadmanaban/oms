@@ -91,15 +91,11 @@ export default function ProductForm() {
         }
     }, []);
 
-    const getcategory = () => {
-        const categoryList = [
-            { label: 'Category 1', value: '1' },
-            { label: 'Category 2', value: '2' },
-            { label: 'Category 3', value: '3' },
-            { label: 'Category 4', value: '4' }
-        ];
+    const getcategory = async () => {
+        let responseData = await getData("add_product");
+        let categoryList = responseData.category;
         if (params.id == null || params.id == '') {
-            formik.setFieldValue("category", categoryList[0].value);
+            formik.setFieldValue("category", categoryList[0].category_id);
         }
         setCategoryList(categoryList);
     }
@@ -153,7 +149,7 @@ export default function ProductForm() {
                                             category &&
                                             category.map((list, index) => {
                                                 return (
-                                                    <option value={list.value} label={list.label}> {" "}red </option>
+                                                    <option value={list.category_id} label={list.category_name}> </option>
                                                 )
                                             })
                                         }

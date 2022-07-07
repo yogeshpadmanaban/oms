@@ -169,9 +169,76 @@ const orderReport = {
 }
 
 
+const addproducts = {
+    "category": [
+        {
+            "category_id": 4,
+            "category_name": "necklace",
+            "status": "0",
+            "created_at": null,
+            "updated_at": "2021-03-03 16:22:47",
+            "deleted_at": null
+        },
+        {
+            "category_id": 10,
+            "category_name": "dollar",
+            "status": "0",
+            "created_at": null,
+            "updated_at": "2021-03-04 08:14:13",
+            "deleted_at": null
+        },
+    ]
+}
+
+const addorder = {
+
+    products: [
+        {
+            "product_id": 2,
+            "category": "2",
+            "name": "ladies ring",
+            "product_image": "",
+            "product_details": null,
+            "product_type": "Customized product",
+            "status": "0",
+            "created_at": null,
+            "updated_at": "2021-03-03 16:24:01",
+            "deleted_at": null
+        },
+        {
+            "product_id": 3,
+            "category": "4",
+            "name": "necklace",
+            "product_image": "",
+            "product_details": null,
+            "product_type": "Customized product",
+            "status": "0",
+            "created_at": null,
+            "updated_at": "2021-03-03 16:24:32",
+            "deleted_at": null
+        },
+    ],
+    order_img: null,
+    menu: "order_list"
+
+}
+
+
 
 export async function getData(apiName) {
     console.log("apiName", apiName);
+    let params = {};
+
+    if (apiName == 'order_details') {
+        params.user_id = localStorage.getItem("user_id");
+        params.user_role = localStorage.getItem("user_role");
+    }
+    // if (apiName == 'add_product') {
+    //     return addproducts;
+    // }
+    // if (apiName == 'add_order') {
+    //     return addorder;
+    // }
     // if (apiName == 'category_details') {
     //     return categoryReport;
     // }
@@ -185,14 +252,14 @@ export async function getData(apiName) {
     //     return orderReport;
     // }
     // else {
-        let apiUrl = baseUrl + apiName;
-        let responseData = await axios.get(apiUrl).then((response) => {
-            return response;
-        },
-            (error) => {
-                return error;
-            });
-        return responseData;
+    console.log("params", params);
+    let apiUrl = baseUrl + apiName;
+    let responseData = await axios.get(apiUrl, { params }).then((response) => {
+        return response;
+    }, (error) => {
+        return error;
+    });
+    return responseData;
     // }
 }
 
@@ -208,8 +275,7 @@ export async function postData(apiName, params) {
     let apiUrl = baseUrl + apiName;
     let responseData = await axios.post(apiUrl, params, config).then((response) => {
         return response;
-    },
-    (error) => {
+    }, (error) => {
         return error;
     });
     return responseData;

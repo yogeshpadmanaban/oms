@@ -92,7 +92,7 @@ export default function OrderForm() {
     });
 
     useEffect(async () => {
-        await getcategory();
+        await getdropdownRecords();
         if (params && params.id) {
             let url = 'edit_product/' + params.id;
             let responseData = await getData(url);
@@ -113,14 +113,11 @@ export default function OrderForm() {
         }
     }, []);
 
-    const getcategory = () => {
-        const productnameList = [
-            { label: 'Product 1', value: '1' },
-            { label: 'Product 2', value: '2' },
-            { label: 'Product 3', value: '3' },
-            { label: 'Product 4', value: '4' }
-        ];
+    const getdropdownRecords = async () => {
 
+        let responseData = await getData("add_order");
+        let productnameList = responseData.products;
+        
         const customernameList = [
             { label: 'CustomerName 1', value: '1' },
             { label: 'CustomerName 2', value: '2' },
@@ -129,7 +126,7 @@ export default function OrderForm() {
         ];
 
         if (params.id == null || params.id == '') {
-            formik.setFieldValue("product_name", productnameList[0].value);
+            formik.setFieldValue("product_name", productnameList[0].product_id);
             formik.setFieldValue("customer_name", customernameList[0].value);
             formik.setFieldValue("purity", purity_options[0].value);
             formik.setFieldValue("designed_by", design_options[0].value);
@@ -171,7 +168,7 @@ export default function OrderForm() {
                                             productnameList &&
                                             productnameList.map((list, index) => {
                                                 return (
-                                                    <option value={list.value} label={list.label}> </option>
+                                                    <option value={list.product_id} label={list.name}> </option>
                                                 )
                                             })
                                         }

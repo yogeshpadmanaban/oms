@@ -33,7 +33,9 @@ export default function LoginForm() {
       console.log("values", values);
       let response = await postData('login/admin', values);
       if (response.status == 200 && response.data.token) {
-        localStorage.setItem("token", response.data.token)
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("user_id", response.data.user_id);
+        localStorage.setItem("user_role", response.data.user_role);
         navigate('/admin/dashboard', { replace: true });
       } else {
         toast.error(response.data.message);
