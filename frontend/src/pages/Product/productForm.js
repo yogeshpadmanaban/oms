@@ -95,19 +95,16 @@ export default function ProductForm() {
     const getcategory = async () => {
         let responseData = await getData("add_product");
         let categoryList = responseData.data.category;
-        categoryList.unshift( {
+        categoryList.unshift({
             "category_id": 0,
-            "category_name": "select_category",
-        },)
+            "category_name": "Select Category",
+        })
         if (params.id == null || params.id == '') {
             formik.setFieldValue("category", categoryList[0].category_id);
         }
         setCategoryList(categoryList);
     }
 
-    const handleCategoryChange = (event) => {
-        console.log('selectedCategory', event.target.value);
-    }
 
     const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps, setFieldValue, initialValues } = formik;
     return (
@@ -126,7 +123,7 @@ export default function ProductForm() {
                             <Form autoComplete="off" encType="multipart/form-data" noValidate onSubmit={handleSubmit}>
                                 <Stack spacing={3} sx={{ my: 4 }}>
 
-                                    <div style={{ "marginLeft": "10px" }}>Product Type:</div>
+                                    <div style={{ "marginLeft": "10px", "color": "#637381", fontWeight: "400" }}>Product Type:</div>
                                     <div role="group" aria-labelledby="my-radio-group">
                                         {
                                             radioOptions &&
@@ -140,21 +137,19 @@ export default function ProductForm() {
                                         }
                                     </div>
 
-                                    <div style={{ "marginLeft": "10px" }}>Product Category:</div>
+                                    <div style={{ "marginLeft": "10px", "color": "#637381", fontWeight: "400" }}>Product Category:</div>
                                     <select name="category" value={values.category}
-
-                                        // onChange={(event) => handleCategoryChange(event)}
                                         onChange={(event) => {
                                             setFieldValue("category", event.target.value)
                                         }}
 
-                                        style={{ display: "block", padding: "15px" }}
+                                        style={{ display: "block", padding: "15px", fontWeight: "400", fontSize: "inherit", borderRadius: "7px" }}
                                     >
                                         {
                                             category &&
                                             category.map((list, index) => {
                                                 return (
-                                                    <option value={list.category_id} label={list.category_name}> </option>
+                                                    <option style={{ "color": "#637381", padding: "15px", fontWeight: "400", fontSize: "inherit" }} value={list.category_id} label={list.category_name}> </option>
                                                 )
                                             })
                                         }

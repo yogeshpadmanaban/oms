@@ -133,8 +133,8 @@ const orderReport = {
                 "order_id": 1,
                 "jc_number": 2678,
                 "product_type": "Customized product",
-                "product_category": "dollar",
-                "product_name": 'dollar',
+                "category": "dollar",
+                "name": 'dollar',
                 "customer_name": 'gokul',
                 "purity": 92,
                 "product_weight": 6,
@@ -151,8 +151,8 @@ const orderReport = {
                 "order_id": 2,
                 "jc_number": 2678,
                 "product_type": "Customized product",
-                "product_category": "dollar",
-                "product_name": 'dollar',
+                "category": "dollar",
+                "name": 'dollar',
                 "customer_name": 'gokulsssss',
                 "purity": 92,
                 "product_weight": 6,
@@ -170,56 +170,79 @@ const orderReport = {
 
 
 const addproducts = {
-    "category": [
-        {
-            "category_id": 4,
-            "category_name": "necklace",
-            "status": "0",
-            "created_at": null,
-            "updated_at": "2021-03-03 16:22:47",
-            "deleted_at": null
-        },
-        {
-            "category_id": 10,
-            "category_name": "dollar",
-            "status": "0",
-            "created_at": null,
-            "updated_at": "2021-03-04 08:14:13",
-            "deleted_at": null
-        },
-    ]
+    data: {
+        "category": [
+            {
+                "category_id": 4,
+                "category_name": "necklace",
+                "status": "0",
+                "created_at": null,
+                "updated_at": "2021-03-03 16:22:47",
+                "deleted_at": null
+            },
+            {
+                "category_id": 10,
+                "category_name": "dollar",
+                "status": "0",
+                "created_at": null,
+                "updated_at": "2021-03-04 08:14:13",
+                "deleted_at": null
+            },
+        ]
+    }
+
 }
 
 const addorder = {
+    data: {
+        products: [
+            {
+                "product_id": 2,
+                "category": "2",
+                "name": "ladies ring",
+                "product_image": "",
+                "product_details": null,
+                "product_type": "Customized product",
+                "status": "0",
+                "created_at": null,
+                "updated_at": "2021-03-03 16:24:01",
+                "deleted_at": null
+            },
+            {
+                "product_id": 3,
+                "category": "4",
+                "name": "necklace",
+                "product_image": "",
+                "product_details": null,
+                "product_type": "Customized product",
+                "status": "0",
+                "created_at": null,
+                "updated_at": "2021-03-03 16:24:32",
+                "deleted_at": null
+            },
+        ],
+        customers: [
+            {
+              "customer_id": 1,
+              "profile_picture": null,
+              "name": "Gokull",
+              "address": "smk",
+              "city": "madurai",
+              "state": "TN",
+              "gst_no": "6757575757675",
+              "pan_no": "675765675677567",
+              "other_upload": null,
+              "status": "0",
+              "created_date": null,
+              "modified_date": "2022-06-18 13:24:31",
+              "deleted_at": null
+            },
+        ],
+        
+        order_img: null,
+    }
 
-    products: [
-        {
-            "product_id": 2,
-            "category": "2",
-            "name": "ladies ring",
-            "product_image": "",
-            "product_details": null,
-            "product_type": "Customized product",
-            "status": "0",
-            "created_at": null,
-            "updated_at": "2021-03-03 16:24:01",
-            "deleted_at": null
-        },
-        {
-            "product_id": 3,
-            "category": "4",
-            "name": "necklace",
-            "product_image": "",
-            "product_details": null,
-            "product_type": "Customized product",
-            "status": "0",
-            "created_at": null,
-            "updated_at": "2021-03-03 16:24:32",
-            "deleted_at": null
-        },
-    ],
-    order_img: null,
-    menu: "order_list"
+
 
 }
 
@@ -248,7 +271,7 @@ export async function getData(apiName) {
     // else if (apiName == 'customer_details') {
     //     return customerReport;
     // }
-    // else if (apiName == 'order_datails') {
+    // else if (apiName == 'order_details') {
     //     return orderReport;
     // }
     // else {

@@ -52,7 +52,7 @@ export default function OrderForm() {
 
     const ustomerformSchema = Yup.object().shape({
 
-        product_id: Yup.string(),
+        order_id: Yup.string(),
         customer_name: Yup.string(),
         purity: Yup.string(),
         jc_number: Yup.string(),
@@ -67,7 +67,7 @@ export default function OrderForm() {
 
     const formik = useFormik({
         initialValues: {
-            product_id: '',
+            order_id: '',
             customer_name: '',
             purity: '',
             jc_number: '',
@@ -98,9 +98,9 @@ export default function OrderForm() {
             let responseData = await getData(url);
             console.log(responseData.data.orders);
             if (responseData && responseData.data.orders) {
-                const { product_id, customer_name, purity, jc_number, weight,
+                const { order_id, customer_name, purity, jc_number, weight,
                     quantity, designed_by, delivery_date, order_image, order_details } = responseData.data.orders;
-                formik.setFieldValue("product_id", product_id);
+                formik.setFieldValue("order_id", order_id);
                 formik.setFieldValue("customer_name", customer_name);
                 formik.setFieldValue("purity", purity);
                 formik.setFieldValue("jc_number", jc_number);
@@ -118,25 +118,20 @@ export default function OrderForm() {
 
         let responseData = await getData("add_order");
         let productnameList = responseData.data.products;
+        let customernameList = responseData.data.customers;
         productnameList.unshift({
             "product_id": 0,
-            "name": "select_product",
+            "name": "Select Product",
         })
 
-        const customernameList = [
-            { label: 'select_customer', value: '0' },
-            { label: 'CustomerName 1', value: '1' },
-            { label: 'CustomerName 2', value: '2' },
-            { label: 'CustomerName 3', value: '3' },
-            { label: 'CustomerName 4', value: '4' }
-        ];
+        customernameList.unshift({
+            "customer_id": 0,
+            "name": "Select Customer",
+        })
 
         if (params.id == null || params.id == '') {
             formik.setFieldValue("product_id", productnameList[0].product_id);
-            formik.setFieldValue("customer_name", customernameList[0].value);
-            formik.setFieldValue("purity", purity_options[0].value);
-            formik.setFieldValue("designed_by", design_options[0].value);
-
+            formik.setFieldValue("customer_name", customernameList[0].customer_id);
         }
         setproductnameList(productnameList);
         setcustomernameList(customernameList);
@@ -163,43 +158,43 @@ export default function OrderForm() {
                             <Form autoComplete="off" encType="multipart/form-data" noValidate onSubmit={handleSubmit}>
                                 <Stack spacing={3} sx={{ my: 4 }}>
 
-                                    <div style={{ "marginLeft": "10px" }}>Product Name:</div>
+                                    <div style={{ "marginLeft": "10px", "color": "#637381", fontWeight: "400" }}>Product Name:</div>
                                     <select name="product_id" value={values.product_id}
                                         onChange={(event) => {
                                             setFieldValue("product_id", event.target.value)
                                         }}
-                                        style={{ display: "block", padding: "15px" }}
+                                        style={{ display: "block", padding: "15px", fontWeight: "400", fontSize: "inherit", borderRadius: "7px" }}
                                     >
                                         {
                                             productnameList &&
                                             productnameList.map((list, index) => {
                                                 return (
-                                                    <option value={list.product_id} label={list.name}> </option>
+                                                    <option style={{ "color": "#637381", padding: "15px", fontWeight: "400", fontSize: "inherit" }} value={list.product_id} label={list.name}> </option>
                                                 )
                                             })
                                         }
                                     </select>
 
 
-                                    <div style={{ "marginLeft": "10px" }}>Customer Name:</div>
-                                    <select name="customer_name" value={values.customer_name}
+                                    <div style={{ "marginLeft": "10px", "color": "#637381", fontWeight: "400" }}>Customer Name:</div>
+                                    <select name="customer_name" value={values.name}
                                         onChange={(event) => {
                                             setFieldValue("customer_name", event.target.value)
                                         }}
-                                        style={{ display: "block", padding: "15px" }}
+                                        style={{ display: "block", padding: "15px", fontWeight: "400", fontSize: "inherit", borderRadius: "7px" }}
                                     >
                                         {
                                             customernameList &&
                                             customernameList.map((list, index) => {
                                                 return (
-                                                    <option value={list.value} label={list.label}> </option>
+                                                    <option style={{ "color": "#637381", padding: "15px", fontWeight: "400", fontSize: "inherit" }} value={list.customer_id} label={list.name}> </option>
                                                 )
                                             })
                                         }
                                     </select>
 
 
-                                    <div style={{ "marginLeft": "10px" }}>Purity:</div>
+                                    <div style={{ "marginLeft": "10px", "color": "#637381", fontWeight: "400" }}>Purity:</div>
                                     <div role="group" aria-labelledby="my-radio-group">
                                         {
                                             purity_options &&
@@ -243,7 +238,7 @@ export default function OrderForm() {
                                     />
 
 
-                                    <div style={{ "marginLeft": "10px" }}>To be Design:</div>
+                                    <div style={{ "marginLeft": "10px", "color": "#637381", fontWeight: "400" }}>To be Design:</div>
                                     <div role="group" aria-labelledby="my-radio-group">
                                         {
                                             design_options &&

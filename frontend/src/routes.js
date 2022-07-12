@@ -35,8 +35,8 @@ export default function Router() {
   return useRoutes([
     {
       path: '/admin',
-      element: <DashboardLayout />,
-      // element: isLoggedIn ? <DashboardLayout /> : <Navigate to="/admin/login" />,
+      // element: <DashboardLayout />,
+      element: isLoggedIn ? <DashboardLayout /> : <Navigate to="/admin/login" />,
       children: [
         { path: 'dashboard', element: <DashboardApp /> },
 
