@@ -118,7 +118,7 @@ class PublicController extends Controller
     //to store order details 
     public function store(Request $request)
     {
-        $id = $request->input('hdn_id');    
+        $id = $request->input('id');    
         // $user_id = session()->get('sess_arr')['user_id'];
         // $user_role = session()->get('sess_arr')['user_role'];
         $user_status = '';
@@ -189,7 +189,7 @@ class PublicController extends Controller
 
         $order_data = [
             'order_id' => $rdm_order_id,
-            // 'product_type' => $product_type['product_type'],
+            'product_type' => $product_type['product_type'],
             'product_id' => $request->input('product_id'),
             'customer_id' => $request->input('customer_id'),
             'mould_id' => $request->input('mould_name'),

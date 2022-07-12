@@ -39,7 +39,7 @@ const TABLE_HEAD = [
     { id: 'jc_number', label: 'Jc Number', alignRight: false },
     { id: 'product_type', label: 'Product Type', alignRight: false },
     { id: 'product_category', label: 'Product Category', alignRight: false },
-    { id: 'product_name', label: 'Product Name', alignRight: false },
+    { id: 'product_id', label: 'Product Name', alignRight: false },
     { id: 'customer_name', label: 'Customer Name', alignRight: false },
     { id: 'purity', label: 'Purity', alignRight: false },
     { id: 'product_weight', label: 'Product Weight', alignRight: false },
@@ -263,7 +263,7 @@ export default function OrderReport() {
                                     {filteredList &&
                                         filteredList.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
 
-                                            const { order_id, jc_number, product_type, product_category, product_name, customer_name, purity, product_weight, quantity, design_by, order_details,
+                                            const { order_id, jc_number, product_type, category, name, customer_name, purity, product_weight, quantity, design_by, order_details,
                                                 order_image, delivery_date, user_status, status } = row;
 
                                             const isItemSelected = selected.indexOf(order_id) !== -1;
@@ -283,8 +283,8 @@ export default function OrderReport() {
                                                     <TableCell align="left">{order_id}</TableCell>
                                                     <TableCell align="left">{jc_number}</TableCell>
                                                     <TableCell align="left">{product_type}</TableCell>
-                                                    <TableCell align="left">{product_category}</TableCell>
-                                                    <TableCell align="left">{product_name}</TableCell>
+                                                    <TableCell align="left">{category}</TableCell>
+                                                    <TableCell align="left">{name}</TableCell>
                                                     <TableCell align="left">{customer_name}</TableCell>
                                                     <TableCell align="left">{purity}</TableCell>
                                                     <TableCell align="left">{product_weight}</TableCell>

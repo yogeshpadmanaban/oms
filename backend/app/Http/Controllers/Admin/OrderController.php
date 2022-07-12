@@ -37,8 +37,8 @@ use App\OrderImages;
 						// 'from_date' => (isset($_REQUEST['from_date']))?$_REQUEST['from_date']:'',
 						// 'to_date' => (isset($_REQUEST['to_date']))?$_REQUEST['to_date']:'',
 
-						'user_id' => '',
-						'user_role' => '',
+						'user_id' => $request->query('user_id'),
+						'user_role' => $request->query('user_role'),
 						'sort' => 'desc',
 						'search' => '',
 						'limit' => '',
@@ -48,6 +48,7 @@ use App\OrderImages;
 
 					];
 		$fetch_data = OrderDetails::fetchdata($arr_data);
+		return $fetch_data;
 	}
 
 	//to view order 
@@ -75,10 +76,10 @@ use App\OrderImages;
 		$data['orders']=OrderDetails::where('id',base64_decode($request->id))->first();
 		$data['products'] = ProductDetails::where('status','=','0')->get();
 		$data['customers'] = CustomerDetails::where('status','=','0')->get();
-		$data['cads'] = Cad::where('status','=','0')->get();
+		// $data['cads'] = Cad::where('status','=','0')->get();
 		$data['order_img'] = OrderImages::where('order_id','=',$data['orders']['order_id'])->get()->toArray();	
 		// echo "<pre>";  print_r($data['orders']);exit();
-		return ['orders'=>$data['orders'],'products' => $data['products'],'customers' => $data['customers'],'cads' => $data['cads'],'order_img' => $data['order_img'],'menu'=>$data['menu']];
+		return ['orders'=>$data['orders'],'products' => $data['products'],'customers' => $data['customers'],'order_img' => $data['order_img'],'menu'=>$data['menu']];
 	}
 
 	//to change status of particular id

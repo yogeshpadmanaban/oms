@@ -63,7 +63,7 @@ Route::post('/login/admin', [LoginController::class,'login'])->name('login.submi
         Route::post('/admin/category_bulk_status_change/{data}', [CategoryController::class, 'bulk_status_change']);
         Route::post('/admin/category_multi_delete/{id}', [CategoryController::class, 'multiple_delete']);
 
-        Route::post('/admin/add_product', [ProductController::class,'create']);
+        Route::get('/admin/add_product', [ProductController::class,'create']);
         Route::post('/admin/store_product', [ProductController::class,'store']);
         Route::get('/admin/product_details', [ProductController::class,'fetch_product_details']);
         Route::get('/admin/edit_product/{id}', [ProductController::class,'edit_product']);
@@ -73,12 +73,13 @@ Route::post('/login/admin', [LoginController::class,'login'])->name('login.submi
         Route::post('/admin/product_multi_delete/{id}', [ProductController::class,'multiple_delete']);
         Route::post('/admin/product_name_check', [ProductController::class,'product_name_check']);
 
-        Route::post('/admin/add_order', [OrderController::class,'create']);
+        Route::get('/admin/add_order', [OrderController::class,'create']);
         Route::get('/admin/order_listing', [OrderController::class,'listing']);
         Route::get('/admin/view_orders', [OrderController::class,'view_orders']);	
         Route::get('/admin/add_order', [OrderController::class,'create']);
         Route::get('/admin/edit_order/{id}', [OrderController::class,'edit_order']);
-        Route::get('/admin/order_details', [OrderController::class,'fetch_order_details']);
+
+        Route::get('/admin/order_details/{user_id?}/{user_role?}', [OrderController::class,'fetch_order_details']);
         Route::post('/admin/order_change_status/{id}', [OrderController::class,'status_change']);
         Route::post('/admin/order_delete/{id}', [OrderController::class,'delete']);
         Route::post('/admin/order_bulk_status_change/{data}', [OrderController::class,'bulk_status_change']);

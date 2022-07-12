@@ -196,7 +196,7 @@ class ProductController extends Controller
 	//to store product details 
 	public function store(Request $request)
 	{
-		$product_id=$request['hdn_id'];
+		$product_id=$request['product_id'];
 
 		$image='';
 

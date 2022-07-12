@@ -51,8 +51,6 @@ class OrderDetails extends Model
     {
         $user_role = $req_arr['user_role'];
 
-dd($user_role);
-
         $user_id = $req_arr['user_id'];
         $sort = $req_arr['sort'];
         $search = $req_arr['search'];
@@ -100,7 +98,7 @@ dd($user_role);
             ->when($from_date != "" && $to_date != "", function($result_two) use ($from_date, $to_date){
                 return $result_two->whereBetween('od.delivery_date', [$from_date, $to_date]);
             })
-            ->limit($limit)->offset($offset)
+            // ->limit($limit)->offset($offset)
             ->orderBy('od.id',$sort)    
             ->get();
 
@@ -113,14 +111,16 @@ dd($user_role);
             $data['records']=$result_two;
             $data['num_rows'] = $result_two->count();
 
+            // dd($data['num_rows']);
+
             foreach ($data['records'] as $key => $value)
             {
 
                 $o_id = $data['records'][$key]->order_id;
-                if($data['records'][$key]->order_id!='')
-                {
-                    $data['records'][$key]->order_id="<button type='button' style='cursor: default'; class='btn btn-primary'>".$data['records'][$key]->order_id."</button>";
-                }
+                // if($data['records'][$key]->order_id!='')
+                // {
+                //     $data['records'][$key]->order_id="<button type='button' style='cursor: default'; class='btn btn-primary'>".$data['records'][$key]->order_id."</button>";
+                // }
 
                 if(!empty($order_images)){
 
@@ -185,16 +185,16 @@ dd($user_role);
 
                 }
                  
-                if($data['records'][$key]->order_details!='')
-                {
-                    $order_details = substr($data['records'][$key]->order_details,0,20);
-                    $data['records'][$key]->order_details = '<div data-title="'.$data['records'][$key]->order_details.'">'.$order_details.'...</span>  </div>';
-                    #$data['records'][$key]->order_details = substr($data['records'][$key]->order_details,0,10);
-                }
-                else
-                {
-                    $data['records'][$key]->order_details='-';  
-                } 
+                // if($data['records'][$key]->order_details!='')
+                // {
+                //     $order_details = substr($data['records'][$key]->order_details,0,20);
+                //     $data['records'][$key]->order_details = '<div data-title="'.$data['records'][$key]->order_details.'">'.$order_details.'...</span>  </div>';
+                //     #$data['records'][$key]->order_details = substr($data['records'][$key]->order_details,0,10);
+                // }
+                // else
+                // {
+                //     $data['records'][$key]->order_details='-';  
+                // } 
                 
                 if($data['records'][$key]->delivery_date=='')
                 {   
@@ -235,36 +235,36 @@ dd($user_role);
                         $data['records'][$key]->product_image='-';  
                     }
 
-                    if($data['records'][$key]->mould_status=='0')
-                    {
-                        $data['records'][$key]->mould_status="<button type='button' data-toggle='tooltip' data-placement='top' style='cursor:default' title='Contact mould to change status' class='btn btn-danger'>Pending</button>";
+                    // if($data['records'][$key]->mould_status=='0')
+                    // {
+                    //     $data['records'][$key]->mould_status="<button type='button' data-toggle='tooltip' data-placement='top' style='cursor:default' title='Contact mould to change status' class='btn btn-danger'>Pending</button>";
 
-                    }
-                    else{
-                        $data['records'][$key]->mould_status="<button type='button' data-toggle='tooltip' data-placement='top' style='cursor:default' title='Contact mould to change status' class='btn btn-success'>Finished</button>";    
+                    // }
+                    // else{
+                    //     $data['records'][$key]->mould_status="<button type='button' data-toggle='tooltip' data-placement='top' style='cursor:default' title='Contact mould to change status' class='btn btn-success'>Finished</button>";    
 
-                    }
+                    // }
 
-                    if($data['records'][$key]->status=='1')
-                    {
-                        $data['records'][$key]->status="<i class='fa fa-close change_status' style='font-size:20px;color:red;cursor:pointer' data-url='/admin/order_change_status/' data-id='".base64_encode($data['records'][$key]->id)."' name='status".$data['records'][$key]->id."' data-status='status".$data['records'][$key]->id."' style=color:red></i>";
+                    // if($data['records'][$key]->status=='1')
+                    // {
+                    //     $data['records'][$key]->status="<i class='fa fa-close change_status' style='font-size:20px;color:red;cursor:pointer' data-url='/admin/order_change_status/' data-id='".base64_encode($data['records'][$key]->id)."' name='status".$data['records'][$key]->id."' data-status='status".$data['records'][$key]->id."' style=color:red></i>";
 
-                    }
-                    else{
-                        $data['records'][$key]->status="<i class='fa fa-check change_status' style='font-size:20px;color:green;cursor:pointer' data-url='/admin/order_change_status/'aria-hidden='true' data-id='".base64_encode($data['records'][$key]->id)."' name='status".$data['records'][$key]->id."' data-status='status".$data['records'][$key]->id."' class='btn'  style=color:green></i>";    
+                    // }
+                    // else{
+                    //     $data['records'][$key]->status="<i class='fa fa-check change_status' style='font-size:20px;color:green;cursor:pointer' data-url='/admin/order_change_status/'aria-hidden='true' data-id='".base64_encode($data['records'][$key]->id)."' name='status".$data['records'][$key]->id."' data-status='status".$data['records'][$key]->id."' class='btn'  style=color:green></i>";    
 
-                    }
+                    // }
 
-                    if($data['records'][$key]->user_status=='1' && $data['records'][$key]->cad_user_status=='0')
-                    {
-                        $data['records'][$key]->user_status="<button type='button' data-toggle='tooltip' data-placement='top' style='cursor:default' title='Cad and Mould are Assigned' class='btn btn-success'> Assigned</button>";
+                    // if($data['records'][$key]->user_status=='1' && $data['records'][$key]->cad_user_status=='0')
+                    // {
+                    //     $data['records'][$key]->user_status="<button type='button' data-toggle='tooltip' data-placement='top' style='cursor:default' title='Cad and Mould are Assigned' class='btn btn-success'> Assigned</button>";
 
-                    }
-                    else{
+                    // }
+                    // else{
 
-                        $data['records'][$key]->user_status="<button type='button' data-toggle='tooltip' data-placement='top' style='cursor:default' title='Assign Cad and Mould to change status' class='btn btn-danger'>Not Assigned</button>";
+                    //     $data['records'][$key]->user_status="<button type='button' data-toggle='tooltip' data-placement='top' style='cursor:default' title='Assign Cad and Mould to change status' class='btn btn-danger'>Not Assigned</button>";
 
-                    }
+                    // }
 
                     $data['records'][$key]->check_box="<input type='checkbox' class='checkbox' onclick='multi_select()'  value='".$data['records'][$key]->id."' name='data' style='width:20px;height:20px'>";   
                     
@@ -284,7 +284,8 @@ dd($user_role);
                 } 
             }
         $data['table_data']='{"total":'.intval( $data['totalRecords'] ).',"recordsFiltered":'.intval( $data['num_rows'] ).',"rows":'.json_encode($data['records']).'}';
+
         $data['menu']="order_list";
-		echo ($data['table_data']);
+		return ($data['table_data']);
     }
 }

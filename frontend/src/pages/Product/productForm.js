@@ -67,7 +67,7 @@ export default function ProductForm() {
             let response = await postData('store_product', values);
             if (response) {
                 toast.success(response.data.message);
-                navigate('/admin/customer_report', { replace: true });
+                navigate('/admin/product_report', { replace: true });
             } else {
                 toast.error(response.data.message);
             }
@@ -94,7 +94,7 @@ export default function ProductForm() {
 
     const getcategory = async () => {
         let responseData = await getData("add_product");
-        let categoryList = responseData.category;
+        let categoryList = responseData.data.category;
         categoryList.unshift( {
             "category_id": 0,
             "category_name": "select_category",

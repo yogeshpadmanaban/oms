@@ -52,7 +52,7 @@ export default function OrderForm() {
 
     const ustomerformSchema = Yup.object().shape({
 
-        product_name: Yup.string(),
+        product_id: Yup.string(),
         customer_name: Yup.string(),
         purity: Yup.string(),
         jc_number: Yup.string(),
@@ -60,14 +60,14 @@ export default function OrderForm() {
         quantity: Yup.string(),
         designed_by: Yup.string(),
         delivery_date: Yup.string(),
-        order_image: Yup.string(),
+        // order_image: Yup.string(),
         order_details: Yup.string(),
 
     });
 
     const formik = useFormik({
         initialValues: {
-            product_name: '',
+            product_id: '',
             customer_name: '',
             purity: '',
             jc_number: '',
@@ -94,12 +94,13 @@ export default function OrderForm() {
     useEffect(async () => {
         await getdropdownRecords();
         if (params && params.id) {
-            let url = 'edit_product/' + params.id;
+            let url = 'edit_order/' + params.id;
             let responseData = await getData(url);
-            if (responseData && responseData.data.order) {
-                const { product_name, customer_name, purity, jc_number, weight,
-                    quantity, designed_by, delivery_date, order_image, order_details } = responseData.data.order;
-                formik.setFieldValue("product_name", product_name);
+            console.log(responseData.data.orders);
+            if (responseData && responseData.data.orders) {
+                const { product_id, customer_name, purity, jc_number, weight,
+                    quantity, designed_by, delivery_date, order_image, order_details } = responseData.data.orders;
+                formik.setFieldValue("product_id", product_id);
                 formik.setFieldValue("customer_name", customer_name);
                 formik.setFieldValue("purity", purity);
                 formik.setFieldValue("jc_number", jc_number);
@@ -116,7 +117,7 @@ export default function OrderForm() {
     const getdropdownRecords = async () => {
 
         let responseData = await getData("add_order");
-        let productnameList = responseData.products;
+        let productnameList = responseData.data.products;
         productnameList.unshift({
             "product_id": 0,
             "name": "select_product",
@@ -131,7 +132,7 @@ export default function OrderForm() {
         ];
 
         if (params.id == null || params.id == '') {
-            formik.setFieldValue("product_name", productnameList[0].product_id);
+            formik.setFieldValue("product_id", productnameList[0].product_id);
             formik.setFieldValue("customer_name", customernameList[0].value);
             formik.setFieldValue("purity", purity_options[0].value);
             formik.setFieldValue("designed_by", design_options[0].value);
@@ -163,9 +164,9 @@ export default function OrderForm() {
                                 <Stack spacing={3} sx={{ my: 4 }}>
 
                                     <div style={{ "marginLeft": "10px" }}>Product Name:</div>
-                                    <select name="product_name" value={values.product_name}
+                                    <select name="product_id" value={values.product_id}
                                         onChange={(event) => {
-                                            setFieldValue("product_name", event.target.value)
+                                            setFieldValue("product_id", event.target.value)
                                         }}
                                         style={{ display: "block", padding: "15px" }}
                                     >
