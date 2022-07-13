@@ -20,6 +20,9 @@ import Iconify from '../../components/Iconify';
 import { postData, getData } from '../../Services/apiservice';
 import { ToastContainer, toast } from 'react-toastify';
 
+//css
+import '../common.css';
+
 // ----------------------------------------------------------------------
 
 const RootStyle = styled('div')(({ theme }) => ({
@@ -53,7 +56,8 @@ export default function OrderForm() {
     const ustomerformSchema = Yup.object().shape({
 
         order_id: Yup.string(),
-        customer_name: Yup.string(),
+        product_name: Yup.string().required('Product Name is requried'),
+        customer_name: Yup.string().required('Customer Name is requried'),
         purity: Yup.string(),
         jc_number: Yup.string(),
         weight: Yup.string(),
@@ -68,6 +72,7 @@ export default function OrderForm() {
     const formik = useFormik({
         initialValues: {
             order_id: '',
+            product_name: '',
             customer_name: '',
             purity: '',
             jc_number: '',
@@ -120,12 +125,12 @@ export default function OrderForm() {
         let productnameList = responseData.data.products;
         let customernameList = responseData.data.customers;
         productnameList.unshift({
-            "product_id": 0,
+            "product_id": '',
             "name": "Select Product",
         })
 
         customernameList.unshift({
-            "customer_id": 0,
+            "customer_id": '',
             "name": "Select Customer",
         })
 
@@ -158,49 +163,56 @@ export default function OrderForm() {
                             <Form autoComplete="off" encType="multipart/form-data" noValidate onSubmit={handleSubmit}>
                                 <Stack spacing={3} sx={{ my: 4 }}>
 
-                                    <div style={{ "marginLeft": "10px", "color": "#637381", fontWeight: "400" }}>Product Name:</div>
-                                    <select name="product_id" value={values.product_id}
+                                    <div className="required lbl">Product Name:</div>
+                                    <select name="product_name" value={values.product_name}
                                         onChange={(event) => {
-                                            setFieldValue("product_id", event.target.value)
+                                            setFieldValue("product_name", event.target.value)
                                         }}
-                                        style={{ display: "block", padding: "15px", fontWeight: "400", fontSize: "inherit", borderRadius: "7px" }}
+                                        className="selectfield"
                                     >
                                         {
                                             productnameList &&
                                             productnameList.map((list, index) => {
                                                 return (
-                                                    <option style={{ "color": "#637381", padding: "15px", fontWeight: "400", fontSize: "inherit" }} value={list.product_id} label={list.name}> </option>
+                                                    <option className="seloptionfield" value={list.product_id} label={list.name}> </option>
                                                 )
                                             })
+
                                         }
                                     </select>
+                                    {errors.product_name && touched.product_name &&
+                                        <div className="selerr">{errors.product_name}</div>
+                                    }
 
 
-                                    <div style={{ "marginLeft": "10px", "color": "#637381", fontWeight: "400" }}>Customer Name:</div>
+                                    <div className="required lbl">Customer Name:</div>
                                     <select name="customer_name" value={values.name}
                                         onChange={(event) => {
                                             setFieldValue("customer_name", event.target.value)
                                         }}
-                                        style={{ display: "block", padding: "15px", fontWeight: "400", fontSize: "inherit", borderRadius: "7px" }}
+                                        className="selectfield"
                                     >
                                         {
                                             customernameList &&
                                             customernameList.map((list, index) => {
                                                 return (
-                                                    <option style={{ "color": "#637381", padding: "15px", fontWeight: "400", fontSize: "inherit" }} value={list.customer_id} label={list.name}> </option>
+                                                    <option className="seloptionfield" value={list.customer_id} label={list.name}> </option>
                                                 )
                                             })
                                         }
                                     </select>
+                                    {errors.customer_name && touched.customer_name &&
+                                        <div className="selerr">{errors.customer_name}</div>
+                                    }
 
 
-                                    <div style={{ "marginLeft": "10px", "color": "#637381", fontWeight: "400" }}>Purity:</div>
+                                    <div className="lbl">Purity:</div>
                                     <div role="group" aria-labelledby="my-radio-group">
                                         {
                                             purity_options &&
                                             purity_options.map((option, index) => {
                                                 return (
-                                                    <div style={{ "marginLeft": "10px" }}>
+                                                    <div className="ml10">
                                                         <label className='mb-2'><Field type="radio" name="purity" value={option.value} /> {option.label}</label>
                                                     </div>
                                                 )
@@ -238,13 +250,13 @@ export default function OrderForm() {
                                     />
 
 
-                                    <div style={{ "marginLeft": "10px", "color": "#637381", fontWeight: "400" }}>To be Design:</div>
+                                    <div className="lbl">To be Design:</div>
                                     <div role="group" aria-labelledby="my-radio-group">
                                         {
                                             design_options &&
                                             design_options.map((option, index) => {
                                                 return (
-                                                    <div style={{ "marginLeft": "10px" }}>
+                                                    <div className="ml10">
                                                         <label className='mb-2'><Field type="radio" name="designed_by" value={option.value} /> {option.label}</label>
                                                     </div>
                                                 )

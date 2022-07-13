@@ -20,6 +20,9 @@ import Iconify from '../../components/Iconify';
 import { postData, getData } from '../../Services/apiservice';
 import { ToastContainer, toast } from 'react-toastify';
 
+
+//css
+import '../common.css';
 // ----------------------------------------------------------------------
 
 const RootStyle = styled('div')(({ theme }) => ({
@@ -43,8 +46,8 @@ export default function ProductForm() {
 
     const ustomerformSchema = Yup.object().shape({
         product_id: '',
-        product_type: Yup.string(),
-        category: Yup.string(),
+        product_type: Yup.string().required('Product type is required'),
+        category: Yup.string().required('Product category is required'),
         name: Yup.string().required('Name is required'),
         product_image: '',
         product_details: Yup.string()
@@ -96,7 +99,7 @@ export default function ProductForm() {
         let responseData = await getData("add_product");
         let categoryList = responseData.data.category;
         categoryList.unshift({
-            "category_id": 0,
+            "category_id": '',
             "category_name": "Select Category",
         })
         if (params.id == null || params.id == '') {
@@ -123,38 +126,45 @@ export default function ProductForm() {
                             <Form autoComplete="off" encType="multipart/form-data" noValidate onSubmit={handleSubmit}>
                                 <Stack spacing={3} sx={{ my: 4 }}>
 
-                                    <div style={{ "marginLeft": "10px", "color": "#637381", fontWeight: "400" }}>Product Type:</div>
+                                    <div className="required lbl">Product Type:</div>
                                     <div role="group" aria-labelledby="my-radio-group">
                                         {
                                             radioOptions &&
                                             radioOptions.map((option, index) => {
                                                 return (
-                                                    <div style={{ "marginLeft": "10px" }}>
+                                                    <div className='ml10'>
                                                         <label className='mb-2'><Field key={index} type="radio" name="product_type" value={option.value} /> {option.label}</label>
                                                     </div>
                                                 )
                                             })
                                         }
                                     </div>
+                                    {errors.product_type && touched.product_type &&
+                                        <div className="selerr">{errors.product_type}</div>
+                                    }
 
-                                    <div style={{ "marginLeft": "10px", "color": "#637381", fontWeight: "400" }}>Product Category:</div>
+                                    <div className="required lbl">Product Category:</div>
                                     <select name="category" value={values.category}
                                         onChange={(event) => {
                                             setFieldValue("category", event.target.value)
                                         }}
 
-                                        style={{ display: "block", padding: "15px", fontWeight: "400", fontSize: "inherit", borderRadius: "7px" }}
+                                        className="selectfield"
                                     >
                                         {
                                             category &&
                                             category.map((list, index) => {
                                                 return (
-                                                    <option style={{ "color": "#637381", padding: "15px", fontWeight: "400", fontSize: "inherit" }} value={list.category_id} label={list.category_name}> </option>
+                                                    <option className="seloptionfield" value={list.category_id} label={list.category_name}> </option>
                                                 )
                                             })
                                         }
 
                                     </select>
+
+                                    {errors.category && touched.category &&
+                                        <div className="selerr">{errors.category}</div>
+                                    }
 
 
                                     <TextField

@@ -1,0 +1,48 @@
+/* Customised Form Css start*/
+
+
+.required:after {
+    content: " *";
+    color: red;
+}
+
+.lbl {
+    margin-left: 10px !important;
+    color: #637381;
+    font-weight: "400" !important
+}
+
+.selectfield {
+    display: block;
+    padding: 15px;
+    font-weight: 400;
+    font-size: inherit;
+    border-radius: 7px
+}
+
+.selerr {
+    color: #FF4842;
+    line-height: 1.5 !important;
+    font-size: 0.75rem !important;
+    font-family: unset !important;
+    text-align: left !important;
+    margin-top: 3px !important;
+    margin-right: 14px !important;
+    margin-bottom: 0 !important;
+    margin-left: 14px !important;
+}
+
+.ml10 {
+    margin-left: 10px !important;
+}
+
+.seloptionfield {
+    color: #637381;
+    padding: 15px;
+    font-weight: 400;
+    font-size: inherit
+}
+
+
+
+/* Customised Form Css end*/
