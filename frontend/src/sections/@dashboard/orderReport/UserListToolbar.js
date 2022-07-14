@@ -1,9 +1,19 @@
 import PropTypes from 'prop-types';
+import * as Yup from 'yup';
+
 // material
 import { styled } from '@mui/material/styles';
-import { Toolbar, Tooltip, IconButton, Typography, OutlinedInput, InputAdornment } from '@mui/material';
+import {
+  Toolbar, Tooltip, IconButton, Typography, OutlinedInput, InputAdornment, TextField, Button
+} from '@mui/material';
+
+
+
+import { useFormik, Form, FormikProvider } from 'formik';
+
 // component
 import Iconify from '../../../components/Iconify';
+import { ToastContainer, toast } from 'react-toastify';
 
 // ----------------------------------------------------------------------
 
@@ -34,63 +44,126 @@ UserListToolbar.propTypes = {
   filterName: PropTypes.string,
   onFilterName: PropTypes.func,
   onDelete: PropTypes.func,
-  onstausChange: PropTypes.func
+  onstausChange: PropTypes.func,
+  getRecord: PropTypes.func,
 };
 
-export default function UserListToolbar({ numSelected, filterName, onFilterName, onDelete, onstausChange }) {
+
+export default function UserListToolbar({ numSelected, filterName, onFilterName, onDelete, onstausChange, getRecord }) {
+  const filterSchema = Yup.object().shape({
+    from_date: Yup.string(),
+    to_date: Yup.string(),
+  });
+  const formik = useFormik({
+    initialValues: {
+      from_date: '',
+      to_date: ''
+    },
+    validationSchema: filterSchema,
+    onSubmit: async (values, { resetForm }) => {
+      if (!values.from_date && !values.to_date) {
+        toast.error("Please fill Dates");
+        return;
+      } else {
+        let data = values;
+        resetForm();
+        getRecord(data);
+      }
+
+    },
+  });
+
+  const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps, setFieldValue, initialValues } = formik;
+
   return (
+    <div>
 
+      <RootStyle
+        sx={{
+          ...(numSelected > 0 && {
+            color: 'primary.main',
+            bgcolor: 'primary.lighter',
+          }),
+        }}
+      >
+        {numSelected > 0 ? (
+          <Typography component="div" variant="subtitle1">
+            {numSelected} selected
+          </Typography>
+        ) :
 
-    <RootStyle
-      sx={{
-        ...(numSelected > 0 && {
-          color: 'primary.main',
-          bgcolor: 'primary.lighter',
-        }),
-      }}
-    >
-      {numSelected > 0 ? (
-        <Typography component="div" variant="subtitle1">
-          {numSelected} selected
-        </Typography>
-      ) :
+          (
+            <SearchStyle
+              value={filterName}
+              onChange={onFilterName}
+              placeholder="Search user..."
+              startAdornment={
+                <InputAdornment position="start">
+                  <Iconify icon="eva:search-fill" sx={{ color: 'text.disabled', width: 20, height: 20 }} />
+                </InputAdornment>
+              }
+            />
+          )}
 
-        (
-          <SearchStyle
-            value={filterName}
-            onChange={onFilterName}
-            placeholder="Search user..."
-            startAdornment={
-              <InputAdornment position="start">
-                <Iconify icon="eva:search-fill" sx={{ color: 'text.disabled', width: 20, height: 20 }} />
-              </InputAdornment>
-            }
-          />
+        {numSelected > 0 ? (
+          <div>
+            <Tooltip title="Bulk Status Change">
+              <IconButton onClick={onstausChange}>
+                <Iconify icon="el:lock" />
+              </IconButton>
+            </Tooltip>
+
+            <Tooltip title="Bulk Delete">
+              <IconButton onClick={onDelete}>
+                <Iconify icon="eva:trash-2-fill" />
+              </IconButton>
+            </Tooltip>
+          </div>
+
+        ) : (
+          <Tooltip title="Filter list">
+            <IconButton>
+              <Iconify icon="ic:round-filter-list" />
+            </IconButton>
+          </Tooltip>
         )}
 
-      {numSelected > 0 ? (
-        <div>
-          <Tooltip title="Bulk Status Change">
-            <IconButton onClick={onstausChange}>
-              <Iconify icon="el:lock" />
-            </IconButton>
-          </Tooltip>
+      </RootStyle>
 
-          <Tooltip title="Bulk Delete">
-            <IconButton onClick={onDelete}>
-              <Iconify icon="eva:trash-2-fill" />
-            </IconButton>
-          </Tooltip>
-        </div>
+      <FormikProvider value={formik}>
+        <Form autoComplete="off" encType="multipart/form-data" noValidate onSubmit={handleSubmit}>
 
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <Iconify icon="ic:round-filter-list" />
-          </IconButton>
-        </Tooltip>
-      )}
+          <RootStyle>
+            <TextField
+              type="date"
+              label="From Date"
+              margin="normal"
+              {...getFieldProps('from_date')}
+              InputLabelProps={{ shrink: true }}
+              error={Boolean(touched.from_date && errors.from_date)}
+              helperText={touched.from_date && errors.from_date}
+            />
 
-    </RootStyle>
+            <TextField
+              type="date"
+              label="To Date"
+              margin="normal"
+              {...getFieldProps('to_date')}
+              InputLabelProps={{ shrink: true }}
+              error={Boolean(touched.to_date && errors.to_date)}
+              helperText={touched.to_date && errors.to_date}
+            />
+
+            <Button variant="contained" type="submit">
+              Search by Date
+            </Button>
+
+          </RootStyle>
+        </Form>
+      </FormikProvider>
+
+    </div >
   );
+
+
 }

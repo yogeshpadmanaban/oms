@@ -223,22 +223,22 @@ const addorder = {
         ],
         customers: [
             {
-              "customer_id": 1,
-              "profile_picture": null,
-              "name": "Gokull",
-              "address": "smk",
-              "city": "madurai",
-              "state": "TN",
-              "gst_no": "6757575757675",
-              "pan_no": "675765675677567",
-              "other_upload": null,
-              "status": "0",
-              "created_date": null,
-              "modified_date": "2022-06-18 13:24:31",
-              "deleted_at": null
+                "customer_id": 1,
+                "profile_picture": null,
+                "name": "Gokull",
+                "address": "smk",
+                "city": "madurai",
+                "state": "TN",
+                "gst_no": "6757575757675",
+                "pan_no": "675765675677567",
+                "other_upload": null,
+                "status": "0",
+                "created_date": null,
+                "modified_date": "2022-06-18 13:24:31",
+                "deleted_at": null
             },
         ],
-        
+
         order_img: null,
     }
 
@@ -249,13 +249,7 @@ const addorder = {
 
 
 export async function getData(apiName) {
-    console.log("apiName", apiName);
-    let params = {};
 
-    if (apiName == 'order_details') {
-        params.user_id = localStorage.getItem("user_id");
-        params.user_role = localStorage.getItem("user_role");
-    }
     // if (apiName == 'add_product') {
     //     return addproducts;
     // }
@@ -271,10 +265,31 @@ export async function getData(apiName) {
     // else if (apiName == 'customer_details') {
     //     return customerReport;
     // }
-    // else if (apiName == 'order_details') {
-    //     return orderReport;
-    // }
-    // else {
+
+    let apiUrl = baseUrl + apiName;
+    let responseData = await axios.get(apiUrl).then((response) => {
+        return response;
+    }, (error) => {
+        return error;
+    });
+    return responseData;
+
+}
+
+
+export async function getorderData(apiName, data) {
+    let params = {};
+
+    if (apiName == 'order_details') {
+        params.user_id = localStorage.getItem("user_id");
+        params.user_role = localStorage.getItem("user_role");
+        if (data) {
+            params.from_date = data.from_date;
+            params.to_date = data.to_date;
+        }
+        // return orderReport;
+    }
+
     console.log("params", params);
     let apiUrl = baseUrl + apiName;
     let responseData = await axios.get(apiUrl, { params }).then((response) => {
@@ -283,12 +298,12 @@ export async function getData(apiName) {
         return error;
     });
     return responseData;
-    // }
+
 }
 
 
+
 export async function postData(apiName, params) {
-    console.log(apiName);
     if (apiName == "login/admin") {
         var baseUrl = 'http://localhost:8000/api/';
     }

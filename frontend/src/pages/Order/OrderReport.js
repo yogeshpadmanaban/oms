@@ -30,7 +30,7 @@ import SearchNotFound from '../../components/SearchNotFound'; // Common Page
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../../sections/@dashboard/orderReport'; // Sepearte page
 
 // apiservice
-import { postData, getData } from '../../Services/apiservice';
+import { postData, getData, getorderData } from '../../Services/apiservice';
 
 
 const TABLE_HEAD = [
@@ -82,12 +82,13 @@ export default function OrderReport() {
     const [List, setList] = useState([]);
 
     useEffect(async () => {
-        await getRecord();
+        await getRecord('');
     }, []);
 
 
-    const getRecord = async () => {
-        let response = await getData('order_details');
+    const getRecord = async (data) => {
+        console.log("data", data);
+        let response = await getorderData('order_details');
         console.log(response);
         if (response && response.data.rows) {
             setList(response.data.rows);
@@ -159,7 +160,7 @@ export default function OrderReport() {
                     let responseData = await postData(apiUrl)
                     if (responseData) {
                         toast.success("Deleted Successfully");
-                        await getRecord();
+                        await getRecord('');
                         await handletableReset();
                     } else {
                         toast.error("Oops ! Somewithing wen wrong");
@@ -206,7 +207,7 @@ export default function OrderReport() {
                     let responseData = await postData(apiUrl);
                     if (responseData) {
                         toast.success("Status Changed Successfully");
-                        await getRecord();
+                        await getRecord('');
                         await handletableReset();
                     } else {
                         toast.error("Oops ! Somewithing wen wrong");
@@ -242,7 +243,7 @@ export default function OrderReport() {
 
                 <Card>
                     <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName}
-                        onDelete={ondeleteClick} onstausChange={onstatusChange} />
+                        onDelete={ondeleteClick} onstausChange={onstatusChange} getRecord={getRecord}/>
 
                     <Scrollbar>
                         <TableContainer sx={{ minWidth: 800 }}>
