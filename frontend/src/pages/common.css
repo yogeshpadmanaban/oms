@@ -17,7 +17,8 @@
     padding: 15px;
     font-weight: 400;
     font-size: inherit;
-    border-radius: 7px
+    border-radius: 7px;
+    background-color: white;
 }
 
 .selerr {
