@@ -221,8 +221,8 @@ class CustomerController extends Controller
 
 		$image=$other_upl=null;
 
-// 		dd( $request->file('profile_picture'));
-// return $request->file('profile_picture');
+		// return $request;
+return $request;
 		if($request->file('profile_picture'))
 		{
 			$destinationPath = 'uploads/customer/profile_picture/'; // upload path

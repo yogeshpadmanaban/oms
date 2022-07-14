@@ -32,12 +32,12 @@ export default function CustomerForm() {
 
     const navigate = useNavigate();
     const params = useParams();
-    const [profile_picture, setProfile_picture] = useState('');
+    // const [profile_picture, setProfile_picture] = useState('')
 
 
     const ustomerformSchema = Yup.object().shape({
         customer_id: '',
-        profile_picture: '',
+        // profile_picture: '',
         name: Yup.string().required('Name is required'),
         address: Yup.string().required('Address is required'),
         city: Yup.string().required('City is required'),
@@ -56,7 +56,7 @@ export default function CustomerForm() {
             state: '',
             gst_no: '',
             pan_no: '',
-            profile_picture: '',
+            // profile_picture: '',
             other_upload: ''
         },
         validationSchema: ustomerformSchema,
@@ -83,7 +83,7 @@ export default function CustomerForm() {
                 values.other_upload = other_upload;
             }
 
-            console.log("values", values);
+            console.log("form values", values);
 
             let response = await postData('store_customer', values);
             if (response) {
