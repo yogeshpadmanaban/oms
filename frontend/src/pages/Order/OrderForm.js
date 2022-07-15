@@ -45,6 +45,11 @@ export default function OrderForm() {
         { label: '96', value: '96' },
     ];
 
+    const metalstatus_options = [
+        { label: 'Yes', value: "1" },
+        { label: 'No', value: "0" },
+    ];
+
     const design_options = [
         { label: 'Stone', value: 'Stone' },
         { label: 'Enamel', value: 'Enamel' },
@@ -59,6 +64,8 @@ export default function OrderForm() {
         product_name: Yup.string().required('Product Name is requried'),
         customer_name: Yup.string().required('Customer Name is requried'),
         purity: Yup.string(),
+        metal_status: Yup.string(),
+        metal_status_date: Yup.string(),
         jc_number: Yup.string(),
         weight: Yup.string(),
         quantity: Yup.string(),
@@ -75,6 +82,8 @@ export default function OrderForm() {
             product_name: '',
             customer_name: '',
             purity: '',
+            metal_status: '',
+            metal_status_date: '',
             jc_number: '',
             weight: '',
             quantity: '',
@@ -108,6 +117,8 @@ export default function OrderForm() {
                 formik.setFieldValue("order_id", order_id);
                 formik.setFieldValue("customer_name", customer_name);
                 formik.setFieldValue("purity", purity);
+                formik.setFieldValue("metal_status", metal_status);
+                formik.setFieldValue("metal_status_date", metal_status_date);
                 formik.setFieldValue("jc_number", jc_number);
                 formik.setFieldValue("weight", weight);
                 formik.setFieldValue("quantity", quantity);
@@ -219,6 +230,34 @@ export default function OrderForm() {
                                             })
                                         }
                                     </div>
+
+                                    <div className="lbl">Metal Status:</div>
+                                    <div role="group" aria-labelledby="my-radio-group1">
+                                        {
+                                            metalstatus_options &&
+                                            metalstatus_options.map((option, index) => {
+                                                return (
+                                                    <div className="ml10">
+                                                        <label className='mb-2'><Field type="radio" name="metal_status" value={option.value} /> {option.label}</label>
+                                                    </div>
+                                                )
+                                            })
+                                        }
+                                    </div>
+
+
+                                    {
+                                        values && values.metal_status && values.metal_status == '1' &&
+                                        <TextField
+                                            fullWidth
+                                            type="date"
+                                            label="Metal Status Date"
+                                            {...getFieldProps('metal_status_date')}
+                                            InputLabelProps={{ shrink: true }}
+                                            error={Boolean(touched.metal_status_date && errors.metal_status_date)}
+                                            helperText={touched.metal_status_date && errors.metal_status_date}
+                                        />
+                                    }
 
 
                                     <TextField

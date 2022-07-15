@@ -4,6 +4,8 @@ import { Link as RouterLink } from 'react-router-dom';
 import { decode as base64_decode, encode as base64_encode } from 'base-64';
 import swal from 'sweetalert'; // sweetalert
 import { ToastContainer, toast } from 'react-toastify';
+import Moment from 'react-moment';
+import moment from 'moment';
 
 // material
 import {
@@ -32,6 +34,8 @@ import { UserListHead, UserListToolbar, UserMoreMenu } from '../../sections/@das
 // apiservice
 import { postData, getData, getorderData } from '../../Services/apiservice';
 
+//css
+import '../common.css';
 
 const TABLE_HEAD = [
 
@@ -50,6 +54,8 @@ const TABLE_HEAD = [
     { id: 'delivery_date', label: 'Delivery Date', alignRight: false },
     { id: 'user_status', label: 'Assigner Status', alignRight: false },
     { id: 'status', label: 'Status', alignRight: false },
+    { id: 'metal_status', label: 'Metal Status', alignRight: false },
+    { id: 'metal_status_date', label: 'Metal Status Date', alignRight: false },
     { id: '', label: 'Action', alignRight: false }
 
 ];
@@ -91,7 +97,11 @@ export default function OrderReport() {
         let response = await getorderData('order_details');
         console.log(response);
         if (response && response.data.rows) {
-            setList(response.data.rows);
+            let responseData = response.data.rows;
+            responseData.sort(function (a, b) {
+                return new Date(a.metal_status_date) - new Date(b.metal_status_date);
+            });
+            setList(responseData);
         }
     }
 
@@ -243,7 +253,7 @@ export default function OrderReport() {
 
                 <Card>
                     <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName}
-                        onDelete={ondeleteClick} onstausChange={onstatusChange} getRecord={getRecord}/>
+                        onDelete={ondeleteClick} onstausChange={onstatusChange} getRecord={getRecord} />
 
                     <Scrollbar>
                         <TableContainer sx={{ minWidth: 800 }}>
@@ -265,7 +275,7 @@ export default function OrderReport() {
                                         filteredList.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
 
                                             const { order_id, jc_number, product_type, category, name, customer_name, purity, product_weight, quantity, design_by, order_details,
-                                                order_image, delivery_date, user_status, status } = row;
+                                                order_image, delivery_date, user_status, status, metal_status, metal_status_date } = row;
 
                                             const isItemSelected = selected.indexOf(order_id) !== -1;
 
@@ -273,6 +283,7 @@ export default function OrderReport() {
                                                 <TableRow
                                                     hover
                                                     key={order_id}
+                                                    className={new Date() > new Date(metal_status_date) ? "setmark" : ""}
                                                     tabIndex={-1}
                                                     role="checkbox"
                                                     selected={isItemSelected}
@@ -299,6 +310,7 @@ export default function OrderReport() {
                                                         </Stack>
                                                     </TableCell>
                                                     <TableCell align="left">{delivery_date}</TableCell>
+
                                                     <TableCell align="left">{user_status}</TableCell>
 
                                                     <TableCell align="left" onClick={() => onstatusChange(order_id)}>
@@ -309,6 +321,12 @@ export default function OrderReport() {
                                                         />
                                                     </TableCell>
 
+                                                    <TableCell align="left">{metal_status == '1' ? 'Yes' : 'No'}</TableCell>
+                                                    <TableCell align="left">{moment(metal_status_date).format('LLL')}
+                                                        {/* <Moment local>
+                                                            {}
+                                                        </Moment> */}
+                                                    </TableCell>
                                                     <TableCell align="center">
                                                         <UserMoreMenu
                                                             url={'/admin/edit_order/' + base64_encode(order_id)}
