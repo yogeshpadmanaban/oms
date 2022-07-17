@@ -153,7 +153,8 @@ const orderReport = {
                 "user_status": '0',
                 "status": '0',
                 "metal_status": '1',
-                "metal_status_date": date
+                "metal_status_date": date,
+                "orderdue_date": date
             },
 
             {
@@ -173,7 +174,8 @@ const orderReport = {
                 "user_status": '0',
                 "status": '0',
                 "metal_status": '1',
-                "metal_status_date": onedayBefore
+                "metal_status_date": date,
+                "orderdue_date": twodayBefore
             },
 
             {
@@ -193,7 +195,8 @@ const orderReport = {
                 "user_status": '0',
                 "status": '0',
                 "metal_status": '1',
-                "metal_status_date": twodayBefore
+                "metal_status_date": date,
+                "orderdue_date": twodayBefore
             },
 
             {
@@ -213,7 +216,8 @@ const orderReport = {
                 "user_status": '0',
                 "status": '0',
                 "metal_status": '1',
-                "metal_status_date": threedayBefore
+                "metal_status_date": date,
+                "orderdue_date": threedayBefore
             },
 
             {
@@ -233,7 +237,8 @@ const orderReport = {
                 "user_status": '0',
                 "status": '0',
                 "metal_status": '1',
-                "metal_status_date": onedayahed
+                "metal_status_date": date,
+                "orderdue_date": onedayahed
             },
 
         ]

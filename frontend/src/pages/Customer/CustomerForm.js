@@ -32,12 +32,10 @@ export default function CustomerForm() {
 
     const navigate = useNavigate();
     const params = useParams();
-    // const [profile_picture, setProfile_picture] = useState('')
-
 
     const ustomerformSchema = Yup.object().shape({
         customer_id: '',
-        // profile_picture: '',
+        profile_picture: '',
         name: Yup.string().required('Name is required'),
         address: Yup.string().required('Address is required'),
         city: Yup.string().required('City is required'),
@@ -47,45 +45,34 @@ export default function CustomerForm() {
         other_upload: '',
     });
 
+
     const formik = useFormik({
         initialValues: {
             customer_id: '',
+            profile_picture: '',
             name: '',
             address: '',
             city: '',
             state: '',
             gst_no: '',
             pan_no: '',
-            // profile_picture: '',
             other_upload: ''
         },
         validationSchema: ustomerformSchema,
         onSubmit: async (values) => {
 
-            let profile_picture = {};
-            let other_upload = {};
-
-            // params = values;
-            // params.profile_picture = initialValues.profile_picture;
-
-            // if (values.profile_picture) {
-            //     profile_picture.name = values.profile_picture.name;
-            //     profile_picture.type = values.profile_picture.type;
-            //     profile_picture.size = `${values.profile_picture.size} bytes`;
-            //     // profile_picture.data = RNFetchBlob.wrap(fileContent)
-            //     values.profile_picture = profile_picture;
-            // }
-
-            if (values.other_upload) {
-                other_upload.name = values.other_upload.name;
-                other_upload.type = values.other_upload.type;
-                other_upload.size = `${values.other_upload.size} bytes`;
-                values.other_upload = other_upload;
-            }
-
-            console.log("form values", values);
-
-            let response = await postData('store_customer', values);
+            let formData = new FormData();
+            formData.append("customer_id", values.customer_id);
+            formData.append("profile_picture", values.profile_picture);
+            formData.append("name", values.name);
+            formData.append("address", values.address);
+            formData.append("city", values.city);
+            formData.append("state", values.state);
+            formData.append("gst_no", values.gst_no);
+            formData.append("pan_no", values.pan_no);
+            formData.append("other_upload", values.other_upload);
+            
+            let response = await postData('store_customer', formData);
             if (response) {
                 toast.success(response.data.message);
                 navigate('/admin/customer_report', { replace: true });
@@ -116,6 +103,14 @@ export default function CustomerForm() {
         }
     }, []);
 
+    const onfileupload = async (name, value) => {
+        console.log(name, value);
+        let response = await postData('file_upload', value);
+        if (response.status == 200) {
+            formik.setFieldValue("name", response.data);
+        }
+    }
+
     const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps, setFieldValue, initialValues } = formik;
     return (
         <Page title={params && params.id ? "Edit Customer" : "Add Customer"}>
@@ -133,18 +128,16 @@ export default function CustomerForm() {
                             <Form autoComplete="off" encType="multipart/form-data" noValidate onSubmit={handleSubmit}>
                                 <Stack spacing={3} sx={{ my: 4 }}>
 
-                                    <input
-                                        
+                                    <TextField
+                                        fullWidth
                                         type="file"
-                                        
-                                        label="Profile Picture"
-                                        name="profile_picture"
+                                        label="profile_picture"
+                                        InputLabelProps={{ shrink: true }}
                                         onChange={(event) => {
-                                            // initialValues.profile_picture = event.currentTarget.files[0]
-                                            // setProfile_picture(event.currentTarget.files[0]);
-                                            setFieldValue("profile_picture", event.currentTarget.files[0])
+                                            setFieldValue('profile_picture', event.currentTarget.files[0]);
                                         }}
-                                        
+                                        error={Boolean(touched.profile_picture && errors.profile_picture)}
+                                        helperText={touched.profile_picture && errors.profile_picture}
                                     />
 
                                     <TextField

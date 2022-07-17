@@ -56,6 +56,7 @@ const TABLE_HEAD = [
     { id: 'status', label: 'Status', alignRight: false },
     { id: 'metal_status', label: 'Metal Status', alignRight: false },
     { id: 'metal_status_date', label: 'Metal Status Date', alignRight: false },
+    { id: 'orderdue_date', label: 'Order Due Date', alignRight: false },
     { id: '', label: 'Action', alignRight: false }
 
 ];
@@ -99,7 +100,7 @@ export default function OrderReport() {
         if (response && response.data.rows) {
             let responseData = response.data.rows;
             responseData.sort(function (a, b) {
-                return new Date(a.metal_status_date) - new Date(b.metal_status_date);
+                return new Date(a.orderdue_date) - new Date(b.orderdue_date);
             });
             setList(responseData);
         }
@@ -275,7 +276,7 @@ export default function OrderReport() {
                                         filteredList.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
 
                                             const { order_id, jc_number, product_type, category, name, customer_name, purity, product_weight, quantity, design_by, order_details,
-                                                order_image, delivery_date, user_status, status, metal_status, metal_status_date } = row;
+                                                order_image, delivery_date, user_status, status, metal_status, metal_status_date, orderdue_date } = row;
 
                                             const isItemSelected = selected.indexOf(order_id) !== -1;
 
@@ -283,7 +284,7 @@ export default function OrderReport() {
                                                 <TableRow
                                                     hover
                                                     key={order_id}
-                                                    className={new Date() > new Date(metal_status_date) ? "setmark" : ""}
+                                                    className={new Date() > new Date(orderdue_date) ? "setmark" : ""}
                                                     tabIndex={-1}
                                                     role="checkbox"
                                                     selected={isItemSelected}
@@ -323,9 +324,8 @@ export default function OrderReport() {
 
                                                     <TableCell align="left">{metal_status == '1' ? 'Yes' : 'No'}</TableCell>
                                                     <TableCell align="left">{moment(metal_status_date).format('LLL')}
-                                                        {/* <Moment local>
-                                                            {}
-                                                        </Moment> */}
+                                                    </TableCell>
+                                                    <TableCell align="left">{moment(orderdue_date).format('LLL')}
                                                     </TableCell>
                                                     <TableCell align="center">
                                                         <UserMoreMenu

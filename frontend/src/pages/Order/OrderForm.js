@@ -66,6 +66,7 @@ export default function OrderForm() {
         purity: Yup.string(),
         metal_status: Yup.string(),
         metal_status_date: Yup.string(),
+        orderdue_date: Yup.string(),
         jc_number: Yup.string(),
         weight: Yup.string(),
         quantity: Yup.string(),
@@ -84,6 +85,7 @@ export default function OrderForm() {
             purity: '',
             metal_status: '',
             metal_status_date: '',
+            orderdue_date: '',
             jc_number: '',
             weight: '',
             quantity: '',
@@ -113,12 +115,13 @@ export default function OrderForm() {
             console.log(responseData.data.orders);
             if (responseData && responseData.data.orders) {
                 const { order_id, customer_name, purity, jc_number, weight,
-                    quantity, designed_by, delivery_date, order_image, order_details } = responseData.data.orders;
+                    quantity, designed_by, delivery_date, order_image, order_details, orderdue_date } = responseData.data.orders;
                 formik.setFieldValue("order_id", order_id);
                 formik.setFieldValue("customer_name", customer_name);
                 formik.setFieldValue("purity", purity);
                 formik.setFieldValue("metal_status", metal_status);
                 formik.setFieldValue("metal_status_date", metal_status_date);
+                formik.setFieldValue("orderdue_date", orderdue_date);
                 formik.setFieldValue("jc_number", jc_number);
                 formik.setFieldValue("weight", weight);
                 formik.setFieldValue("quantity", quantity);
@@ -246,19 +249,25 @@ export default function OrderForm() {
                                     </div>
 
 
-                                    {
-                                        values && values.metal_status && values.metal_status == '1' &&
-                                        <TextField
-                                            fullWidth
-                                            type="date"
-                                            label="Metal Status Date"
-                                            {...getFieldProps('metal_status_date')}
-                                            InputLabelProps={{ shrink: true }}
-                                            error={Boolean(touched.metal_status_date && errors.metal_status_date)}
-                                            helperText={touched.metal_status_date && errors.metal_status_date}
-                                        />
-                                    }
+                                    <TextField
+                                        fullWidth
+                                        type="date"
+                                        label="Metal Status Date"
+                                        {...getFieldProps('metal_status_date')}
+                                        InputLabelProps={{ shrink: true }}
+                                        error={Boolean(touched.metal_status_date && errors.metal_status_date)}
+                                        helperText={touched.metal_status_date && errors.metal_status_date}
+                                    />
 
+                                    <TextField
+                                        fullWidth
+                                        type="date"
+                                        label="Order Due Date"
+                                        {...getFieldProps('orderdue_date')}
+                                        InputLabelProps={{ shrink: true }}
+                                        error={Boolean(touched.orderdue_date && errors.orderdue_date)}
+                                        helperText={touched.orderdue_date && errors.orderdue_date}
+                                    />
 
                                     <TextField
                                         fullWidth
