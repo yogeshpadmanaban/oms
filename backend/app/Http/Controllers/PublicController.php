@@ -141,12 +141,12 @@ class PublicController extends Controller
         //     }
         // }
 
-        if ($request->input('design_by')!=''){
-            $design_by = implode(',',$request->input('design_by'));
-        }
-        else{
-            $design_by = '';
-        }
+        // if ($request->input('design_by')!=''){
+        //     $design_by = implode(',',$request->input('design_by'));
+        // }
+        // else{
+        //     $design_by = '';
+        // }
 
         if($request->input('hdn_rdm_oder_id')!='')
         {
@@ -192,14 +192,17 @@ class PublicController extends Controller
             'product_type' => $product_type['product_type'],
             'product_id' => $request->input('product_id'),
             'customer_id' => $request->input('customer_id'),
-            'mould_id' => $request->input('mould_name'),
+            // 'mould_id' => $request->input('mould_name'),
             'purity' => $request->input('purity'),
             'jc_number' => $request->input('jc_number'),
             'quantity' => $request->input('quantity'),
-            'cad_id' => $request->input('cad_id'),
+            // 'cad_id' => $request->input('cad_id'),
             'weight' => $request->input('weight'),
-            'design_by' => $design_by,
+            'design_by' => $request->input('design_by'),
             'delivery_date' => $request->input('delivery_date'),
+            'metal_provided' => $request->input('metal_provided'),
+            'metal_provided_date' => $request->input('metal_provided_date'),
+            'order_due_date' => $request->input('order_due_date'),
             'order_image' => NULL,
             'order_details' => $request->input('order_details'),
             'user_status' => $user_status,
@@ -208,13 +211,13 @@ class PublicController extends Controller
         ];
 
 
-        if(!empty($image))
-        {
-            OrderImages::where('order_creator_id', $user_id)->where('order_id',  $order_data['order_id'])->delete();
-            foreach ($image as $key => $value) {
-                OrderImages::insert($value);
-            }
-        }
+        // if(!empty($image))
+        // {
+        //     OrderImages::where('order_creator_id', $user_id)->where('order_id',  $order_data['order_id'])->delete();
+        //     foreach ($image as $key => $value) {
+        //         OrderImages::insert($value);
+        //     }
+        // }
 
         $res = OrderDetails::updateOrCreate(['id'=>$id],$order_data); 
 

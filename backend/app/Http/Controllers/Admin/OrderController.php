@@ -34,9 +34,8 @@ use App\OrderImages;
 						// 'search' => (isset($_REQUEST['search']))?$_REQUEST['search']:'',
 						// 'limit' => (int)$_REQUEST['limit'],
 						// 'offset' => (int)$_REQUEST['offset'],
-						// 'from_date' => (isset($_REQUEST['from_date']))?$_REQUEST['from_date']:'',
-						// 'to_date' => (isset($_REQUEST['to_date']))?$_REQUEST['to_date']:'',
-
+						'from_date' => $request->query('from_date'),
+						'to_date' => $request->query('to_date'),
 						'user_id' => $request->query('user_id'),
 						'user_role' => $request->query('user_role'),
 						'sort' => 'desc',
@@ -104,7 +103,7 @@ use App\OrderImages;
 	//to delete data of particular id
 	public function delete($id)
 	{
-		OrderDetails::where('id',$id)->update(['status' => '2']);	
+		$row_data = OrderDetails::where('id',$id)->update(['status' => '2']);	
 		OrderDetails::find($id)->delete();
 		return response()->json([
 			'success' => 'Record has been deleted successfully!',

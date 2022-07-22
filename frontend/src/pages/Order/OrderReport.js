@@ -39,10 +39,10 @@ import '../common.css';
 
 const TABLE_HEAD = [
 
-    { id: 'order_id', label: 'Order Id', alignRight: false },
+    { id: 'id', label: 'Order Id', alignRight: false },
     { id: 'jc_number', label: 'Jc Number', alignRight: false },
     { id: 'product_type', label: 'Product Type', alignRight: false },
-    { id: 'product_category', label: 'Product Category', alignRight: false },
+    { id: 'category_name', label: 'Product Category', alignRight: false },
     { id: 'product_id', label: 'Product Name', alignRight: false },
     { id: 'customer_name', label: 'Customer Name', alignRight: false },
     { id: 'purity', label: 'Purity', alignRight: false },
@@ -52,11 +52,11 @@ const TABLE_HEAD = [
     { id: 'order_details', label: 'Order Details', alignRight: false },
     { id: 'order_image', label: 'Order Image', alignRight: false },
     { id: 'delivery_date', label: 'Delivery Date', alignRight: false },
-    { id: 'user_status', label: 'Assigner Status', alignRight: false },
+    // { id: 'user_status', label: 'Assigner Status', alignRight: false },
+    { id: 'metal_status', label: 'Metal Provided', alignRight: false },
+    { id: 'metal_status_date', label: 'Metal Provided Date', alignRight: false },
+    { id: 'order_due_date', label: 'Order Due Date', alignRight: false },
     { id: 'status', label: 'Status', alignRight: false },
-    { id: 'metal_status', label: 'Metal Status', alignRight: false },
-    { id: 'metal_status_date', label: 'Metal Status Date', alignRight: false },
-    { id: 'orderdue_date', label: 'Order Due Date', alignRight: false },
     { id: '', label: 'Action', alignRight: false }
 
 ];
@@ -80,9 +80,9 @@ export default function OrderReport() {
     const [order, setOrder] = useState('asc');  // asc || dsc
 
 
-    const [orderBy, setOrderBy] = useState('order_id'); // By Default order_id
+    const [orderBy, setOrderBy] = useState('id'); // By Default id
 
-    const [filterName, setFilterName] = useState(''); // search filter order_id set and it's fun
+    const [filterName, setFilterName] = useState(''); // search filter id set and it's fun
 
     const [rowsPerPage, setRowsPerPage] = useState(5);  // setrowsPerPage
 
@@ -100,7 +100,7 @@ export default function OrderReport() {
         if (response && response.data.rows) {
             let responseData = response.data.rows;
             responseData.sort(function (a, b) {
-                return new Date(a.orderdue_date) - new Date(b.orderdue_date);
+                return new Date(a.order_due_date) - new Date(b.order_due_date);
             });
             setList(responseData);
         }
@@ -116,7 +116,7 @@ export default function OrderReport() {
     // all checkbox Click
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelecteds = List.map((n) => n.order_id);
+            const newSelecteds = List.map((n) => n.id);
             setSelected(newSelecteds);
             return;
         }
@@ -124,11 +124,11 @@ export default function OrderReport() {
     };
 
     // Single checkbox Click
-    const handleClick = (order_id) => {
-        const selectedIndex = selected.indexOf(order_id);
+    const handleClick = (id) => {
+        const selectedIndex = selected.indexOf(id);
         let newSelected = [];
         if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, order_id);
+            newSelected = newSelected.concat(selected, id);
         } else if (selectedIndex === 0) {
             newSelected = newSelected.concat(selected.slice(1));
         } else if (selectedIndex === selected.length - 1) {
@@ -145,10 +145,10 @@ export default function OrderReport() {
     };
 
     // On Delete
-    const ondeleteClick = async (order_id) => {
+    const ondeleteClick = async (id) => {
 
         let apiUrl, selectedArray = [];
-        if (selected && selected.length > 1 && order_id) {
+        if (selected && selected.length > 1 && id) {
             selectedArray = selected;
             apiUrl = 'order_multi_delete/' + '[' + selectedArray + ']';
         }
@@ -156,7 +156,7 @@ export default function OrderReport() {
             if (selected && selected.length > 0) {
                 apiUrl = 'order_delete/' + selected;
             } else {
-                apiUrl = 'order_delete/' + order_id;
+                apiUrl = 'order_delete/' + id;
             }
         }
         swal({
@@ -192,11 +192,11 @@ export default function OrderReport() {
     };
 
     // onStatus Change
-    const onstatusChange = async (order_id) => {
+    const onstatusChange = async (id) => {
 
         let apiUrl, selectedArray = [];
 
-        if (selected && selected.length > 1 && order_id) {
+        if (selected && selected.length > 1 && id) {
             selectedArray = selected;
             apiUrl = 'order_bulk_status_change/' + '[' + selectedArray + ']';
         }
@@ -204,7 +204,7 @@ export default function OrderReport() {
             if (selected && selected.length > 0) {
                 apiUrl = 'order_change_status/' + selected;
             } else {
-                apiUrl = 'order_change_status/' + order_id;
+                apiUrl = 'order_change_status/' + id;
             }
         }
         swal({
@@ -275,28 +275,28 @@ export default function OrderReport() {
                                     {filteredList &&
                                         filteredList.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
 
-                                            const { order_id, jc_number, product_type, category, name, customer_name, purity, product_weight, quantity, design_by, order_details,
-                                                order_image, delivery_date, user_status, status, metal_status, metal_status_date, orderdue_date } = row;
+                                            const { id, jc_number, product_type, category_name, name, customer_name, purity, product_weight, quantity, design_by, order_details,
+                                                order_image, delivery_date, user_status, status, metal_status, metal_status_date, order_due_date } = row;
 
-                                            const isItemSelected = selected.indexOf(order_id) !== -1;
+                                            const isItemSelected = selected.indexOf(id) !== -1;
 
                                             return (
                                                 <TableRow
                                                     hover
-                                                    key={order_id}
-                                                    className={new Date() > new Date(orderdue_date) ? "setmark" : ""}
+                                                    key={id}
+                                                    className={new Date() > new Date(order_due_date) ? "setmark" : ""}
                                                     tabIndex={-1}
                                                     role="checkbox"
                                                     selected={isItemSelected}
                                                     aria-checked={isItemSelected}
                                                 >
                                                     <TableCell padding="checkbox">
-                                                        <Checkbox checked={isItemSelected} onChange={(event) => handleClick(order_id)} />
+                                                        <Checkbox checked={isItemSelected} onChange={(event) => handleClick(id)} />
                                                     </TableCell>
-                                                    <TableCell align="left">{order_id}</TableCell>
+                                                    <TableCell align="left">{id}</TableCell>
                                                     <TableCell align="left">{jc_number}</TableCell>
                                                     <TableCell align="left">{product_type}</TableCell>
-                                                    <TableCell align="left">{category}</TableCell>
+                                                    <TableCell align="left">{category_name}</TableCell>
                                                     <TableCell align="left">{name}</TableCell>
                                                     <TableCell align="left">{customer_name}</TableCell>
                                                     <TableCell align="left">{purity}</TableCell>
@@ -312,27 +312,26 @@ export default function OrderReport() {
                                                     </TableCell>
                                                     <TableCell align="left">{delivery_date}</TableCell>
 
-                                                    <TableCell align="left">{user_status}</TableCell>
+                                                    {/* <TableCell align="left">{user_status}</TableCell> */}
 
-                                                    <TableCell align="left" onClick={() => onstatusChange(order_id)}>
+                                                    <TableCell align="left">{metal_status == '1' ? 'Yes' : 'No'}</TableCell>
+                                                    <TableCell align="left">{moment(metal_status_date).format('LLL')}
+                                                    </TableCell>
+                                                    <TableCell align="left">{moment(order_due_date).format('LLL')}
+                                                    </TableCell>
+                                                    <TableCell align="left" onClick={() => onstatusChange(id)}>
                                                         <Iconify
                                                             icon={status == 1 ? 'charm:cross' :
                                                                 'typcn:tick'}
                                                             sx={{ width: 25, height: 25, ml: 1 }}
                                                         />
                                                     </TableCell>
-
-                                                    <TableCell align="left">{metal_status == '1' ? 'Yes' : 'No'}</TableCell>
-                                                    <TableCell align="left">{moment(metal_status_date).format('LLL')}
-                                                    </TableCell>
-                                                    <TableCell align="left">{moment(orderdue_date).format('LLL')}
-                                                    </TableCell>
                                                     <TableCell align="center">
                                                         <UserMoreMenu
-                                                            url={'/admin/edit_order/' + base64_encode(order_id)}
+                                                            url={'/admin/edit_order/' + base64_encode(id)}
                                                             selectedList={selected}
                                                             onDelete={ondeleteClick}
-                                                            rowId={order_id}
+                                                            rowId={id}
                                                         />
                                                     </TableCell>
                                                 </TableRow>

@@ -361,6 +361,7 @@ export async function getorderData(apiName, data) {
         params.user_id = localStorage.getItem("user_id");
         params.user_role = localStorage.getItem("user_role");
         if (data) {
+            console.log("data", data);
             params.from_date = data.from_date;
             params.to_date = data.to_date;
         }

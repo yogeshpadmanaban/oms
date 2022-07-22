@@ -133,7 +133,7 @@ class ProductController extends Controller
 	//to delete data of particular id
 	public function delete($id)
 	{
-		ProductDetails::where('product_id',$id)->update(['status' => '2']);	
+		$row_data = ProductDetails::where('product_id',$id)->update(['status' => '2']);	
 		ProductDetails::find($id)->delete();
 		return response()->json([
 			'success' => 'Record has been deleted successfully!',

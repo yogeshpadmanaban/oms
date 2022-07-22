@@ -60,17 +60,17 @@ export default function OrderForm() {
 
     const ustomerformSchema = Yup.object().shape({
 
-        order_id: Yup.string(),
-        product_name: Yup.string().required('Product Name is requried'),
-        customer_name: Yup.string().required('Customer Name is requried'),
+        id: Yup.string(),
+        product_id: Yup.string().required('Product Name is requried'),
+        customer_id: Yup.string().required('Customer Name is requried'),
         purity: Yup.string(),
-        metal_status: Yup.string(),
-        metal_status_date: Yup.string(),
-        orderdue_date: Yup.string(),
+        metal_provided: Yup.string(),
+        metal_provided_date: Yup.string(),
+        order_due_date: Yup.string(),
         jc_number: Yup.string(),
         weight: Yup.string(),
         quantity: Yup.string(),
-        designed_by: Yup.string(),
+        design_by: Yup.string(),
         delivery_date: Yup.string(),
         // order_image: Yup.string(),
         order_details: Yup.string(),
@@ -79,17 +79,16 @@ export default function OrderForm() {
 
     const formik = useFormik({
         initialValues: {
-            order_id: '',
-            product_name: '',
-            customer_name: '',
+            product_id: '',
+            customer_id: '',
             purity: '',
-            metal_status: '',
-            metal_status_date: '',
-            orderdue_date: '',
+            metal_provided: '',
+            metal_provided_date: '',
+            order_due_date: '',
             jc_number: '',
             weight: '',
             quantity: '',
-            designed_by: '',
+            design_by: '',
             delivery_date: '',
             order_image: '',
             order_details: ''
@@ -114,18 +113,19 @@ export default function OrderForm() {
             let responseData = await getData(url);
             console.log(responseData.data.orders);
             if (responseData && responseData.data.orders) {
-                const { order_id, customer_name, purity, jc_number, weight,
-                    quantity, designed_by, delivery_date, order_image, order_details, orderdue_date } = responseData.data.orders;
-                formik.setFieldValue("order_id", order_id);
-                formik.setFieldValue("customer_name", customer_name);
+                const { id, product_id, customer_id, purity, jc_number, weight,
+                    quantity, design_by, delivery_date, order_image, order_details, metal_provided, metal_provided_date, order_due_date } = responseData.data.orders;
+                formik.setFieldValue("id", id);
+                formik.setFieldValue("product_id", product_id);
+                formik.setFieldValue("customer_id", customer_id);
                 formik.setFieldValue("purity", purity);
-                formik.setFieldValue("metal_status", metal_status);
-                formik.setFieldValue("metal_status_date", metal_status_date);
-                formik.setFieldValue("orderdue_date", orderdue_date);
+                formik.setFieldValue("metal_provided", metal_provided);
+                formik.setFieldValue("metal_provided_date", metal_provided_date);
+                formik.setFieldValue("order_due_date", order_due_date);
                 formik.setFieldValue("jc_number", jc_number);
                 formik.setFieldValue("weight", weight);
                 formik.setFieldValue("quantity", quantity);
-                formik.setFieldValue("designed_by", designed_by);
+                formik.setFieldValue("design_by", design_by);
                 formik.setFieldValue("delivery_date", delivery_date);
                 formik.setFieldValue("order_image", order_image);
                 formik.setFieldValue("order_details", order_details);
@@ -150,7 +150,7 @@ export default function OrderForm() {
 
         if (params.id == null || params.id == '') {
             formik.setFieldValue("product_id", productnameList[0].product_id);
-            formik.setFieldValue("customer_name", customernameList[0].customer_id);
+            formik.setFieldValue("customer_id", customernameList[0].customer_id);
         }
         setproductnameList(productnameList);
         setcustomernameList(customernameList);
@@ -178,9 +178,9 @@ export default function OrderForm() {
                                 <Stack spacing={3} sx={{ my: 4 }}>
 
                                     <div className="required lbl">Product Name:</div>
-                                    <select name="product_name" value={values.product_name}
+                                    <select name="product_id" value={values.product_id}
                                         onChange={(event) => {
-                                            setFieldValue("product_name", event.target.value)
+                                            setFieldValue("product_id", event.target.value)
                                         }}
                                         className="selectfield"
                                     >
@@ -194,15 +194,15 @@ export default function OrderForm() {
 
                                         }
                                     </select>
-                                    {errors.product_name && touched.product_name &&
-                                        <div className="selerr">{errors.product_name}</div>
+                                    {errors.product_id && touched.product_id &&
+                                        <div className="selerr">{errors.product_id}</div>
                                     }
 
 
                                     <div className="required lbl">Customer Name:</div>
-                                    <select name="customer_name" value={values.name}
+                                    <select name="customer_id" value={values.name}
                                         onChange={(event) => {
-                                            setFieldValue("customer_name", event.target.value)
+                                            setFieldValue("customer_id", event.target.value)
                                         }}
                                         className="selectfield"
                                     >
@@ -215,8 +215,8 @@ export default function OrderForm() {
                                             })
                                         }
                                     </select>
-                                    {errors.customer_name && touched.customer_name &&
-                                        <div className="selerr">{errors.customer_name}</div>
+                                    {errors.customer_id && touched.customer_id &&
+                                        <div className="selerr">{errors.customer_id}</div>
                                     }
 
 
@@ -241,7 +241,7 @@ export default function OrderForm() {
                                             metalstatus_options.map((option, index) => {
                                                 return (
                                                     <div className="ml10">
-                                                        <label className='mb-2'><Field type="radio" name="metal_status" value={option.value} /> {option.label}</label>
+                                                        <label className='mb-2'><Field type="radio" name="metal_provided" value={option.value} /> {option.label}</label>
                                                     </div>
                                                 )
                                             })
@@ -253,20 +253,20 @@ export default function OrderForm() {
                                         fullWidth
                                         type="date"
                                         label="Metal Status Date"
-                                        {...getFieldProps('metal_status_date')}
+                                        {...getFieldProps('metal_provided_date')}
                                         InputLabelProps={{ shrink: true }}
-                                        error={Boolean(touched.metal_status_date && errors.metal_status_date)}
-                                        helperText={touched.metal_status_date && errors.metal_status_date}
+                                        error={Boolean(touched.metal_provided_date && errors.metal_provided_date)}
+                                        helperText={touched.metal_provided_date && errors.metal_provided_date}
                                     />
 
                                     <TextField
                                         fullWidth
                                         type="date"
                                         label="Order Due Date"
-                                        {...getFieldProps('orderdue_date')}
+                                        {...getFieldProps('order_due_date')}
                                         InputLabelProps={{ shrink: true }}
-                                        error={Boolean(touched.orderdue_date && errors.orderdue_date)}
-                                        helperText={touched.orderdue_date && errors.orderdue_date}
+                                        error={Boolean(touched.order_due_date && errors.order_due_date)}
+                                        helperText={touched.order_due_date && errors.order_due_date}
                                     />
 
                                     <TextField
@@ -305,7 +305,7 @@ export default function OrderForm() {
                                             design_options.map((option, index) => {
                                                 return (
                                                     <div className="ml10">
-                                                        <label className='mb-2'><Field type="radio" name="designed_by" value={option.value} /> {option.label}</label>
+                                                        <label className='mb-2'><Field type="radio" name="design_by" value={option.value} /> {option.label}</label>
                                                     </div>
                                                 )
                                             })
