@@ -8,6 +8,12 @@ const config = {
     headers: { Authorization: `Bearer ${token}` }
 };
 
+var date = new Date();
+var onedayBefore = new Date().setDate(new Date().getDate() - 1);
+var twodayBefore = new Date().setDate(new Date().getDate() - 2);
+var threedayBefore = new Date().setDate(new Date().getDate() - 3);
+var fourdayBefore = new Date().setDate(new Date().getDate() - 4);
+var onedayahed = new Date().setDate(new Date().getDate() + 1);
 
 const customerReport = {
     total: 7,
@@ -125,6 +131,7 @@ const productReport = {
 }
 
 const orderReport = {
+
     total: 12,
     recordsFiltered: 12,
     data: {
@@ -144,7 +151,10 @@ const orderReport = {
                 "order_image": "---",
                 "delivery_date": "29/07/2020",
                 "user_status": '0',
-                "status": '0'
+                "status": '0',
+                "metal_status": '1',
+                "metal_status_date": date,
+                "orderdue_date": date
             },
 
             {
@@ -162,8 +172,75 @@ const orderReport = {
                 "order_image": "---",
                 "delivery_date": "29/07/2020",
                 "user_status": '0',
-                "status": '0'
-            }
+                "status": '0',
+                "metal_status": '1',
+                "metal_status_date": date,
+                "orderdue_date": twodayBefore
+            },
+
+            {
+                "order_id": 3,
+                "jc_number": 2678,
+                "product_type": "Customized product",
+                "category": "dollar",
+                "name": 'dollar',
+                "customer_name": 'gokulsssss',
+                "purity": 92,
+                "product_weight": 6,
+                "quantity": 1,
+                "design_by": "sample designed by",
+                "order_details": "sdfsf",
+                "order_image": "---",
+                "delivery_date": "29/07/2020",
+                "user_status": '0',
+                "status": '0',
+                "metal_status": '1',
+                "metal_status_date": date,
+                "orderdue_date": twodayBefore
+            },
+
+            {
+                "order_id": 4,
+                "jc_number": 2678,
+                "product_type": "Customized product",
+                "category": "dollar",
+                "name": 'dollar',
+                "customer_name": 'gokulsssss',
+                "purity": 92,
+                "product_weight": 6,
+                "quantity": 1,
+                "design_by": "sample designed by",
+                "order_details": "sdfsf",
+                "order_image": "---",
+                "delivery_date": "29/07/2020",
+                "user_status": '0',
+                "status": '0',
+                "metal_status": '1',
+                "metal_status_date": date,
+                "orderdue_date": threedayBefore
+            },
+
+            {
+                "order_id": 5,
+                "jc_number": 2678,
+                "product_type": "Customized product",
+                "category": "dollar",
+                "name": 'dollar',
+                "customer_name": 'gokulsssss',
+                "purity": 92,
+                "product_weight": 6,
+                "quantity": 1,
+                "design_by": "sample designed by",
+                "order_details": "sdfsf",
+                "order_image": "---",
+                "delivery_date": "29/07/2020",
+                "user_status": '0',
+                "status": '0',
+                "metal_status": '1',
+                "metal_status_date": date,
+                "orderdue_date": onedayahed
+            },
+
         ]
     }
 }
