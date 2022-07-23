@@ -51,10 +51,10 @@ export default function OrderForm() {
     ];
 
     const design_options = [
-        { label: 'Stone', value: 'Stone' },
-        { label: 'Enamel', value: 'Enamel' },
-        { label: 'Radium', value: 'Radium' },
-        { label: 'Cutting', value: 'Cutting' },
+        { label: 'Stone', value: 'stone' },
+        { label: 'Enamel', value: 'enamel' },
+        { label: 'Radium', value: 'radium' },
+        { label: 'Cutting', value: 'cutting' },
     ];
 
 
@@ -138,6 +138,11 @@ export default function OrderForm() {
         let responseData = await getData("add_order");
         let productnameList = responseData.data.products;
         let customernameList = responseData.data.customers;
+
+        console.log("productnameList", productnameList);
+        console.log("customernameList", customernameList);
+        // console.log("values", values);
+
         productnameList.unshift({
             "product_id": '',
             "name": "Select Product",
@@ -200,7 +205,7 @@ export default function OrderForm() {
 
 
                                     <div className="required lbl">Customer Name:</div>
-                                    <select name="customer_id" value={values.name}
+                                    <select name="customer_id" value={values.customer_id}
                                         onChange={(event) => {
                                             setFieldValue("customer_id", event.target.value)
                                         }}

@@ -89,9 +89,9 @@ export default function LoginForm() {
             label="Remember me"
           />
 
-          <Link component={RouterLink} variant="subtitle2" to="#" underline="hover">
+          {/* <Link component={RouterLink} variant="subtitle2" to="#" underline="hover">
             Forgot password?
-          </Link>
+          </Link> */}
         </Stack>
 
         <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}> Login </LoadingButton>

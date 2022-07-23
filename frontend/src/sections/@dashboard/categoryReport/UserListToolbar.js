@@ -5,6 +5,9 @@ import { Toolbar, Tooltip, IconButton, Typography, OutlinedInput, InputAdornment
 // component
 import Iconify from '../../../components/Iconify';
 
+// css
+import '../../../pages/common.css';
+
 // ----------------------------------------------------------------------
 
 const RootStyle = styled(Toolbar)(({ theme }) => ({
@@ -72,21 +75,20 @@ export default function UserListToolbar({ numSelected, filterName, onFilterName,
       {numSelected > 0 ? (
         <div>
           <Tooltip title="Bulk Status Change">
-            <IconButton onClick={onstausChange}>
+            <IconButton className='stausButton' onClick={onstausChange}>
               <Iconify icon="el:lock" />
             </IconButton>
           </Tooltip>
 
           <Tooltip title="Bulk Delete">
-            <IconButton onClick={onDelete}>
+            <IconButton className='trashButton' onClick={onDelete}>
               <Iconify icon="eva:trash-2-fill" />
             </IconButton>
           </Tooltip>
         </div>
-
       ) : (
         <Tooltip title="Export PDF">
-          <IconButton onClick={onexport}>
+          <IconButton className='stausButton' onClick={onexport}>
             <Iconify icon="foundation:page-export-pdf" />
           </IconButton>
         </Tooltip>

@@ -43,10 +43,10 @@ import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
 
 
-// import jsPDF from "jspdf";
-// import autoTable from 'jspdf-autotable';
+import jsPDF from "jspdf";
+import autoTable from 'jspdf-autotable';
 
-// const doc = new jsPDF()
+const doc = new jsPDF()
 
 
 const TABLE_HEAD = [
@@ -342,31 +342,31 @@ export default function CategoryReport() {
         setFilterName('');
     }
 
-    // const exportPDF = () => {
-    //     const unit = "pt";
-    //     const size = "A4"; // Use A1, A2, A3 or A4
-    //     const orientation = "portrait"; // portrait or landscape
+    const exportPDF = () => {
+        const unit = "pt";
+        const size = "A4"; // Use A1, A2, A3 or A4
+        const orientation = "portrait"; // portrait or landscape
 
-    //     const marginLeft = 40;
-    //     const doc = new jsPDF(orientation, unit, size);
+        const marginLeft = 40;
+        const doc = new jsPDF(orientation, unit, size);
 
-    //     doc.setFontSize(15);
+        doc.setFontSize(15);
 
-    //     const title = "Category Report";
-    //     const headers = [['Id', "Category Name", "Status"]];
+        const title = "Category Report";
+        const headers = [['Id', "Category Name", "Status"]];
 
-    //     const data = list.map(elt => [elt.category_id, elt.category_name, elt.status]);
+        const data = list.map(elt => [elt.category_id, elt.category_name, elt.status]);
 
-    //     let content = {
-    //         startY: 50,
-    //         head: headers,
-    //         body: data
-    //     };
+        let content = {
+            startY: 50,
+            head: headers,
+            body: data
+        };
 
-    //     doc.text(title, marginLeft, 40);
-    //     doc.autoTable(content);
-    //     doc.save("categoryreport.pdf")
-    // }
+        doc.text(title, marginLeft, 40);
+        doc.autoTable(content);
+        doc.save("categoryreport.pdf")
+    }
 
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - list.length) : 0;
 
@@ -390,7 +390,7 @@ export default function CategoryReport() {
 
                 <Card>
                     <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName}
-                        onDelete={ondeleteClick} onstausChange={onstatusChange} />
+                        onDelete={ondeleteClick} onstausChange={onstatusChange} onexport={exportPDF}/>
 
                     <Scrollbar>
                         <TableContainer sx={{ minWidth: 800 }}>

@@ -37,6 +37,11 @@ import { postData, getData, getorderData } from '../../Services/apiservice';
 //css
 import '../common.css';
 
+import jsPDF from "jspdf";
+import autoTable from 'jspdf-autotable';
+
+const doc = new jsPDF()
+
 const TABLE_HEAD = [
 
     { id: 'id', label: 'Order Id', alignRight: false },
@@ -48,14 +53,14 @@ const TABLE_HEAD = [
     { id: 'purity', label: 'Purity', alignRight: false },
     { id: 'product_weight', label: 'Product Weight', alignRight: false },
     { id: 'quantity', label: 'Quantity', alignRight: false },
-    { id: 'design_by', label: 'To Design Using', alignRight: false },
-    { id: 'order_details', label: 'Order Details', alignRight: false },
+    { id: 'design_by', label: 'Design Using', alignRight: false },
+    // { id: 'order_details', label: 'Order Details', alignRight: false },
     { id: 'order_image', label: 'Order Image', alignRight: false },
     { id: 'delivery_date', label: 'Delivery Date', alignRight: false },
     // { id: 'user_status', label: 'Assigner Status', alignRight: false },
     { id: 'metal_status', label: 'Metal Provided', alignRight: false },
     { id: 'metal_status_date', label: 'Metal Provided Date', alignRight: false },
-    { id: 'order_due_date', label: 'Order Due Date', alignRight: false },
+    { id: 'order_due_date', label: 'Due Date', alignRight: false },
     { id: 'status', label: 'Status', alignRight: false },
     { id: '', label: 'Action', alignRight: false }
 
@@ -233,6 +238,39 @@ export default function OrderReport() {
         setFilterName('');
     }
 
+    const exportPDF = () => {
+        const unit = "pt";
+        const size = "A3"; // Use A1, A2, A3 or A4
+        const orientation = "portrait"; // portrait or landscape
+
+        const marginLeft = 40;
+        const doc = new jsPDF(orientation, unit, size);
+
+        doc.setFontSize(15);
+
+        const title = "Order Report";
+        const headers = [['Order Id', "Jc Number", "Product Type",
+            'Product Category', 'Product Name', 'Customer Name', 'Purity',
+            'Product Weight', 'Quantity', 'Design Using',
+            'Order Details', 'Delivery Date', 'Metal Provided', 'Metal Provided Date',
+            'Due Date', 'status'
+        ]];
+
+        const data = List.map(elt => [elt.id, elt.jc_number, elt.product_type, elt.category_name,
+        elt.product_id, elt.customer_name, elt.purity, elt.product_weight, elt.quantity, elt.design_by,
+        elt.order_details, elt.delivery_date, elt.metal_status, elt.metal_status_date, elt.order_due_date, elt.status]);
+
+        let content = {
+            startY: 50,
+            head: headers,
+            body: data
+        };
+
+        doc.text(title, marginLeft, 40);
+        doc.autoTable(content);
+        doc.save("order_report.pdf")
+    }
+
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - List.length) : 0;
 
     const filteredList = applySortFilter(List, filterName);
@@ -253,7 +291,7 @@ export default function OrderReport() {
 
                 <Card>
                     <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName}
-                        onDelete={ondeleteClick} onstausChange={onstatusChange} getRecord={getRecord} />
+                        onDelete={ondeleteClick} onstausChange={onstatusChange} getRecord={getRecord} onexport={exportPDF} />
 
                     <Scrollbar>
                         <TableContainer sx={{ minWidth: 800 }}>
@@ -292,7 +330,7 @@ export default function OrderReport() {
                                                     <TableCell padding="checkbox">
                                                         <Checkbox checked={isItemSelected} onChange={(event) => handleClick(id)} />
                                                     </TableCell>
-                                                    <TableCell align="left">{id}</TableCell>
+                                                    <TableCell className='highlight_cell' align="left">{id}</TableCell>
                                                     <TableCell align="left">{jc_number}</TableCell>
                                                     <TableCell align="left">{product_type}</TableCell>
                                                     <TableCell align="left">{category_name}</TableCell>
@@ -303,20 +341,23 @@ export default function OrderReport() {
 
                                                     <TableCell align="left">{quantity}</TableCell>
                                                     <TableCell align="left">{design_by}</TableCell>
-                                                    <TableCell align="left">{order_details}</TableCell>
+                                                    {/* <TableCell align="left">{order_details}</TableCell> */}
                                                     <TableCell component="th" scope="row" padding="none">
                                                         <Stack direction="row" alignItems="center" spacing={2}>
                                                             <Avatar alt={customer_name} src={order_image} />
                                                         </Stack>
                                                     </TableCell>
-                                                    <TableCell align="left">{delivery_date}</TableCell>
+                                                    {/* <TableCell align="left">{moment(delivery_date).format('YYYY/MM/DD')}</TableCell> */}
+
+                                                    <TableCell align="left">{delivery_date ? moment(delivery_date).format('YYYY/MM/DD') : '-'}</TableCell>
+
 
                                                     {/* <TableCell align="left">{user_status}</TableCell> */}
 
                                                     <TableCell align="left">{metal_status == '1' ? 'Yes' : 'No'}</TableCell>
-                                                    <TableCell align="left">{moment(metal_status_date).format('LLL')}
+                                                    <TableCell align="left">{moment(metal_status_date).format('YYYY/MM/DD')}
                                                     </TableCell>
-                                                    <TableCell align="left">{moment(order_due_date).format('LLL')}
+                                                    <TableCell align="left">{moment(order_due_date).format('YYYY/MM/DD')}
                                                     </TableCell>
                                                     <TableCell align="left" onClick={() => onstatusChange(id)}>
                                                         <Iconify

@@ -32,6 +32,10 @@ import { UserListHead, UserListToolbar, UserMoreMenu } from '../../sections/@das
 // apiservice
 import { postData, getData } from '../../Services/apiservice';
 
+import jsPDF from "jspdf";
+import autoTable from 'jspdf-autotable';
+
+const doc = new jsPDF()
 
 const TABLE_HEAD = [
   { id: 'profile_picture', label: 'Profile Picture', alignRight: false },
@@ -213,6 +217,35 @@ export default function CustomerReport() {
     setFilterName('');
   }
 
+  const exportPDF = () => {
+    const unit = "pt";
+    const size = "A4"; // Use A1, A2, A3 or A4
+    const orientation = "portrait"; // portrait or landscape
+
+    const marginLeft = 40;
+    const doc = new jsPDF(orientation, unit, size);
+
+    doc.setFontSize(15);
+
+    const title = "Customer Report";
+    const headers = [["Customer Name", "Address",
+      'City', "State", "Gst", 'Pan', "Status"]];
+
+    const data = customerList.map(elt => [elt.name, elt.address,
+    elt.city, elt.state, elt.gst_no,
+    elt.pan_no, elt.status]);
+
+    let content = {
+      startY: 50,
+      head: headers,
+      body: data
+    };
+
+    doc.text(title, marginLeft, 40);
+    doc.autoTable(content);
+    doc.save("customerreport.pdf")
+  }
+
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - customerList.length) : 0;
 
   const filteredUsers = applySortFilter(customerList, filterName);
@@ -233,7 +266,7 @@ export default function CustomerReport() {
 
         <Card>
           <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName}
-            onDelete={ondeleteClick} onstausChange={onstatusChange} />
+            onDelete={ondeleteClick} onstausChange={onstatusChange} onexport={exportPDF} />
 
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>

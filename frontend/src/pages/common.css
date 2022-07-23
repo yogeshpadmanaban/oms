@@ -49,4 +49,17 @@
     background-color: #e16363;
 }
 
+
+.highlight_cell {
+    color: #2065d1;
+}
+
+.trashButton {
+    color: red;
+}
+
+.stausButton {
+    color: #2065d1;
+}
+
 /* Customised Form Css end*/
