@@ -2,15 +2,6 @@ import axios from "axios";
 
 let token = localStorage.getItem("token");
 
-<<<<<<< HEAD
-//local
-// var baseUrl = 'http://localhost:8000/api/admin/';
-
-//live
-var baseUrl = 'https://api.omsmdu.com/api/admin/';
-
-=======
->>>>>>> 1b6112e0916ff5dc6ead1e8b288eff087151ba72
 const config = {
     headers: { Authorization: `Bearer ${token}` }
 };
@@ -403,19 +394,10 @@ export async function getorderData(apiName, data) {
 export async function postData(apiName, params) {
 
     if (apiName == "login/admin") {
-<<<<<<< HEAD
-        // var baseUrl = 'http://localhost:8000/api/';
-        var baseUrl = 'https://api.omsmdu.com/api/';
-    }
-    else {
-        // var baseUrl = 'http://localhost:8000/api/admin/';
-        var baseUrl = 'https://api.omsmdu.com/api/admin/';
-=======
         var baseUrl = environment.loginUrl;
     }
     else {
         var baseUrl = environment.baseUrl;
->>>>>>> 1b6112e0916ff5dc6ead1e8b288eff087151ba72
     }
 
     let apiUrl = baseUrl + apiName;
