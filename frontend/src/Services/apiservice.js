@@ -2,11 +2,19 @@ import axios from "axios";
 
 let token = localStorage.getItem("token");
 
-var baseUrl = 'http://localhost:8000/api/admin/';
-
 const config = {
     headers: { Authorization: `Bearer ${token}` }
 };
+
+let environment = {};
+
+if (window.location.origin == 'https://omsmdu.com') {
+    environment.baseUrl = 'https://omsmdu.com/api/admin/';
+    environment.loginUrl = 'https://omsmdu.com/api/';
+} else {
+    environment.baseUrl = 'http://localhost:8000/api/admin/';
+    environment.loginUrl = 'http://localhost:8000/api/';
+}
 
 var date = new Date();
 var onedayBefore = new Date().setDate(new Date().getDate() - 1);
@@ -14,6 +22,7 @@ var twodayBefore = new Date().setDate(new Date().getDate() - 2);
 var threedayBefore = new Date().setDate(new Date().getDate() - 3);
 var fourdayBefore = new Date().setDate(new Date().getDate() - 4);
 var onedayahed = new Date().setDate(new Date().getDate() + 1);
+
 
 const customerReport = {
     total: 7,
@@ -78,7 +87,6 @@ const customerReport = {
 
 };
 
-
 const categoryReport = {
     total: 13,
     recordsFiltered: 13,
@@ -98,7 +106,6 @@ const categoryReport = {
     }
 
 }
-
 
 const productReport = {
     total: 12,
@@ -137,10 +144,10 @@ const orderReport = {
     data: {
         rows: [
             {
-                "order_id": 1,
+                "id": 1,
                 "jc_number": 2678,
                 "product_type": "Customized product",
-                "category": "dollar",
+                "category_name": "dollar",
                 "name": 'dollar',
                 "customer_name": 'gokul',
                 "purity": 92,
@@ -154,14 +161,14 @@ const orderReport = {
                 "status": '0',
                 "metal_status": '1',
                 "metal_status_date": date,
-                "orderdue_date": date
+                "order_due_date": date
             },
 
             {
-                "order_id": 2,
+                "id": 2,
                 "jc_number": 2678,
                 "product_type": "Customized product",
-                "category": "dollar",
+                "category_name": "dollar",
                 "name": 'dollar',
                 "customer_name": 'gokulsssss',
                 "purity": 92,
@@ -175,14 +182,14 @@ const orderReport = {
                 "status": '0',
                 "metal_status": '1',
                 "metal_status_date": date,
-                "orderdue_date": twodayBefore
+                "order_due_date": twodayBefore
             },
 
             {
-                "order_id": 3,
+                "id": 3,
                 "jc_number": 2678,
                 "product_type": "Customized product",
-                "category": "dollar",
+                "category_name": "dollar",
                 "name": 'dollar',
                 "customer_name": 'gokulsssss',
                 "purity": 92,
@@ -196,14 +203,14 @@ const orderReport = {
                 "status": '0',
                 "metal_status": '1',
                 "metal_status_date": date,
-                "orderdue_date": twodayBefore
+                "order_due_date": twodayBefore
             },
 
             {
-                "order_id": 4,
+                "id": 4,
                 "jc_number": 2678,
                 "product_type": "Customized product",
-                "category": "dollar",
+                "category_name": "dollar",
                 "name": 'dollar',
                 "customer_name": 'gokulsssss',
                 "purity": 92,
@@ -217,14 +224,14 @@ const orderReport = {
                 "status": '0',
                 "metal_status": '1',
                 "metal_status_date": date,
-                "orderdue_date": threedayBefore
+                "order_due_date": threedayBefore
             },
 
             {
-                "order_id": 5,
+                "id": 5,
                 "jc_number": 2678,
                 "product_type": "Customized product",
-                "category": "dollar",
+                "category_name": "dollar",
                 "name": 'dollar',
                 "customer_name": 'gokulsssss',
                 "purity": 92,
@@ -238,13 +245,12 @@ const orderReport = {
                 "status": '0',
                 "metal_status": '1',
                 "metal_status_date": date,
-                "orderdue_date": onedayahed
+                "order_due_date": onedayahed
             },
 
         ]
     }
 }
-
 
 const addproducts = {
     data: {
@@ -343,7 +349,7 @@ export async function getData(apiName) {
     //     return customerReport;
     // }
 
-    let apiUrl = baseUrl + apiName;
+    let apiUrl = environment.baseUrl + apiName;
     let responseData = await axios.get(apiUrl).then((response) => {
         return response;
     }, (error) => {
@@ -361,7 +367,6 @@ export async function getorderData(apiName, data) {
         params.user_id = localStorage.getItem("user_id");
         params.user_role = localStorage.getItem("user_role");
         if (data) {
-            console.log("data", data);
             params.from_date = data.from_date;
             params.to_date = data.to_date;
         }
@@ -369,7 +374,7 @@ export async function getorderData(apiName, data) {
     }
 
     console.log("params", params);
-    let apiUrl = baseUrl + apiName;
+    let apiUrl = environment.baseUrl + apiName;
     let responseData = await axios.get(apiUrl, { params }).then((response) => {
         return response;
     }, (error) => {
@@ -382,12 +387,14 @@ export async function getorderData(apiName, data) {
 
 
 export async function postData(apiName, params) {
+
     if (apiName == "login/admin") {
-        var baseUrl = 'http://localhost:8000/api/';
+        var baseUrl = environment.loginUrl;
     }
     else {
-        var baseUrl = 'http://localhost:8000/api/admin/';
+        var baseUrl = environment.baseUrl;
     }
+
     let apiUrl = baseUrl + apiName;
     let responseData = await axios.post(apiUrl, params, config).then((response) => {
         return response;

@@ -36,12 +36,12 @@ export default function CustomerForm() {
     const ustomerformSchema = Yup.object().shape({
         customer_id: '',
         profile_picture: '',
-        name: Yup.string().required('Name is required'),
-        address: Yup.string().required('Address is required'),
-        city: Yup.string().required('City is required'),
-        state: Yup.string().required('State is required'),
-        gst_no: Yup.string().required('Gst is required'),
-        pan_no: Yup.string().required('Pan is required'),
+        name: '',
+        address: '',
+        city: '',
+        state: '',
+        gst_no: '',
+        pan_no: '',
         other_upload: '',
     });
 

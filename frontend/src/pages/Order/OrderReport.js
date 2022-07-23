@@ -94,8 +94,7 @@ export default function OrderReport() {
 
 
     const getRecord = async (data) => {
-        console.log("data", data);
-        let response = await getorderData('order_details');
+        let response = await getorderData('order_details', data);
         console.log(response);
         if (response && response.data.rows) {
             let responseData = response.data.rows;
@@ -282,7 +281,7 @@ export default function OrderReport() {
 
                                             return (
                                                 <TableRow
-                                                    hover
+                                                    // hover
                                                     key={id}
                                                     className={new Date() > new Date(order_due_date) ? "setmark" : ""}
                                                     tabIndex={-1}
