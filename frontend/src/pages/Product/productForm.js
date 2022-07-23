@@ -50,7 +50,7 @@ export default function ProductForm() {
         category: Yup.string().required('Product category is required'),
         name: Yup.string().required('Name is required'),
         product_image: '',
-        product_details: Yup.string()
+        product_details: ''
     });
 
     const formik = useFormik({

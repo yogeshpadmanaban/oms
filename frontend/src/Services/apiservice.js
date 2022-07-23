@@ -9,11 +9,16 @@ const config = {
 let environment = {};
 
 if (window.location.origin == 'https://omsmdu.com') {
-    environment.baseUrl = 'https://omsmdu.com/api/admin/';
-    environment.loginUrl = 'https://omsmdu.com/api/';
+    environment.baseUrl = 'https://api.omsmdu.com/api/admin/';
+    environment.loginUrl = 'https://api.omsmdu.com/api/';
 } else {
+
+    // environment.baseUrl = 'https://api.omsmdu.com/api/admin/';
+    // environment.loginUrl = 'https://api.omsmdu.com/api/';
+
     environment.baseUrl = 'http://localhost:8000/api/admin/';
     environment.loginUrl = 'http://localhost:8000/api/';
+
 }
 
 var date = new Date();
