@@ -2,7 +2,11 @@ import axios from "axios";
 
 let token = localStorage.getItem("token");
 
-var baseUrl = 'http://localhost:8000/api/admin/';
+//local
+// var baseUrl = 'http://localhost:8000/api/admin/';
+
+//live
+var baseUrl = 'https://api.omsmdu.com/api/admin/';
 
 const config = {
     headers: { Authorization: `Bearer ${token}` }
@@ -383,10 +387,12 @@ export async function getorderData(apiName, data) {
 
 export async function postData(apiName, params) {
     if (apiName == "login/admin") {
-        var baseUrl = 'http://localhost:8000/api/';
+        // var baseUrl = 'http://localhost:8000/api/';
+        var baseUrl = 'https://api.omsmdu.com/api/';
     }
     else {
-        var baseUrl = 'http://localhost:8000/api/admin/';
+        // var baseUrl = 'http://localhost:8000/api/admin/';
+        var baseUrl = 'https://api.omsmdu.com/api/admin/';
     }
     let apiUrl = baseUrl + apiName;
     let responseData = await axios.post(apiUrl, params, config).then((response) => {
