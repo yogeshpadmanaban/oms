@@ -60,20 +60,20 @@ export default function OrderForm() {
 
     const ustomerformSchema = Yup.object().shape({
 
-        id: Yup.string(),
+        id: '',
         product_id: Yup.string().required('Product Name is requried'),
         customer_id: Yup.string().required('Customer Name is requried'),
-        purity: Yup.string(),
-        metal_provided: Yup.string(),
-        metal_provided_date: Yup.string(),
-        order_due_date: Yup.string(),
-        jc_number: Yup.string(),
-        weight: Yup.string(),
-        quantity: Yup.string(),
-        design_by: Yup.string(),
-        delivery_date: Yup.string(),
-        // order_image: Yup.string(),
-        order_details: Yup.string(),
+        purity: '',
+        metal_provided: '',
+        metal_provided_date: '',
+        order_due_date: '',
+        jc_number: '',
+        weight: '',
+        quantity: '',
+        design_by: '',
+        delivery_date: '',
+        // order_image: '',
+        order_details: '',
 
     });
 
@@ -227,7 +227,9 @@ export default function OrderForm() {
                                             purity_options.map((option, index) => {
                                                 return (
                                                     <div className="ml10">
-                                                        <label className='mb-2'><Field type="radio" name="purity" value={option.value} /> {option.label}</label>
+                                                        <label className='mb-2'><Field type="checkbox" name="purity" value={option.value} checked={values.purity == option.value ? true : false} onChange={(event) => {
+                                                            setFieldValue("purity", event.target.value)
+                                                        }} /> {option.label}</label>
                                                     </div>
                                                 )
                                             })
@@ -241,7 +243,9 @@ export default function OrderForm() {
                                             metalstatus_options.map((option, index) => {
                                                 return (
                                                     <div className="ml10">
-                                                        <label className='mb-2'><Field type="radio" name="metal_provided" value={option.value} /> {option.label}</label>
+                                                        <label className='mb-2'><Field type="checkbox" name="metal_provided" value={option.value} checked={values.metal_provided == option.value ? true : false} onChange={(event) => {
+                                                            setFieldValue("metal_provided", event.target.value)
+                                                        }} /> {option.label}</label>
                                                     </div>
                                                 )
                                             })
@@ -305,7 +309,10 @@ export default function OrderForm() {
                                             design_options.map((option, index) => {
                                                 return (
                                                     <div className="ml10">
-                                                        <label className='mb-2'><Field type="radio" name="design_by" value={option.value} /> {option.label}</label>
+                                                        <label className='mb-2'><Field type="checkbox" name="design_by" value={option.value} checked={values.design_by == option.value ? true : false}
+                                                            onChange={(event) => {
+                                                                setFieldValue("design_by", event.target.value)
+                                                            }} /> {option.label}</label>
                                                     </div>
                                                 )
                                             })
