@@ -201,7 +201,7 @@ class OrderDetails extends Model
                 
                 if($data['records'][$key]->delivery_date=='')
                 {   
-                    $data['records'][$key]->delivery_date= '-';
+                    $data['records'][$key]->delivery_date= '';
                 } 
                 
 

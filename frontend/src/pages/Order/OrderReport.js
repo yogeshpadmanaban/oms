@@ -44,7 +44,7 @@ const doc = new jsPDF()
 
 const TABLE_HEAD = [
 
-    { id: 'id', label: 'Order Id', alignRight: false },
+    { id: 'order_id', label: 'Order Id', alignRight: false },
     { id: 'jc_number', label: 'Jc Number', alignRight: false },
     { id: 'product_type', label: 'Product Type', alignRight: false },
     { id: 'category_name', label: 'Product Category', alignRight: false },
@@ -312,7 +312,7 @@ export default function OrderReport() {
                                     {filteredList &&
                                         filteredList.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
 
-                                            const { id, jc_number, product_type, category_name, name, customer_name, purity, product_weight, quantity, design_by, order_details,
+                                            const { id, order_id, jc_number, product_type, category_name, name, customer_name, purity, product_weight, quantity, design_by, order_details,
                                                 order_image, delivery_date, user_status, status, metal_status, metal_status_date, order_due_date } = row;
 
                                             const isItemSelected = selected.indexOf(id) !== -1;
@@ -330,7 +330,7 @@ export default function OrderReport() {
                                                     <TableCell padding="checkbox">
                                                         <Checkbox checked={isItemSelected} onChange={(event) => handleClick(id)} />
                                                     </TableCell>
-                                                    <TableCell className='highlight_cell' align="left">{id}</TableCell>
+                                                    <TableCell className='highlight_cell' align="left">{order_id}</TableCell>
                                                     <TableCell align="left">{jc_number}</TableCell>
                                                     <TableCell align="left">{product_type}</TableCell>
                                                     <TableCell align="left">{category_name}</TableCell>

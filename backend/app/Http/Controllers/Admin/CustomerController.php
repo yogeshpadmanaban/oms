@@ -221,23 +221,14 @@ class CustomerController extends Controller
 
 		$image=$other_upl=null;
 
-		// return $request;
-return $request;
 		if($request->file('profile_picture'))
 		{
 			$destinationPath = 'uploads/customer/profile_picture/'; // upload path
 			$files = $request->file('profile_picture');
-
-// foreach($request->file('profile_picture') as $profile){
-	// return ($request->file('profile_picture'));	
-// }
-			
-
 			$profile_path = date('YmdHis') . "." . $files->getClientOriginalExtension();
 			$files->move(public_path($destinationPath),$profile_path);
 			$image=$destinationPath.$profile_path;
 		}
-
 	
 		if($request->file('other_upload'))
 		{

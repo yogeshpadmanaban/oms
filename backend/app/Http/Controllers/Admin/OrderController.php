@@ -42,10 +42,8 @@ use App\OrderImages;
 						'search' => '',
 						'limit' => '',
 						'offset' => '',
-						'from_date' => '',
-						'to_date' => ''
-
 					];
+
 		$fetch_data = OrderDetails::fetchdata($arr_data);
 		return $fetch_data;
 	}
