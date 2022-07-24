@@ -59,18 +59,18 @@ class ProductController extends Controller
 				$data['records'][$key]->product_image="-";	
 			}
 
-			if($data['records'][$key]->product_details!='')
-			{
+			// if($data['records'][$key]->product_details!='')
+			// {
 				
-				$product_details = substr($data['records'][$key]->product_details,0,20);
-				$data['records'][$key]->product_details = '<div data-title="'.$data['records'][$key]->product_details.'">'.$product_details.'...</span>  </div>';
-				#$data['records'][$key]->product_details = substr($data['records'][$key]->product_details,0,10);
+			// 	$product_details = substr($data['records'][$key]->product_details,0,20);
+			// 	$data['records'][$key]->product_details = '<div data-title="'.$data['records'][$key]->product_details.'">'.$product_details.'...</span>  </div>';
+			// 	#$data['records'][$key]->product_details = substr($data['records'][$key]->product_details,0,10);
 
-			}
-			else
-			{
-				$data['records'][$key]->product_details='-';	
-			} 
+			// }
+			// else
+			// {
+			// 	$data['records'][$key]->product_details='-';	
+			// } 
 
 			// if($data['records'][$key]->status=='1')
 			// {
