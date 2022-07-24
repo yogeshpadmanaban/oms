@@ -335,7 +335,7 @@ export default function ProductReport() {
                                 {isDataNotFound && (
                                     <TableBody>
                                         <TableRow>
-                                            <TableCell align="center" colSpan={10} sx={{ py: 3 }}>
+                                            <TableCell align="center" colSpan={7} sx={{ py: 3 }}>
                                                 <SearchNotFound searchQuery={filterName} />
                                             </TableCell>
                                         </TableRow>

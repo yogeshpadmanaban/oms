@@ -436,7 +436,7 @@ export default function CategoryReport() {
                                 {isDataNotFound && (
                                     <TableBody>
                                         <TableRow>
-                                            <TableCell align="center" colSpan={10} sx={{ py: 3 }}>
+                                            <TableCell align="center" colSpan={3} sx={{ py: 3 }}>
                                                 <SearchNotFound searchQuery={filterName} />
                                             </TableCell>
                                         </TableRow>

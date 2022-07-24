@@ -65,7 +65,7 @@ const TABLE_HEAD = [
 
 function applySortFilter(array, query) {
     if (query) {
-        return filter(array, (_user) => _user.customer_name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+        return filter(array, (_user) => _user.order_id.toLowerCase().indexOf(query.toLowerCase()) !== -1);
     }
     else {
         return array;
@@ -383,7 +383,7 @@ export default function OrderReport() {
                                 {isDataNotFound && (
                                     <TableBody>
                                         <TableRow>
-                                            <TableCell align="center" colSpan={10} sx={{ py: 3 }}>
+                                            <TableCell align="center" colSpan={17} sx={{ py: 3 }}>
                                                 <SearchNotFound searchQuery={filterName} />
                                             </TableCell>
                                         </TableRow>
