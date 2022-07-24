@@ -95,7 +95,6 @@ export default function OrderForm() {
         },
         validationSchema: ustomerformSchema,
         onSubmit: async (values) => {
-            console.log("values", values);
             let response = await postData('store_order', values);
             if (response) {
                 toast.success(response.data.message);
@@ -111,7 +110,6 @@ export default function OrderForm() {
         if (params && params.id) {
             let url = 'edit_order/' + params.id;
             let responseData = await getData(url);
-            console.log(responseData.data.orders);
             if (responseData && responseData.data.orders) {
                 const { id, product_id, customer_id, purity, jc_number, weight,
                     quantity, design_by, delivery_date, order_image, order_details, metal_provided, metal_provided_date, order_due_date } = responseData.data.orders;
@@ -139,10 +137,6 @@ export default function OrderForm() {
         let productnameList = responseData.data.products;
         let customernameList = responseData.data.customers;
 
-        console.log("productnameList", productnameList);
-        console.log("customernameList", customernameList);
-        // console.log("values", values);
-
         productnameList.unshift({
             "product_id": '',
             "name": "Select Product",
@@ -161,9 +155,6 @@ export default function OrderForm() {
         setcustomernameList(customernameList);
     }
 
-    const handleCategoryChange = (event) => {
-        console.log('selectedCategory', event.target.value);
-    }
 
     const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps, setFieldValue, initialValues } = formik;
     return (
@@ -232,9 +223,7 @@ export default function OrderForm() {
                                             purity_options.map((option, index) => {
                                                 return (
                                                     <div className="ml10">
-                                                        <label className='mb-2'><Field type="checkbox" name="purity" value={option.value} checked={values.purity == option.value ? true : false} onChange={(event) => {
-                                                            setFieldValue("purity", event.target.value)
-                                                        }} /> {option.label}</label>
+                                                        <label className='mb-2'><Field type="radio" name="purity" value={option.value} /> {option.label}</label>
                                                     </div>
                                                 )
                                             })
@@ -248,9 +237,7 @@ export default function OrderForm() {
                                             metalstatus_options.map((option, index) => {
                                                 return (
                                                     <div className="ml10">
-                                                        <label className='mb-2'><Field type="checkbox" name="metal_provided" value={option.value} checked={values.metal_provided == option.value ? true : false} onChange={(event) => {
-                                                            setFieldValue("metal_provided", event.target.value)
-                                                        }} /> {option.label}</label>
+                                                        <label className='mb-2'><Field type="radio" name="metal_provided" value={option.value} /> {option.label}</label>
                                                     </div>
                                                 )
                                             })
@@ -314,10 +301,7 @@ export default function OrderForm() {
                                             design_options.map((option, index) => {
                                                 return (
                                                     <div className="ml10">
-                                                        <label className='mb-2'><Field type="checkbox" name="design_by" value={option.value} checked={values.design_by == option.value ? true : false}
-                                                            onChange={(event) => {
-                                                                setFieldValue("design_by", event.target.value)
-                                                            }} /> {option.label}</label>
+                                                        <label className='mb-2'><Field type="checkbox" name="design_by" value={option.value} /> {option.label}</label>
                                                     </div>
                                                 )
                                             })

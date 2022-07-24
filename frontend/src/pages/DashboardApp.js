@@ -27,12 +27,12 @@ export default function DashboardApp() {
 
   const getDashboardCount = async () => {
     let response = await getData('dashboard');
-    console.log("dashboardresponse", count);
     if (response) {
       setCount(response.data);
     }
 
   }
+
 
   return (
     <Page title="Dashboard">
@@ -44,21 +44,21 @@ export default function DashboardApp() {
         <Grid container spacing={3}>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="User Report" path="/admin/customer_report" total={count && count.user_count && count.user_count} color="error" icon={'ant-design:user-switch-outlined'} />
+            <AppWidgetSummary title="Customer Report" path="/admin/customer_report" total={count && count.tot_customers && count.tot_customers} icon={'carbon:user-activity'} />
           </Grid>
 
+          <Grid item xs={12} sm={6} md={3}>
+            <AppWidgetSummary title="Order Report" path="/admin/order_report" total={count && count.user_count && count.user_count} color="error" icon={'ant-design:user-switch-outlined'} />
+          </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Customer Report" path="/admin/customer_report" total={count && count.tot_customers && count.tot_customers} icon={'carbon:user-activity'} />
+            <AppWidgetSummary title="Product Report" path="/admin/product_report" total={count && count.tot_products && count.tot_products} color="warning" icon={'arcticons:user-manual'} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
             <AppWidgetSummary title="Category Report" path="/admin/category_report" total={count && count.tot_orders && count.tot_orders} color="info" icon={'bx:category-alt'} />
           </Grid>
 
-          <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Product Report" path="/admin/product_report" total={count && count.tot_products && count.tot_products} color="warning" icon={'arcticons:user-manual'} />
-          </Grid>
         </Grid>
       </Container>
     </Page>

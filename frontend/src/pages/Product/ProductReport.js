@@ -1,9 +1,9 @@
 import { filter } from 'lodash';
 import React, { useEffect, useState } from "react";
 import { Link as RouterLink } from 'react-router-dom';
-import { decode as base64_decode, encode as base64_encode } from 'base-64';
+import { encode as base64_encode } from 'base-64';
 import swal from 'sweetalert'; // sweetalert
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 // material
 import {
@@ -33,9 +33,6 @@ import { UserListHead, UserListToolbar, UserMoreMenu } from '../../sections/@das
 import { postData, getData } from '../../Services/apiservice';
 
 import jsPDF from "jspdf";
-import autoTable from 'jspdf-autotable';
-
-const doc = new jsPDF()
 
 const TABLE_HEAD = [
     { id: 'product_type', label: 'Product Type', alignRight: false },
@@ -80,7 +77,6 @@ export default function ProductReport() {
 
     const getRecord = async () => {
         let response = await getData('product_details');
-        console.log(response);
         if (response && response.data.rows) {
             setList(response.data.rows);
         }
@@ -130,8 +126,9 @@ export default function ProductReport() {
         let apiUrl, selectedArray = [];
         if (selected && selected.length > 1 && product_id) {
             selectedArray = selected;
-            apiUrl = 'product_bulk_status_change/' + '[' + selectedArray + ']';
+            apiUrl = 'product_multi_delete/' + '[' + selectedArray + ']';
         }
+
         else {
             if (selected && selected.length > 0) {
                 apiUrl = 'product_delete/' + selected;
@@ -139,6 +136,7 @@ export default function ProductReport() {
                 apiUrl = 'product_delete/' + product_id;
             }
         }
+
         swal({
             title: "Are you sure you want to delete?",
             text: "Once deleted, you will not be able to recover!",
@@ -148,7 +146,6 @@ export default function ProductReport() {
         })
             .then(async (willDelete) => {
                 if (willDelete) {
-                    console.log("apiUrl", apiUrl);
                     let responseData = await postData(apiUrl)
                     if (responseData) {
                         toast.success("Deleted Successfully");
@@ -196,7 +193,6 @@ export default function ProductReport() {
         })
             .then(async (willchangeStatus) => {
                 if (willchangeStatus) {
-                    console.log("apiurl", apiUrl)
                     let responseData = await postData(apiUrl);
                     if (responseData) {
                         toast.success("Status Changed Successfully");
@@ -288,9 +284,6 @@ export default function ProductReport() {
 
                                             const isItemSelected = selected.indexOf(product_id) !== -1;
 
-                                            if (isItemSelected == true) {
-                                                console.log("selected", selected);
-                                            }
 
                                             return (
                                                 <TableRow

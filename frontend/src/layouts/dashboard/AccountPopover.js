@@ -9,7 +9,7 @@ import MenuPopover from '../../components/MenuPopover';
 import account from '../../_mock/account';
 
 import { postData } from '../../Services/apiservice';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 
 // ----------------------------------------------------------------------
@@ -20,11 +20,11 @@ const MENU_OPTIONS = [
   //   icon: 'eva:home-fill',
   //   linkTo: '/',
   // },
-  {
-    label: 'Profile',
-    icon: 'eva:person-fill',
-    linkTo: '#',
-  },
+  // {
+  //   label: 'Profile',
+  //   icon: 'eva:person-fill',
+  //   linkTo: '#',
+  // },
   // {
   //   label: 'Settings',
   //   icon: 'eva:settings-2-fill',
@@ -52,7 +52,7 @@ export default function AccountPopover() {
     let token = localStorage.getItem('token');
     setOpen(null);
     let response = await postData('logout', { authToken: token });
-    if (response.status == 200) {
+    if (response.status === 200) {
       localStorage.removeItem("token", response.data.token);
       toast.success("logout Successfully");
       navigate('/admin/login', { replace: true });
@@ -98,7 +98,7 @@ export default function AccountPopover() {
           },
         }}
       >
-        <Box sx={{ my: 1.5, px: 2.5 }}>
+        {/* <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle2" noWrap>
             {account.displayName}
           </Typography>
@@ -117,7 +117,7 @@ export default function AccountPopover() {
           ))}
         </Stack>
 
-        <Divider sx={{ borderStyle: 'dashed' }} />
+        <Divider sx={{ borderStyle: 'dashed' }} /> */}
 
         <MenuItem onClick={logOut} sx={{ m: 1 }}>
           Logout

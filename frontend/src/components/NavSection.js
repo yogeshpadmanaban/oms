@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { NavLink as RouterLink, matchPath, useLocation } from 'react-router-dom';
+import { NavLink as RouterLink, useLocation } from 'react-router-dom';
 // material
 import { alpha, useTheme, styled } from '@mui/material/styles';
 import { Box, List, Collapse, ListItemText, ListItemIcon, ListItemButton } from '@mui/material';
@@ -148,10 +148,10 @@ export default function NavSection({ navConfig, ...other }) {
     if (splitURL.length > 3) {
       editUrl = splitURL[2];
     }
-    if (activePath.indexOf(pathname) != -1 && !editUrl) {
+    if (activePath.indexOf(pathname) !== -1 && !editUrl) {
       return true;
     }
-    else if (editUrl && activePath.indexOf(editUrl) != -1) {
+    else if (editUrl && activePath.indexOf(editUrl) !== -1) {
       return true;
     }
     else {

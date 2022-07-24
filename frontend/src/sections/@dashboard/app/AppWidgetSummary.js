@@ -38,7 +38,6 @@ export default function AppWidgetSummary({ title, total, path, icon, color = 'pr
   const navigate = useNavigate();
 
   const onNavigate = (path) => {
-    console.log("path", path);
     navigate(path, { replace: true });
   }
 

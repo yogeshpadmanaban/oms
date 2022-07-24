@@ -65,9 +65,9 @@ export default function ProductForm() {
         },
         validationSchema: ustomerformSchema,
         onSubmit: async (values) => {
-            console.log("values", values);
 
             let response = await postData('store_product', values);
+            console.log(response, 'response');
             if (response) {
                 toast.success(response.data.message);
                 navigate('/admin/product_report', { replace: true });

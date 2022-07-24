@@ -1,9 +1,7 @@
 import { filter } from 'lodash';
 import React, { useEffect, useState } from "react";
-import { Link as RouterLink } from 'react-router-dom';
-import { decode as base64_decode, encode as base64_encode } from 'base-64';
 import swal from 'sweetalert'; // sweetalert
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { useFormik, Form, FormikProvider } from 'formik';
 import * as Yup from 'yup';
 import { LoadingButton } from '@mui/lab';
@@ -12,7 +10,6 @@ import {
     Card,
     Table,
     Stack,
-    Avatar,
     Button,
     Checkbox,
     TableRow,
@@ -24,9 +21,6 @@ import {
     TablePagination,
     TextField
 } from '@mui/material';
-
-
-// import { Link, Stack, Card, Container, , IconButton, FormControlLabel, Typography, Button } from '@mui/material';
 
 
 // components
@@ -42,11 +36,8 @@ import { postData, getData } from '../../Services/apiservice';
 import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
 
-
 import jsPDF from "jspdf";
-import autoTable from 'jspdf-autotable';
 
-const doc = new jsPDF()
 
 
 const TABLE_HEAD = [
@@ -79,14 +70,13 @@ function CategoryModal({ open, handleClose, getRecord, oneditedId }) {
         },
         validationSchema: categorySchema,
         onSubmit: async (values, { resetForm }) => {
-            console.log("values", values);
-
             handleClose(); // Modal close
             resetForm(); // Reset form
             getRecord(); // Record Get
 
             let response = await postData('store_category', values);
-            if (response.status == 200) {
+            console.log("response", response);
+            if (response.status === 200) {
                 handleClose(); // Modal close
                 resetForm(); // Reset form
                 toast.success(response.data.message);
@@ -101,9 +91,7 @@ function CategoryModal({ open, handleClose, getRecord, oneditedId }) {
     useEffect(async () => {
         if (oneditedId) {
             let url = 'edit_category/' + oneditedId;
-            console.log("url", url);
             let responseData = await getData(url);
-            console.log("sfsdfsdfsdfsdf", responseData.data.category)
             if (responseData && responseData.data.category) {
                 const { category_id, category_name } = responseData.data.category;
                 formik.setFieldValue("id", category_id);
@@ -195,7 +183,6 @@ export default function CategoryReport() {
 
     const getRecord = async () => {
         let response = await getData('category_details');
-        console.log(response);
         if (response && response.data.rows) {
             setList(response.data.rows);
         }
@@ -245,7 +232,7 @@ export default function CategoryReport() {
         let apiUrl, selectedArray = [];
         if (selected && selected.length > 1 && category_id) {
             selectedArray = selected;
-            apiUrl = 'category_bulk_status_change/' + '[' + selectedArray + ']';
+            apiUrl = 'category_multi_delete/' + '[' + selectedArray + ']';
         }
         else {
             if (selected && selected.length > 0) {
@@ -263,7 +250,6 @@ export default function CategoryReport() {
         })
             .then(async (willDelete) => {
                 if (willDelete) {
-                    console.log("apiUrl", apiUrl);
                     let responseData = await postData(apiUrl)
                     if (responseData) {
                         toast.success("Deleted Successfully");
@@ -279,13 +265,8 @@ export default function CategoryReport() {
     // On Edit
 
     const oneditClick = async (category_id) => {
-        console.log("oneditClick", category_id);
         await setoneditedId(category_id);
         await setOpen(true);
-        // setTimeout(async () => {
-
-        // }, 1500);
-
     }
     // On ChangeRowsperPage
     const handleChangeRowsPerPage = (event) => {
@@ -322,7 +303,6 @@ export default function CategoryReport() {
         })
         .then(async (willchangeStatus) => {
             if (willchangeStatus) {
-                console.log("apiurl", apiUrl)
                 let responseData = await postData(apiUrl);
                 if (responseData) {
                     toast.success("Status Changed Successfully");
@@ -410,10 +390,6 @@ export default function CategoryReport() {
 
                                             const { category_id, status, category_name } = row;
                                             const isItemSelected = selected.indexOf(category_id) !== -1;
-
-                                            if (isItemSelected == true) {
-                                                console.log("selected", selected);
-                                            }
 
                                             return (
                                                 <TableRow

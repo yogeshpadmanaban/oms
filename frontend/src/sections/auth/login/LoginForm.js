@@ -1,15 +1,15 @@
 import * as Yup from 'yup';
 import { useState } from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useFormik, Form, FormikProvider } from 'formik';
 // material
-import { Link, Stack, Checkbox, TextField, IconButton, InputAdornment, FormControlLabel } from '@mui/material';
+import { Stack, TextField, IconButton, InputAdornment } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // component
 import Iconify from '../../../components/Iconify';
 // Serive
 import { postData } from '../../../Services/apiservice';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 // ----------------------------------------------------------------------
 
 export default function LoginForm() {
@@ -30,9 +30,8 @@ export default function LoginForm() {
     },
     validationSchema: LoginSchema,
     onSubmit: async (values) => {
-      console.log("values", values);
       let response = await postData('login/admin', values);
-      if (response.status == 200 && response.data.token) {
+      if (response.status === 200 && response.data.token) {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("user_id", response.data.user_id);
         localStorage.setItem("user_role", response.data.user_role);
@@ -43,7 +42,7 @@ export default function LoginForm() {
     },
   });
 
-  const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
+  const { errors, touched, isSubmitting, handleSubmit, getFieldProps } = formik;
 
   const handleShowPassword = () => {
     setShowPassword((show) => !show);
@@ -84,10 +83,10 @@ export default function LoginForm() {
         </Stack>
 
         <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
-          <FormControlLabel
+          {/* <FormControlLabel
             control={<Checkbox {...getFieldProps('remember')} checked={values.remember} />}
             label="Remember me"
-          />
+          /> */}
 
           {/* <Link component={RouterLink} variant="subtitle2" to="#" underline="hover">
             Forgot password?

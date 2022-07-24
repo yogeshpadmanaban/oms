@@ -34,9 +34,7 @@ export default function RegisterForm() {
     validationSchema: RegisterSchema,
 
     onSubmit: async (values) => {
-      console.log("values", values);
       let response = await postData('register', values);
-      console.log("response", response);
       if (response) {
         navigate('/admin/login', { replace: true });
       }

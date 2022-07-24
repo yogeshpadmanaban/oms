@@ -2,7 +2,7 @@
 import Router from './routes';
 // theme
 import ThemeProvider from './theme';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 // components
 import ScrollToTop from './components/ScrollToTop';

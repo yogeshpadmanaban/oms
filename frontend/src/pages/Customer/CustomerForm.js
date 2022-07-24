@@ -87,7 +87,6 @@ export default function CustomerForm() {
         if (params && params.id) {
             let url = 'edit_customer/' + params.id;
             let responseData = await getData(url);
-            console.log("sfsdfsdfsdfsdf", responseData.data.customer)
             if (responseData && responseData.data.customer) {
                 const { name, address, city, state, gst_no, pan_no, profile_picture, other_upload, customer_id } = responseData.data.customer;
                 formik.setFieldValue("customer_id", customer_id);
@@ -104,7 +103,6 @@ export default function CustomerForm() {
     }, []);
 
     const onfileupload = async (name, value) => {
-        console.log(name, value);
         let response = await postData('file_upload', value);
         if (response.status == 200) {
             formik.setFieldValue("name", response.data);

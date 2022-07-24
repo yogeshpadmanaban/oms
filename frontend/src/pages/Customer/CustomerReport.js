@@ -83,7 +83,6 @@ export default function CustomerReport() {
 
   const getCustomerRecord = async () => {
     let response = await getData('customer_details');
-    console.log(response);
     if (response && response.data.rows) {
       setCustomerList(response.data.rows);
     }
@@ -286,10 +285,6 @@ export default function CustomerReport() {
 
                       const { customer_id, profile_picture, name, address, city, state, gst_no, pan_no, other_upload, status } = row;
                       const isItemSelected = selected.indexOf(customer_id) !== -1;
-
-                      if (isItemSelected == true) {
-                        console.log("selected", selected);
-                      }
 
                       return (
                         <TableRow

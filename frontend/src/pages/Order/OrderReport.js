@@ -1,10 +1,9 @@
 import { filter } from 'lodash';
 import React, { useEffect, useState } from "react";
 import { Link as RouterLink } from 'react-router-dom';
-import { decode as base64_decode, encode as base64_encode } from 'base-64';
+import { encode as base64_encode } from 'base-64';
 import swal from 'sweetalert'; // sweetalert
-import { ToastContainer, toast } from 'react-toastify';
-import Moment from 'react-moment';
+import { toast } from 'react-toastify';
 import moment from 'moment';
 
 // material
@@ -32,15 +31,12 @@ import SearchNotFound from '../../components/SearchNotFound'; // Common Page
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../../sections/@dashboard/orderReport'; // Sepearte page
 
 // apiservice
-import { postData, getData, getorderData } from '../../Services/apiservice';
+import { postData, getorderData } from '../../Services/apiservice';
 
 //css
 import '../common.css';
 
 import jsPDF from "jspdf";
-import autoTable from 'jspdf-autotable';
-
-const doc = new jsPDF()
 
 const TABLE_HEAD = [
 
@@ -100,7 +96,6 @@ export default function OrderReport() {
 
     const getRecord = async (data) => {
         let response = await getorderData('order_details', data);
-        console.log(response);
         if (response && response.data.rows) {
             let responseData = response.data.rows;
             responseData.sort(function (a, b) {

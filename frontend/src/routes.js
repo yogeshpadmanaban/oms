@@ -35,11 +35,9 @@ export default function Router() {
   return useRoutes([
     {
       path: '/admin',
-      // element: <DashboardLayout />,
-      element: isLoggedIn ? <DashboardLayout /> : <Navigate to="/admin/login" />,
+      element: isLoggedIn ? <DashboardLayout /> : <Navigate to="/" />,
       children: [
         { path: 'dashboard', element: <DashboardApp /> },
-
 
         { path: 'customer_report', element: <CustomerReport /> },
         { path: 'add_customer', element: <CustomerForm /> },
@@ -57,13 +55,11 @@ export default function Router() {
         { path: 'add_order', element: <OrderForm /> },
         { path: 'edit_order/:id', element: <OrderForm /> },
 
-
-
       ],
     },
     {
       path: '/',
-      element: <LogoOnlyLayout />,
+      element: !isLoggedIn ? <LogoOnlyLayout /> : <Navigate to="/admin/" />,
       children: [
         { path: '/', element: <Navigate to="/admin/login" /> },
         { path: '/admin/login', element: <Login /> },
