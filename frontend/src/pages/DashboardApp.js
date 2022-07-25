@@ -3,7 +3,6 @@ import { useTheme } from '@mui/material/styles';
 import { Grid, Container, Typography } from '@mui/material';
 
 import React, { useEffect, useState } from "react";
-import { Link as RouterLink } from 'react-router-dom';
 
 // components
 import Page from '../components/Page';
@@ -11,7 +10,7 @@ import Page from '../components/Page';
 import { AppWidgetSummary } from '../sections/@dashboard/app';
 
 // apiservice
-import { postData, getData } from '../Services/apiservice';
+import { getData } from '../Services/apiservice';
 
 
 // ----------------------------------------------------------------------

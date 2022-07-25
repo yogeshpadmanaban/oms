@@ -1,9 +1,9 @@
 import { filter } from 'lodash';
 import React, { useEffect, useState } from "react";
 import { Link as RouterLink } from 'react-router-dom';
-import { decode as base64_decode, encode as base64_encode } from 'base-64';
+import { encode as base64_encode } from 'base-64';
 import swal from 'sweetalert'; // sweetalert
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 // material
 import {
@@ -33,9 +33,6 @@ import { UserListHead, UserListToolbar, UserMoreMenu } from '../../sections/@das
 import { postData, getData } from '../../Services/apiservice';
 
 import jsPDF from "jspdf";
-import autoTable from 'jspdf-autotable';
-
-const doc = new jsPDF()
 
 const TABLE_HEAD = [
   { id: 'profile_picture', label: 'Profile Picture', alignRight: false },
@@ -264,7 +261,7 @@ export default function CustomerReport() {
         </Stack>
 
         <Card>
-          <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName}
+          <UserListToolbar data={customerList.length} numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName}
             onDelete={ondeleteClick} onstausChange={onstatusChange} onexport={exportPDF} />
 
           <Scrollbar>
@@ -313,7 +310,7 @@ export default function CustomerReport() {
 
                           <TableCell align="left" onClick={() => onstatusChange(customer_id)}>
                             <Iconify
-                              icon={status == 1 ? 'charm:cross' :
+                              icon={status === 1 ? 'charm:cross' :
                                 'typcn:tick'}
                               sx={{ width: 25, height: 25, ml: 1 }}
                             />

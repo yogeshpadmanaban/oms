@@ -3,26 +3,24 @@ import React, { useEffect, useState } from "react";
 import { Link as RouterLink, useNavigate, useParams } from 'react-router-dom';
 import { useFormik, Form, FormikProvider, Field } from 'formik';
 import { LoadingButton } from '@mui/lab';
-import { decode as base64_decode, encode as base64_encode } from 'base-64';
-
 
 // @mui
 import { styled } from '@mui/material/styles';
 
 // material
-import { Link, Stack, Card, Container, TextField, IconButton, FormControlLabel, Typography, Button } from '@mui/material';
+import { Stack, Card, Container, TextField, Typography, Button } from '@mui/material';
 
 // components
 import Page from '../../components/Page';
-import Iconify from '../../components/Iconify';
 
 // Serive
 import { postData, getData } from '../../Services/apiservice';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 
 //css
 import '../common.css';
+
 // ----------------------------------------------------------------------
 
 const RootStyle = styled('div')(({ theme }) => ({
@@ -37,6 +35,7 @@ export default function ProductForm() {
     const params = useParams();
 
     const [category, setCategoryList] = useState([]);
+    const [product_image_img, set_product_image_img] = useState('');
 
     const radioOptions = [
         { label: 'Vigat Product', value: 'Vigat Product' },
@@ -56,7 +55,6 @@ export default function ProductForm() {
     const formik = useFormik({
         initialValues: {
             product_id: '',
-            // product_type: params && params.id ? '' : radioOptions[0].value,
             product_type: '',
             category: '',
             name: '',
@@ -66,7 +64,15 @@ export default function ProductForm() {
         validationSchema: ustomerformSchema,
         onSubmit: async (values) => {
 
-            let response = await postData('store_product', values);
+            let formData = new FormData();
+            formData.append("product_id", values.product_id);
+            formData.append("product_type", values.product_type);
+            formData.append("name", values.name);
+            formData.append("category", values.category);
+            formData.append("product_details", values.product_details);
+            formData.append("product_image", values.product_image);
+
+            let response = await postData('store_product', formData);
             console.log(response, 'response');
             if (response) {
                 toast.success(response.data.message);
@@ -102,14 +108,30 @@ export default function ProductForm() {
             "category_id": '',
             "category_name": "Select Category",
         })
-        if (params.id == null || params.id == '') {
+        if (params.id === null || params.id === '') {
             formik.setFieldValue("category", categoryList[0].category_id);
         }
         setCategoryList(categoryList);
     }
 
+    const onfileupload = async (name, value) => {
+        formik.setFieldValue(name, value);
+        let reader = new FileReader();
+        reader.onloadend = () => {
+            setImage(name, reader.result);
+        };
+        reader.readAsDataURL(value);
 
-    const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps, setFieldValue, initialValues } = formik;
+    }
+
+    const setImage = async (fieldName, image) => {
+        if (fieldName === 'product_image') {
+            set_product_image_img(image);
+        }
+    }
+
+
+    const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps, setFieldValue } = formik;
     return (
         <Page title={params && params.id ? "Edit Product" : "Add Product"}>
             <RootStyle>
@@ -183,11 +205,21 @@ export default function ProductForm() {
                                         name="product_image"
                                         InputLabelProps={{ shrink: true }}
                                         onChange={(event) => {
-                                            setFieldValue("product_image", event.currentTarget.files[0])
+                                            onfileupload('product_image', event.currentTarget.files[0]);
                                         }}
                                         error={Boolean(touched.product_image && errors.product_image)}
                                         helperText={touched.product_image && errors.product_image}
                                     />
+
+                                    {
+                                        product_image_img &&
+                                        <img src={product_image_img}
+                                            alt={'Product Image'}
+                                            className="img-thumbnail mt-2"
+                                            height={200}
+                                            width={300} />
+                                    }
+
 
                                     <TextField
                                         fullWidth

@@ -75,7 +75,6 @@ function CategoryModal({ open, handleClose, getRecord, oneditedId }) {
             getRecord(); // Record Get
 
             let response = await postData('store_category', values);
-            console.log("response", response);
             if (response.status === 200) {
                 handleClose(); // Modal close
                 resetForm(); // Reset form
@@ -104,7 +103,7 @@ function CategoryModal({ open, handleClose, getRecord, oneditedId }) {
     }, []);
 
 
-    const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps, setFieldValue, initialValues } = formik;
+    const { errors, touched, isSubmitting, handleSubmit, getFieldProps } = formik;
 
     return (
 
@@ -112,7 +111,6 @@ function CategoryModal({ open, handleClose, getRecord, oneditedId }) {
             <Modal center open={open} onClose={handleClose}>
                 <h2>{oneditedId ? 'Edit Category' : 'Add Category'}</h2>
 
-                {/* <Card> */}
                 <FormikProvider value={formik}>
                     <Form autoComplete="off" encType="multipart/form-data" noValidate onSubmit={handleSubmit}>
                         <Stack spacing={2} sx={{ my: 1 }}>
@@ -134,7 +132,6 @@ function CategoryModal({ open, handleClose, getRecord, oneditedId }) {
                         </Stack>
                     </Form>
                 </FormikProvider>
-                {/* </Card> */}
 
             </Modal>
         </div>
@@ -301,18 +298,18 @@ export default function CategoryReport() {
             buttons: true,
             dangerMode: true,
         })
-        .then(async (willchangeStatus) => {
-            if (willchangeStatus) {
-                let responseData = await postData(apiUrl);
-                if (responseData) {
-                    toast.success("Status Changed Successfully");
-                    await getRecord();
-                    await handletableReset();
-                } else {
-                    toast.error("Oops ! Somewithing wen wrong");
+            .then(async (willchangeStatus) => {
+                if (willchangeStatus) {
+                    let responseData = await postData(apiUrl);
+                    if (responseData) {
+                        toast.success("Status Changed Successfully");
+                        await getRecord();
+                        await handletableReset();
+                    } else {
+                        toast.error("Oops ! Somewithing wen wrong");
+                    }
                 }
-            }
-        });
+            });
     }
 
     const handletableReset = () => {
@@ -369,8 +366,8 @@ export default function CategoryReport() {
                 </Stack>
 
                 <Card>
-                    <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName}
-                        onDelete={ondeleteClick} onstausChange={onstatusChange} onexport={exportPDF}/>
+                    <UserListToolbar data={list.length} numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName}
+                        onDelete={ondeleteClick} onstausChange={onstatusChange} onexport={exportPDF} />
 
                     <Scrollbar>
                         <TableContainer sx={{ minWidth: 800 }}>

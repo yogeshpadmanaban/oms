@@ -37,6 +37,8 @@ export default function Router() {
       path: '/admin',
       element: isLoggedIn ? <DashboardLayout /> : <Navigate to="/" />,
       children: [
+
+        { path: '/admin', element: <Navigate to="/admin/dashboard" /> },
         { path: 'dashboard', element: <DashboardApp /> },
 
         { path: 'customer_report', element: <CustomerReport /> },
@@ -59,7 +61,7 @@ export default function Router() {
     },
     {
       path: '/',
-      element: !isLoggedIn ? <LogoOnlyLayout /> : <Navigate to="/admin/" />,
+      element: !isLoggedIn ? <LogoOnlyLayout /> : <Navigate to="/admin" />,
       children: [
         { path: '/', element: <Navigate to="/admin/login" /> },
         { path: '/admin/login', element: <Login /> },

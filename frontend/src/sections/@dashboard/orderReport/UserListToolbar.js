@@ -13,7 +13,7 @@ import { useFormik, Form, FormikProvider } from 'formik';
 
 // component
 import Iconify from '../../../components/Iconify';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 // css
 import '../../../pages/common.css';
@@ -44,6 +44,7 @@ const SearchStyle = styled(OutlinedInput)(({ theme }) => ({
 
 UserListToolbar.propTypes = {
   numSelected: PropTypes.number,
+  data: PropTypes.number,
   filterName: PropTypes.string,
   onFilterName: PropTypes.func,
   onDelete: PropTypes.func,
@@ -53,7 +54,9 @@ UserListToolbar.propTypes = {
 };
 
 
-export default function UserListToolbar({ numSelected, filterName, onFilterName, onDelete, onstausChange, getRecord, onexport }) {
+export default function UserListToolbar({ numSelected, filterName, onFilterName,
+  onDelete, onstausChange, getRecord, onexport, data }) {
+
   const filterSchema = Yup.object().shape({
     from_date: Yup.string(),
     to_date: Yup.string(),
@@ -77,7 +80,7 @@ export default function UserListToolbar({ numSelected, filterName, onFilterName,
     },
   });
 
-  const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps, setFieldValue, initialValues } = formik;
+  const { errors, touched, handleSubmit, getFieldProps } = formik;
 
   return (
     <div>
@@ -109,7 +112,8 @@ export default function UserListToolbar({ numSelected, filterName, onFilterName,
             />
           )}
 
-        {numSelected > 0 ? (
+        {
+          numSelected > 0 &&
           <div>
             <Tooltip title="Bulk Status Change">
               <IconButton className='stausButton' onClick={onstausChange}>
@@ -124,13 +128,16 @@ export default function UserListToolbar({ numSelected, filterName, onFilterName,
             </Tooltip>
           </div>
 
-        ) : (
+        }
+        
+        {
+          data > 0 &&
           <Tooltip title="Export PDF">
             <IconButton className='stausButton' onClick={onexport}>
               <Iconify icon="foundation:page-export-pdf" />
             </IconButton>
           </Tooltip>
-        )}
+        }
 
       </RootStyle>
 

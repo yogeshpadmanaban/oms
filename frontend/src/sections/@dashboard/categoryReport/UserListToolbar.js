@@ -34,6 +34,7 @@ const SearchStyle = styled(OutlinedInput)(({ theme }) => ({
 
 UserListToolbar.propTypes = {
   numSelected: PropTypes.number,
+  data: PropTypes.number,
   filterName: PropTypes.string,
   onFilterName: PropTypes.func,
   onDelete: PropTypes.func,
@@ -41,7 +42,8 @@ UserListToolbar.propTypes = {
   onstausChange: PropTypes.func
 };
 
-export default function UserListToolbar({ numSelected, filterName, onFilterName, onDelete, onstausChange, onexport }) {
+export default function UserListToolbar({ numSelected, filterName, onFilterName,
+  onDelete, onstausChange, onexport, data }) {
   return (
 
 
@@ -72,8 +74,9 @@ export default function UserListToolbar({ numSelected, filterName, onFilterName,
           />
         )}
 
-      {numSelected > 0 ? (
-        <div>
+      {
+        numSelected > 0 &&
+        < div >
           <Tooltip title="Bulk Status Change">
             <IconButton className='stausButton' onClick={onstausChange}>
               <Iconify icon="el:lock" />
@@ -86,14 +89,19 @@ export default function UserListToolbar({ numSelected, filterName, onFilterName,
             </IconButton>
           </Tooltip>
         </div>
-      ) : (
+      }
+
+      {
+        data > 0 &&
         <Tooltip title="Export PDF">
           <IconButton className='stausButton' onClick={onexport}>
             <Iconify icon="foundation:page-export-pdf" />
           </IconButton>
         </Tooltip>
-      )}
+      }
 
-    </RootStyle>
+
+
+    </RootStyle >
   );
 }

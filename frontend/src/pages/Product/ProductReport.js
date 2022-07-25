@@ -261,7 +261,7 @@ export default function ProductReport() {
                 </Stack>
 
                 <Card>
-                    <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName}
+                    <UserListToolbar data={list.length} numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName}
                         onDelete={ondeleteClick} onstausChange={onstatusChange} onexport={exportPDF} />
 
                     <Scrollbar>

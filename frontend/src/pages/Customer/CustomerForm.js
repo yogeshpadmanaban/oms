@@ -3,22 +3,20 @@ import React, { useEffect, useState } from "react";
 import { Link as RouterLink, useNavigate, useParams } from 'react-router-dom';
 import { useFormik, Form, FormikProvider } from 'formik';
 import { LoadingButton } from '@mui/lab';
-import { decode as base64_decode, encode as base64_encode } from 'base-64';
 
 
 // @mui
 import { styled } from '@mui/material/styles';
 
 // material
-import { Link, Stack, Card, Container, TextField, IconButton, FormControlLabel, Typography, Button } from '@mui/material';
+import { Stack, Card, Container, TextField, Typography, Button } from '@mui/material';
 
 // components
 import Page from '../../components/Page';
-import Iconify from '../../components/Iconify';
 
 // Serive
 import { postData, getData } from '../../Services/apiservice';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 // ----------------------------------------------------------------------
 
@@ -33,10 +31,13 @@ export default function CustomerForm() {
     const navigate = useNavigate();
     const params = useParams();
 
+    const [profile_picture_img, set_profile_picture_img] = useState('');
+    const [other_upload_img, set_other_upload_img] = useState('');
+
     const ustomerformSchema = Yup.object().shape({
         customer_id: '',
         profile_picture: '',
-        name: '',
+        name: Yup.string().required('Customer Name is requried'),
         address: '',
         city: '',
         state: '',
@@ -98,18 +99,32 @@ export default function CustomerForm() {
                 formik.setFieldValue("pan_no", pan_no);
                 formik.setFieldValue("profile_picture", profile_picture);
                 formik.setFieldValue("other_upload", other_upload);
+                setImage("profile_picture", profile_picture);
+                setImage("other_upload", other_upload);
             }
         }
     }, []);
 
     const onfileupload = async (name, value) => {
-        let response = await postData('file_upload', value);
-        if (response.status == 200) {
-            formik.setFieldValue("name", response.data);
+        formik.setFieldValue(name, value);
+        let reader = new FileReader();
+        reader.onloadend = () => {
+            setImage(name, reader.result);
+        };
+        reader.readAsDataURL(value);
+
+    }
+
+    const setImage = async (fieldName, image) => {
+        if (fieldName === 'profile_picture') {
+            set_profile_picture_img(image);
+        } else {
+            set_other_upload_img(image);
         }
     }
 
-    const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps, setFieldValue, initialValues } = formik;
+    const { errors, touched, isSubmitting, handleSubmit, getFieldProps } = formik;
+
     return (
         <Page title={params && params.id ? "Edit Customer" : "Add Customer"}>
             <RootStyle>
@@ -132,11 +147,21 @@ export default function CustomerForm() {
                                         label="profile_picture"
                                         InputLabelProps={{ shrink: true }}
                                         onChange={(event) => {
-                                            setFieldValue('profile_picture', event.currentTarget.files[0]);
+                                            onfileupload('profile_picture', event.currentTarget.files[0]);
                                         }}
                                         error={Boolean(touched.profile_picture && errors.profile_picture)}
                                         helperText={touched.profile_picture && errors.profile_picture}
                                     />
+
+                                    {
+                                        profile_picture_img &&
+                                        <img src={profile_picture_img}
+                                            alt={'Profile Picture'}
+                                            className="img-thumbnail mt-2"
+                                            height={200}
+                                            width={300} />
+                                    }
+
 
                                     <TextField
                                         fullWidth
@@ -202,11 +227,20 @@ export default function CustomerForm() {
                                         name="other_upload"
                                         InputLabelProps={{ shrink: true }}
                                         onChange={(event) => {
-                                            setFieldValue("other_upload", event.currentTarget.files[0])
+                                            onfileupload('other_upload', event.currentTarget.files[0]);
                                         }}
                                         error={Boolean(touched.other_upload && errors.other_upload)}
                                         helperText={touched.other_upload && errors.other_upload}
                                     />
+
+                                    {
+                                        other_upload_img &&
+                                        <img src={other_upload_img}
+                                            alt={'Other Upload'}
+                                            className="img-thumbnail mt-2"
+                                            height={200}
+                                            width={300} />
+                                    }
 
                                     <Stack direction="row" alignItems="center" justifyContent="center" mb={5}>
 
