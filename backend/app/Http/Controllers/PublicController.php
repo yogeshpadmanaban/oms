@@ -141,12 +141,12 @@ class PublicController extends Controller
         //     }
         // }
 
-        // if ($request->input('design_by')!=''){
-        //     $design_by = implode(',',$request->input('design_by'));
-        // }
-        // else{
-        //     $design_by = '';
-        // }
+        if ($request->input('design_by')!=''){
+            $design_by = implode(',',$request->input('design_by'));
+        }
+        else{
+            $design_by = '';
+        }
 
         if($request->input('hdn_rdm_oder_id')!='')
         {
@@ -198,7 +198,7 @@ class PublicController extends Controller
             'quantity' => $request->input('quantity'),
             // 'cad_id' => $request->input('cad_id'),
             'weight' => $request->input('weight'),
-            'design_by' => $request->input('design_by'),
+            'design_by' => $design_by,
             'delivery_date' => $request->input('delivery_date'),
             'metal_provided' => $request->input('metal_provided'),
             'metal_provided_date' => $request->input('metal_provided_date'),
