@@ -99,8 +99,8 @@ export default function CustomerForm() {
                 formik.setFieldValue("pan_no", pan_no);
                 formik.setFieldValue("profile_picture", profile_picture);
                 formik.setFieldValue("other_upload", other_upload);
-                setImage("profile_picture", profile_picture);
-                setImage("other_upload", other_upload);
+                setImage("profile_picture", 'https://api.omsmdu.com/' + profile_picture);
+                setImage("other_upload", 'https://api.omsmdu.com/' + other_upload);
             }
         }
     }, []);

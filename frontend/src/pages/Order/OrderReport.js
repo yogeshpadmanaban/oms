@@ -356,7 +356,7 @@ export default function OrderReport() {
                                                     </TableCell>
                                                     <TableCell align="left" onClick={() => onstatusChange(id)}>
                                                         <Iconify
-                                                            icon={status == 1 ? 'charm:cross' :
+                                                            icon={status === '1'? 'charm:cross' :
                                                                 'typcn:tick'}
                                                             sx={{ width: 25, height: 25, ml: 1 }}
                                                         />

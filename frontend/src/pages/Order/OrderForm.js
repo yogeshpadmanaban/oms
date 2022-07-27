@@ -35,8 +35,8 @@ export default function OrderForm() {
     const params = useParams();
 
     const [productnameList, setproductnameList] = useState([]);
-
     const [customernameList, setcustomernameList] = useState([]);
+    const [order_img, set_orderImage] = useState('');
 
     const purity_options = [
         { label: '95', value: '95' },
@@ -56,6 +56,7 @@ export default function OrderForm() {
     ];
 
 
+
     const ustomerformSchema = Yup.object().shape({
 
         id: '',
@@ -70,7 +71,7 @@ export default function OrderForm() {
         quantity: '',
         design_by: '',
         delivery_date: '',
-        // order_image: '',
+        order_image: '',
         order_details: '',
 
     });
@@ -93,7 +94,23 @@ export default function OrderForm() {
         },
         validationSchema: ustomerformSchema,
         onSubmit: async (values) => {
-            let response = await postData('store_order', values);
+
+            let formData = new FormData();
+            formData.append("product_id", values.product_id);
+            formData.append("customer_id", values.customer_id);
+            formData.append("purity", values.purity);
+            formData.append("metal_provided", values.metal_provided);
+            formData.append("metal_provided_date", values.metal_provided_date);
+            formData.append("order_due_date", values.order_due_date);
+            formData.append("jc_number", values.jc_number);
+            formData.append("weight", values.weight);
+            formData.append("quantity", values.quantity);
+            formData.append("design_by", values.design_by);
+            formData.append("delivery_date", values.delivery_date);
+            formData.append("order_details", values.order_details);
+            formData.append("order_image", values.order_image);
+
+            let response = await postData('store_order', formData);
             if (response) {
                 toast.success(response.data.message);
                 navigate('/admin/order_report', { replace: true });
@@ -122,6 +139,7 @@ export default function OrderForm() {
                 formik.setFieldValue("weight", weight);
                 formik.setFieldValue("quantity", quantity);
                 formik.setFieldValue("design_by", design_by);
+                // formik.setFieldValue("design_by", ["cutting", "radium"]);
                 formik.setFieldValue("delivery_date", delivery_date);
                 formik.setFieldValue("order_image", order_image);
                 formik.setFieldValue("order_details", order_details);
@@ -154,8 +172,24 @@ export default function OrderForm() {
     }
 
 
+    const onfileupload = async (name, value) => {
+        formik.setFieldValue(name, value);
+        let reader = new FileReader();
+        reader.onloadend = () => {
+            setImage(name, reader.result);
+        };
+        reader.readAsDataURL(value);
+
+    }
+
+    const setImage = async (fieldName, image) => {
+        if (fieldName === 'order_image') {
+            set_orderImage(image);
+        }
+    }
+
     const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps, setFieldValue } = formik;
-    
+
     return (
         <Page title={params && params.id ? "Edit Order" : "Add Order"}>
             <RootStyle>
@@ -325,11 +359,20 @@ export default function OrderForm() {
                                         name="order_image"
                                         InputLabelProps={{ shrink: true }}
                                         onChange={(event) => {
-                                            setFieldValue("order_image", event.currentTarget.files[0])
+                                            onfileupload('order_image', event.currentTarget.files[0]);
                                         }}
                                         error={Boolean(touched.order_image && errors.order_image)}
                                         helperText={touched.order_image && errors.order_image}
                                     />
+
+                                    {
+                                        order_img &&
+                                        <img src={order_img}
+                                            alt={'Other Upload'}
+                                            className="img-thumbnail mt-2"
+                                            height={200}
+                                            width={300} />
+                                    }
 
 
                                     <TextField

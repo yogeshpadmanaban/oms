@@ -131,7 +131,7 @@ export default function UserListToolbar({ numSelected, filterName, onFilterName,
         }
         
         {
-          data > 0 &&
+          data > 0 && numSelected === 0 &&
           <Tooltip title="Export PDF">
             <IconButton className='stausButton' onClick={onexport}>
               <Iconify icon="foundation:page-export-pdf" />
