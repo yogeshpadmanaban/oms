@@ -87,20 +87,25 @@ function CategoryModal({ open, handleClose, getRecord, oneditedId }) {
         },
     });
 
-    useEffect(async () => {
-        if (oneditedId) {
-            let url = 'edit_category/' + oneditedId;
-            let responseData = await getData(url);
-            if (responseData && responseData.data.category) {
-                const { category_id, category_name } = responseData.data.category;
-                formik.setFieldValue("id", category_id);
-                formik.setFieldValue("category_name", category_name);
+    useEffect(() => {
+
+        const initData = async () => {
+            if (oneditedId) {
+                let url = 'edit_category/' + oneditedId;
+                let responseData = await getData(url);
+                if (responseData && responseData.data.category) {
+                    const { category_id, category_name } = responseData.data.category;
+                    formik.setFieldValue("id", category_id);
+                    formik.setFieldValue("category_name", category_name);
+                }
+            } else {
+                formik.setFieldValue("id", '');
+                formik.setFieldValue("category_name", '');
             }
-        } else {
-            formik.setFieldValue("id", '');
-            formik.setFieldValue("category_name", '');
         }
+        initData()
     }, []);
+
 
 
     const { errors, touched, isSubmitting, handleSubmit, getFieldProps } = formik;
@@ -173,9 +178,17 @@ export default function CategoryReport() {
     };
 
 
-    useEffect(async () => {
-        await getRecord();
+
+    useEffect(() => {
+        const initData = async () => {
+            let response = await getData('category_details');
+            if (response && response.data.rows) {
+                setList(response.data.rows);
+            }
+        }
+        initData();
     }, []);
+
 
 
     const getRecord = async () => {
@@ -405,7 +418,7 @@ export default function CategoryReport() {
                                                     <TableCell align="left">{category_name}</TableCell>
                                                     <TableCell align="left" onClick={() => onstatusChange(category_id)}>
                                                         <Iconify
-                                                            icon={status === '1'? 'charm:cross' :
+                                                            icon={status === '1' ? 'charm:cross' :
                                                                 'typcn:tick'}
                                                             sx={{ width: 25, height: 25, ml: 1 }}
                                                         />

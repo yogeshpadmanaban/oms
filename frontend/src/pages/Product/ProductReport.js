@@ -70,10 +70,15 @@ export default function ProductReport() {
 
     const [list, setList] = useState([]);
 
-    useEffect(async () => {
-        await getRecord();
+    useEffect(() => {
+        const initData = async () => {
+            let response = await getData('product_details');
+            if (response && response.data.rows) {
+                setList(response.data.rows);
+            }
+        }
+        initData();
     }, []);
-
 
     const getRecord = async () => {
         let response = await getData('product_details');
@@ -81,6 +86,7 @@ export default function ProductReport() {
             setList(response.data.rows);
         }
     }
+
 
     // On Table head sort (sort, sortBy)
     const handleRequestSort = (event, property) => {
@@ -236,7 +242,7 @@ export default function ProductReport() {
 
         doc.text(title, marginLeft, 40);
         doc.autoTable(content);
-        doc.save("product_report.pdf")
+        doc.save("product_report.pdf");
     }
 
 
@@ -302,9 +308,12 @@ export default function ProductReport() {
                                                     <TableCell align="left">{product_type}</TableCell>
                                                     <TableCell align="left">{category_name}</TableCell>
                                                     <TableCell align="left">{name}</TableCell>
-                                                    <TableCell align="left">{product_image}</TableCell>
+                                                    <TableCell component="th" scope="row" padding="none">
+                                                        <Stack direction="row" alignItems="center" spacing={2}>
+                                                            <Avatar alt={name} src={product_image} />
+                                                        </Stack>
+                                                    </TableCell>
                                                     <TableCell align="left">{product_details}</TableCell>
-
                                                     <TableCell align="left" onClick={() => onstatusChange(product_id)}>
                                                         <Iconify
                                                             icon={status === '1' ? 'charm:cross' :

@@ -89,8 +89,18 @@ export default function OrderReport() {
 
     const [List, setList] = useState([]);
 
-    useEffect(async () => {
-        await getRecord('');
+    useEffect(() => {
+        const initData = async (data) => {
+            let response = await getorderData('order_details', data);
+            if (response && response.data.rows) {
+                let responseData = response.data.rows;
+                responseData.sort(function (a, b) {
+                    return new Date(a.order_due_date) - new Date(b.order_due_date);
+                });
+                setList(responseData);
+            }
+        }
+        initData('');
     }, []);
 
 
@@ -308,7 +318,7 @@ export default function OrderReport() {
                                         filteredList.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
 
                                             const { id, order_id, jc_number, product_type, category_name, name, customer_name, purity, product_weight, quantity, design_by, order_details,
-                                                order_image, delivery_date, user_status, status, metal_status, metal_status_date, order_due_date } = row;
+                                                order_image, delivery_date, status, metal_status, metal_status_date, order_due_date } = row;
 
                                             const isItemSelected = selected.indexOf(id) !== -1;
 
@@ -342,21 +352,15 @@ export default function OrderReport() {
                                                             <Avatar alt={customer_name} src={order_image} />
                                                         </Stack>
                                                     </TableCell>
-                                                    {/* <TableCell align="left">{moment(delivery_date).format('YYYY/MM/DD')}</TableCell> */}
-
                                                     <TableCell align="left">{delivery_date ? moment(delivery_date).format('YYYY/MM/DD') : '-'}</TableCell>
-
-
-                                                    {/* <TableCell align="left">{user_status}</TableCell> */}
-
-                                                    <TableCell align="left">{metal_status == '1' ? 'Yes' : 'No'}</TableCell>
+                                                    <TableCell align="left">{metal_status === '1' ? 'Yes' : 'No'}</TableCell>
                                                     <TableCell align="left">{moment(metal_status_date).format('YYYY/MM/DD')}
                                                     </TableCell>
                                                     <TableCell align="left">{moment(order_due_date).format('YYYY/MM/DD')}
                                                     </TableCell>
                                                     <TableCell align="left" onClick={() => onstatusChange(id)}>
                                                         <Iconify
-                                                            icon={status === '1'? 'charm:cross' :
+                                                            icon={status === '1' ? 'charm:cross' :
                                                                 'typcn:tick'}
                                                             sx={{ width: 25, height: 25, ml: 1 }}
                                                         />

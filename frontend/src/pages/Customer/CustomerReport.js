@@ -73,8 +73,14 @@ export default function CustomerReport() {
 
   const [customerList, setCustomerList] = useState([]);
 
-  useEffect(async () => {
-    await getCustomerRecord();
+  useEffect(() => {
+    const initData = async () => {
+      let response = await getData('customer_details');
+      if (response && response.data.rows) {
+        setCustomerList(response.data.rows);
+      }
+    }
+    initData();
   }, []);
 
 
@@ -90,7 +96,7 @@ export default function CustomerReport() {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
-  };
+  }
 
   // all checkbox Click
   const handleSelectAllClick = (event) => {
@@ -100,7 +106,7 @@ export default function CustomerReport() {
       return;
     }
     setSelected([]);
-  };
+  }
 
   // Single checkbox Click
   const handleClick = (customer_id) => {
@@ -306,8 +312,11 @@ export default function CustomerReport() {
                           <TableCell align="left">{state}</TableCell>
                           <TableCell align="left">{gst_no}</TableCell>
                           <TableCell align="left">{pan_no}</TableCell>
-                          <TableCell align="left">{other_upload}</TableCell>
-
+                          <TableCell component="th" scope="row" padding="none">
+                            <Stack direction="row" alignItems="center" spacing={2}>
+                              <Avatar alt={name} src={other_upload} />
+                            </Stack>
+                          </TableCell>
                           <TableCell align="left" onClick={() => onstatusChange(customer_id)}>
                             <Iconify
                               icon={status === '1' ? 'charm:cross' :

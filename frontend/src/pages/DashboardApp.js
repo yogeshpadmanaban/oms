@@ -1,5 +1,5 @@
 // @mui
-import { useTheme } from '@mui/material/styles';
+// import { useTheme } from '@mui/material/styles';
 import { Grid, Container, Typography } from '@mui/material';
 
 import React, { useEffect, useState } from "react";
@@ -16,21 +16,20 @@ import { getData } from '../Services/apiservice';
 // ----------------------------------------------------------------------
 
 export default function DashboardApp() {
-  const theme = useTheme();
+  // const theme = useTheme();
 
   const [count, setCount] = useState({});
 
-  useEffect(async () => {
-    await getDashboardCount();
-  }, []);
 
-  const getDashboardCount = async () => {
-    let response = await getData('dashboard');
-    if (response) {
-      setCount(response.data);
+  useEffect(() => {
+    const initData = async () => {
+      let response = await getData('dashboard');
+      if (response) {
+        setCount(response.data);
+      }
     }
-
-  }
+    initData();
+  }, []);
 
 
   return (
