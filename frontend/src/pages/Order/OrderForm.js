@@ -120,31 +120,37 @@ export default function OrderForm() {
         },
     });
 
-    useEffect(async () => {
-        await getdropdownRecords();
-        if (params && params.id) {
-            let url = 'edit_order/' + params.id;
-            let responseData = await getData(url);
-            if (responseData && responseData.data.orders) {
-                const { id, product_id, customer_id, purity, jc_number, weight,
-                    quantity, design_by, delivery_date, order_image, order_details, metal_provided, metal_provided_date, order_due_date } = responseData.data.orders;
-                formik.setFieldValue("id", id);
-                formik.setFieldValue("product_id", product_id);
-                formik.setFieldValue("customer_id", customer_id);
-                formik.setFieldValue("purity", purity);
-                formik.setFieldValue("metal_provided", metal_provided);
-                formik.setFieldValue("metal_provided_date", metal_provided_date);
-                formik.setFieldValue("order_due_date", order_due_date);
-                formik.setFieldValue("jc_number", jc_number);
-                formik.setFieldValue("weight", weight);
-                formik.setFieldValue("quantity", quantity);
-                formik.setFieldValue("design_by", design_by);
-                // formik.setFieldValue("design_by", ["cutting", "radium"]);
-                formik.setFieldValue("delivery_date", delivery_date);
-                formik.setFieldValue("order_image", order_image);
-                formik.setFieldValue("order_details", order_details);
+    useEffect(() => {
+
+        const initData = async () => {
+            await getdropdownRecords();
+            if (params && params.id) {
+                let url = 'edit_order/' + params.id;
+                let responseData = await getData(url);
+                if (responseData && responseData.data.orders) {
+                    const { id, product_id, customer_id, purity, jc_number, weight,
+                        quantity, design_by, delivery_date, order_image, order_details, metal_provided, metal_provided_date, order_due_date } = responseData.data.orders;
+                    formik.setFieldValue("id", id);
+                    formik.setFieldValue("product_id", product_id);
+                    formik.setFieldValue("customer_id", customer_id);
+                    formik.setFieldValue("purity", purity);
+                    formik.setFieldValue("metal_provided", metal_provided);
+                    formik.setFieldValue("metal_provided_date", metal_provided_date);
+                    formik.setFieldValue("order_due_date", order_due_date);
+                    formik.setFieldValue("jc_number", jc_number);
+                    formik.setFieldValue("weight", weight);
+                    formik.setFieldValue("quantity", quantity);
+                    formik.setFieldValue("design_by", design_by);
+                    // formik.setFieldValue("design_by", ["cutting", "radium"]);
+                    formik.setFieldValue("delivery_date", delivery_date);
+                    formik.setFieldValue("order_details", order_details);
+                    formik.setFieldValue("order_image", order_image);
+                    setImage("order_image", 'https://api.omsmdu.com/' + order_image);
+
+                }
             }
         }
+        initData();
     }, []);
 
     const getdropdownRecords = async () => {
@@ -163,7 +169,7 @@ export default function OrderForm() {
             "name": "Select Customer",
         })
 
-        if (params.id == null || params.id == '') {
+        if (params.id === null || params.id === '') {
             formik.setFieldValue("product_id", productnameList[0].product_id);
             formik.setFieldValue("customer_id", customernameList[0].customer_id);
         }

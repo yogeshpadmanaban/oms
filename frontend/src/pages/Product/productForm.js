@@ -84,21 +84,25 @@ export default function ProductForm() {
         },
     });
 
-    useEffect(async () => {
-        await getcategory();
-        if (params && params.id) {
-            let url = 'edit_product/' + params.id;
-            let responseData = await getData(url);
-            if (responseData && responseData.data.products) {
-                const { name, product_details, product_image, product_id, product_type, category } = responseData.data.products;
-                formik.setFieldValue("product_id", product_id);
-                formik.setFieldValue("product_type", product_type);
-                formik.setFieldValue("category", category);
-                formik.setFieldValue("name", name);
-                formik.setFieldValue("product_image", product_image);
-                formik.setFieldValue("product_details", product_details);
+    useEffect(() => {
+        const initData = async () => {
+            await getcategory();
+            if (params && params.id) {
+                let url = 'edit_product/' + params.id;
+                let responseData = await getData(url);
+                if (responseData && responseData.data.products) {
+                    const { name, product_details, product_image, product_id, product_type, category } = responseData.data.products;
+                    formik.setFieldValue("product_id", product_id);
+                    formik.setFieldValue("product_type", product_type);
+                    formik.setFieldValue("category", category);
+                    formik.setFieldValue("name", name);
+                    formik.setFieldValue("product_details", product_details);
+                    formik.setFieldValue("product_image", product_image);
+                    setImage("product_image", 'https://api.omsmdu.com/' + product_image);
+                }
             }
         }
+        initData();
     }, []);
 
     const getcategory = async () => {

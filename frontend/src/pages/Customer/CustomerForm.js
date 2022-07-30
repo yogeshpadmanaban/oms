@@ -51,7 +51,7 @@ export default function CustomerForm() {
         initialValues: {
             customer_id: '',
             profile_picture: '',
-            name: '',
+            name: '', 
             address: '',
             city: '',
             state: '',
@@ -84,25 +84,28 @@ export default function CustomerForm() {
         },
     });
 
-    useEffect(async () => {
-        if (params && params.id) {
-            let url = 'edit_customer/' + params.id;
-            let responseData = await getData(url);
-            if (responseData && responseData.data.customer) {
-                const { name, address, city, state, gst_no, pan_no, profile_picture, other_upload, customer_id } = responseData.data.customer;
-                formik.setFieldValue("customer_id", customer_id);
-                formik.setFieldValue("name", name);
-                formik.setFieldValue("address", address);
-                formik.setFieldValue("city", city);
-                formik.setFieldValue("state", state);
-                formik.setFieldValue("gst_no", gst_no);
-                formik.setFieldValue("pan_no", pan_no);
-                formik.setFieldValue("profile_picture", profile_picture);
-                formik.setFieldValue("other_upload", other_upload);
-                setImage("profile_picture", 'https://api.omsmdu.com/' + profile_picture);
-                setImage("other_upload", 'https://api.omsmdu.com/' + other_upload);
+    useEffect(() => {
+        const initData = async () => {
+            if (params && params.id) {
+                let url = 'edit_customer/' + params.id;
+                let responseData = await getData(url);
+                if (responseData && responseData.data.customer) {
+                    const { name, address, city, state, gst_no, pan_no, profile_picture, other_upload, customer_id } = responseData.data.customer;
+                    formik.setFieldValue("customer_id", customer_id);
+                    formik.setFieldValue("name", name);
+                    formik.setFieldValue("address", address);
+                    formik.setFieldValue("city", city);
+                    formik.setFieldValue("state", state);
+                    formik.setFieldValue("gst_no", gst_no);
+                    formik.setFieldValue("pan_no", pan_no);
+                    formik.setFieldValue("profile_picture", profile_picture);
+                    formik.setFieldValue("other_upload", other_upload);
+                    setImage("profile_picture", 'https://api.omsmdu.com/' + profile_picture);
+                    setImage("other_upload", 'https://api.omsmdu.com/' + other_upload);
+                }
             }
         }
+        initData();
     }, []);
 
     const onfileupload = async (name, value) => {
