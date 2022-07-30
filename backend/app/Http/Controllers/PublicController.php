@@ -125,27 +125,18 @@ class PublicController extends Controller
         $pdt_id = $request->input('product_id');
         $user_status = '0';
 
-        // dd($user_role);
-
         $image=[];
 
-        if($request->input('cad_id')!='' && $request->input('mould_name')!=''){
-            $user_status = '1';
-        }
-
-        // if($id!='') 
-        // {   
-        //     if(($request['temp_order_img']!='')&&($image==''))
-        //     {   
-        //         $image=$request['temp_order_img'];
-        //     }
+        // if($request->input('cad_id')!='' && $request->input('mould_name')!=''){
+        //     $user_status = '1';
         // }
 
-        if ($request->input('design_by')!=''){
-            $design_by = implode(',',$request->input('design_by'));
-        }
-        else{
-            $design_by = '';
+        if($id!='') 
+        {   
+            if(($request['temp_order_img']!='')&&($image==''))
+            {   
+                $image=$request['temp_order_img'];
+            }
         }
 
         if($request->input('hdn_rdm_oder_id')!='')
@@ -163,17 +154,17 @@ class PublicController extends Controller
                
                 $array = ['order_id'=>$rdm_order_id, 'order_creator_id'=> $user_id, 'order_creator_role'=> $user_role, 'order_image'=>NULL]; 
 
-                if($request->file('order_img'.$i)!='')
+                if($request->file('order_image'.$i)!='')
                 {
                     $destinationPath = 'uploads/order/'; // upload path
-                    $files = $request->file('order_img'.$i);
+                    $files = $request->file('order_image'.$i);
                     $profile_path = uniqid() . '_' . trim($files->getClientOriginalName());
                     $files->move($destinationPath, $profile_path);
                     $order_img_name=$destinationPath.$profile_path; 
                     $array['order_image'] = $order_img_name;
                 }
 
-                if($request->input('hidden_order_img'.$i)!='' && $request->file('order_img'.$i)=='')
+                if($request->input('hidden_order_img'.$i)!='' && $request->file('order_image'.$i)=='')
                 {
                     $array['order_image'] = $request->input('hidden_order_img'.$i) ?? $value;
                 }
@@ -198,7 +189,7 @@ class PublicController extends Controller
             'quantity' => $request->input('quantity'),
             // 'cad_id' => $request->input('cad_id'),
             'weight' => $request->input('weight'),
-            'design_by' => $design_by,
+            'design_by' => $request->input('design_by'),
             'delivery_date' => $request->input('delivery_date'),
             'metal_provided' => $request->input('metal_provided'),
             'metal_provided_date' => $request->input('metal_provided_date'),
@@ -211,13 +202,13 @@ class PublicController extends Controller
         ];
 
 
-        // if(!empty($image))
-        // {
-        //     OrderImages::where('order_creator_id', $user_id)->where('order_id',  $order_data['order_id'])->delete();
-        //     foreach ($image as $key => $value) {
-        //         OrderImages::insert($value);
-        //     }
-        // }
+        if(!empty($image))
+        {
+            OrderImages::where('order_creator_id', $user_id)->where('order_id',  $order_data['order_id'])->delete();
+            foreach ($image as $key => $value) {
+                OrderImages::insert($value);
+            }
+        }
 
         $res = OrderDetails::updateOrCreate(['id'=>$id],$order_data); 
 

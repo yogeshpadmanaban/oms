@@ -131,160 +131,16 @@ class OrderDetails extends Model
 
                     foreach ($order_images as $oimg) {
                         if($o_id == $oimg['order_id']){ 
-
-                            array_push($oimg_array, $data['records'][$key]->order_image="<a href = '".url($oimg['order_image'])."' download> <img class='img_enlarge' src='".url($oimg['order_image'])."'style='width:50px;height:50px'></a>");
-
+                            array_push($oimg_array, $data['records'][$key]->order_image=$oimg['order_image']);
                         }
                     }
                     $data['records'][$key]->order_image = implode('',$oimg_array);    
 
                 }
                 else{
-                    $data['records'][$key]->order_image='-';    
+                    $data['records'][$key]->order_image=' ';    
                 }
 
-
-                // if($data['records'][$key]->order_image!='')
-                // {
-                //  $order_image = $data['records'][$key]->order_image;
-                //  $data['records'][$key]->order_image="<a href = '".url($order_image)."' download> <img class='img_enlarge' src='".url($order_image)."'style='width:50px;height:50px'></a>";  
-                // }
-
-                if($user_role == 'admin' || $user_role == 'mould')
-                {    
-
-                    if($data['records'][$key]->mould_image!='')
-                    {
-                        $mould_image = $data['records'][$key]->mould_image;
-                        $data['records'][$key]->mould_image="<a href = '".url($mould_image)."' download> <img class='img_enlarge' src='".url($mould_image)."'style='width:50px;height:50px'></a>";  
-                    }
-                    else{
-                        $data['records'][$key]->mould_image='-';    
-                    }
-
-                }
-
-                if($user_role == 'admin' || $user_role == 'cad')
-                {  
-
-                    if($data['records'][$key]->cad_image!='')
-                    {
-                        $cad_image = $data['records'][$key]->cad_image;
-                        $data['records'][$key]->cad_image="<a href = '".url($cad_image)."' download> <img class='img_enlarge' src='".url($cad_image)."'style='width:50px;height:50px'></a>";    
-                    }
-                    else{
-                        $data['records'][$key]->cad_image='-';  
-                    }
-
-                    if($data['records'][$key]->cad_status=='0')
-                    {
-                        $data['records'][$key]->cad_status="<button type='button' data-toggle='tooltip' data-placement='top' style='cursor:default' title='Contact cad to change status' class='btn btn-danger'>Pending</button>";
-
-                    }
-                    else{
-                        $data['records'][$key]->cad_status="<button type='button' data-toggle='tooltip' data-placement='top' style='cursor:default' title='Contact cad to change status' class='btn btn-success'>Finished</button>";    
-
-                    }
-
-                }
-                 
-                // if($data['records'][$key]->order_details!='')
-                // {
-                //     $order_details = substr($data['records'][$key]->order_details,0,20);
-                //     $data['records'][$key]->order_details = '<div data-title="'.$data['records'][$key]->order_details.'">'.$order_details.'...</span>  </div>';
-                //     #$data['records'][$key]->order_details = substr($data['records'][$key]->order_details,0,10);
-                // }
-                // else
-                // {
-                //     $data['records'][$key]->order_details='-';  
-                // } 
-                
-                if($data['records'][$key]->delivery_date=='')
-                {   
-                    $data['records'][$key]->delivery_date= '';
-                } 
-                
-
-                if($user_role == 'mould')
-                { 
-
-                    if($data['records'][$key]->mould_status=='0')
-                    {
-                        $data['records'][$key]->mould_status="<button class='btn btn-danger change_status'    data-url='/mould/status_change/' data-id='".base64_encode($data['records'][$key]->id)."'>Pending</button>";
-
-                    }
-                    else{
-                        $data['records'][$key]->mould_status="<button class='btn btn-success change_status'   data-url='/mould/status_change/' data-id='".base64_encode($data['records'][$key]->id)."'>Finished</button>";
-
-                    }
-
-                }
-                if($user_role == 'mould' || $user_role == 'cad')
-                { 
-
-                    $data['records'][$key]->action="<button type='button' class='btn btn-primary' onclick='ajx_get_order_details(this.id)'  id='".base64_encode($data['records'][$key]->id)."'>Add/Edit</button>";
-
-                }
-
-                if($user_role == 'admin')
-                { 
-
-                    if($data['records'][$key]->product_image!='')
-                    {
-                        $product_image = $data['records'][$key]->product_image;
-                        $data['records'][$key]->product_image="<a href = '".url($product_image)."' download> <img class='img_enlarge' src='".url($product_image)."'style='width:70px;height:70px'></a>";    
-                    }
-                    else{
-                        $data['records'][$key]->product_image='-';  
-                    }
-
-                    // if($data['records'][$key]->mould_status=='0')
-                    // {
-                    //     $data['records'][$key]->mould_status="<button type='button' data-toggle='tooltip' data-placement='top' style='cursor:default' title='Contact mould to change status' class='btn btn-danger'>Pending</button>";
-
-                    // }
-                    // else{
-                    //     $data['records'][$key]->mould_status="<button type='button' data-toggle='tooltip' data-placement='top' style='cursor:default' title='Contact mould to change status' class='btn btn-success'>Finished</button>";    
-
-                    // }
-
-                    // if($data['records'][$key]->status=='1')
-                    // {
-                    //     $data['records'][$key]->status="<i class='fa fa-close change_status' style='font-size:20px;color:red;cursor:pointer' data-url='/admin/order_change_status/' data-id='".base64_encode($data['records'][$key]->id)."' name='status".$data['records'][$key]->id."' data-status='status".$data['records'][$key]->id."' style=color:red></i>";
-
-                    // }
-                    // else{
-                    //     $data['records'][$key]->status="<i class='fa fa-check change_status' style='font-size:20px;color:green;cursor:pointer' data-url='/admin/order_change_status/'aria-hidden='true' data-id='".base64_encode($data['records'][$key]->id)."' name='status".$data['records'][$key]->id."' data-status='status".$data['records'][$key]->id."' class='btn'  style=color:green></i>";    
-
-                    // }
-
-                    // if($data['records'][$key]->user_status=='1' && $data['records'][$key]->cad_user_status=='0')
-                    // {
-                    //     $data['records'][$key]->user_status="<button type='button' data-toggle='tooltip' data-placement='top' style='cursor:default' title='Cad and Mould are Assigned' class='btn btn-success'> Assigned</button>";
-
-                    // }
-                    // else{
-
-                    //     $data['records'][$key]->user_status="<button type='button' data-toggle='tooltip' data-placement='top' style='cursor:default' title='Assign Cad and Mould to change status' class='btn btn-danger'>Not Assigned</button>";
-
-                    // }
-
-                    $data['records'][$key]->check_box="<input type='checkbox' class='checkbox' onclick='multi_select()'  value='".$data['records'][$key]->id."' name='data' style='width:20px;height:20px'>";   
-                    
-                    $data['records'][$key]->action="
-
-                    <a href=".url('/execPDF/'.base64_encode($data['records'][$key]->id)).">
-                    <i class='fa fa-download' style='font-size:18px;cursor:pointer' data-toggle='tooltip' data-placement='top' title='Download'></i>
-                    </a>
-
-                    <a href='/admin/edit_order/".base64_encode($data['records'][$key]->id)."'>  
-
-                    <i class='fa fa-edit' style='font-size:18px;' data-toggle='tooltip' data-placement='top' title='Edit' id='".$data['records'][$key]->id."'></i></a>&nbsp;
-
-                    <i class='fa fa-trash record_delete'  data-id='".base64_encode($data['records'][$key]->id)."' style='font-size:20px;cursor:pointer' data-url='/admin/order_delete/' data-toggle='tooltip' data-placement='top' title='Delete'  data-id='".base64_encode($data['records'][$key]->id)."' ></i>";
-                    $data['records'][$key]->check="<input type=checkbox class='btn checkbox' id='".$data['records'][$key]->id."' value='' >";
-
-                } 
             }
         $data['table_data']='{"total":'.intval( $data['totalRecords'] ).',"recordsFiltered":'.intval( $data['num_rows'] ).',"rows":'.json_encode($data['records']).'}';
 

@@ -47,47 +47,6 @@ class ProductController extends Controller
 		$data['records']=$result_two;
 		$data['num_rows'] = $result_two->count();
 
-		foreach ($data['records'] as $key => $value)
-		{
-			if($data['records'][$key]->product_image!='')
-			{
-				$product_image = $data['records'][$key]->product_image;
-
-				$data['records'][$key]->product_image="<a href = '".url($product_image)."' download> <img src='".url($product_image)."' style='width:50px;height:50px' class='img_enlarge'></a>";	
-			}
-			else{
-				$data['records'][$key]->product_image="-";	
-			}
-
-			// if($data['records'][$key]->product_details!='')
-			// {
-				
-			// 	$product_details = substr($data['records'][$key]->product_details,0,20);
-			// 	$data['records'][$key]->product_details = '<div data-title="'.$data['records'][$key]->product_details.'">'.$product_details.'...</span>  </div>';
-			// 	#$data['records'][$key]->product_details = substr($data['records'][$key]->product_details,0,10);
-
-			// }
-			// else
-			// {
-			// 	$data['records'][$key]->product_details='-';	
-			// } 
-
-			// if($data['records'][$key]->status=='1')
-			// {
-			// 	$data['records'][$key]->status="<i class='fa fa-close change_status' style='font-size:20px;color:red;cursor:pointer' data-url='/admin/product_change_status/' data-id='".base64_encode($data['records'][$key]->product_id)."' name='status".$data['records'][$key]->product_id."' data-status='status".$data['records'][$key]->product_id."' style=color:red></i>";
-			// }
-			// else{
-			// 	$data['records'][$key]->status="<i class='fa fa-check change_status' style='font-size:20px;color:green;cursor:pointer' aria-hidden='true' data-url='/admin/product_change_status/' data-id='".base64_encode($data['records'][$key]->product_id)."' name='status".$data['records'][$key]->product_id."' data-status='status".$data['records'][$key]->product_id."' class='btn' style=color:green></i>";	
-		
-			// }
-			$data['records'][$key]->check_box="<input type='checkbox'  class='checkbox' onclick='multi_select()'  value='".$data['records'][$key]->product_id."' name='data' style='width:20px;height:20px'>";	
-			
-			$data['records'][$key]->action="<a href='/admin/edit_product/".base64_encode($data['records'][$key]->product_id)."'>
-			<i class='fa fa-edit' style='font-size:18px;' data-toggle='tooltip' data-placement='top' title='Edit' id='".$data['records'][$key]->product_id."'></i></a>&nbsp;
-
-			<i class='fa fa-trash record_delete' style='font-size:20px;cursor:pointer' data-toggle='tooltip' data-placement='top' title='Delete' data-url='/admin/product_delete/' data-id='".base64_encode($data['records'][$key]->product_id)."'></i>";
-			$data['records'][$key]->check="<input type=checkbox class='btn checkbox'id='".$data['records'][$key]->product_id."' value='' >";
-		}
 		$data['table_data']='{"total":'.intval( $data['totalRecords'] ).',"recordsFiltered":'.intval( $data['num_rows'] ).',"rows":'.json_encode($data['records']).'}';
         $data['menu']="cad_list";
 		return ($data['table_data']);
@@ -200,10 +159,10 @@ class ProductController extends Controller
 
 		$image='';
 
-		if($request->file('pdt_img'))
+		if($request->file('product_image'))
 		{
 			$destinationPath = 'uploads/product/'; // upload path
-			$files = $request->file('pdt_img');
+			$files = $request->file('product_image');
 			$profile_path = date('YmdHis') . "." . $files->getClientOriginalExtension();
 			$files->move($destinationPath, $profile_path);
 			$image=$destinationPath.$profile_path;

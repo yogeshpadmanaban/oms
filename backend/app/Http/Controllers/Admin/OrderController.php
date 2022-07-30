@@ -71,6 +71,8 @@ use App\OrderImages;
 	{
 		$data['menu']="order_list";
 		$data['orders']=OrderDetails::where('id',base64_decode($request->id))->first();
+
+		$data['orders']['design_by'] = explode(',',$data['orders']['design_by']);
 		$data['products'] = ProductDetails::where('status','=','0')->get();
 		$data['customers'] = CustomerDetails::where('status','=','0')->get();
 		// $data['cads'] = Cad::where('status','=','0')->get();

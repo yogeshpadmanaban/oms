@@ -43,23 +43,6 @@ class CategoryController extends Controller
 		$data['records']=$result_two;
 		$data['num_rows'] = $result_two->count();
 
-		foreach ($data['records'] as $key => $value)
-		{
-			// if($data['records'][$key]->status=='1')
-			// {
-			// 	$data['records'][$key]->status="<i class='fa fa-close change_status' style='font-size:20px;color:red;cursor:pointer' data-url='/admin/category_change_status/' data-id='".base64_encode($data['records'][$key]->category_id)."' name='status".$data['records'][$key]->category_id."' data-status='status".$data['records'][$key]->category_id."' style=color:red></i>";
-			// }
-			// else{
-			// 	$data['records'][$key]->status="<i class='fa fa-check change_status' style='font-size:20px;color:green;cursor:pointer' aria-hidden='true' data-url='/admin/category_change_status/' data-id='".base64_encode($data['records'][$key]->category_id)."' name='status".$data['records'][$key]->category_id."' data-status='status".$data['records'][$key]->category_id."' class='btn' style=color:green></i>";	
-		
-			// }
-			$data['records'][$key]->check_box="<input type='checkbox' class='checkbox' onclick='multi_select()' value='".$data['records'][$key]->category_id."' name='data' style='width:20px;height:20px'>";	
-			
-			$data['records'][$key]->action=" <i class='fa fa-edit'  onclick='ajx_category_edit(this.id)' style='font-size:18px;cursor:pointer' data-toggle='tooltip' data-placement='top' title='Edit'  id='".base64_encode($data['records'][$key]->category_id)."'></i></a>&nbsp;
-
-			<i class='fa fa-trash record_delete' style='font-size:20px;cursor:pointer' data-toggle='tooltip' data-placement='top' title='Delete' data-url='/admin/category_delete/' data-id='".base64_encode($data['records'][$key]->category_id)."'></i>";
-			$data['records'][$key]->check="<input type=checkbox class='btn'id='".$data['records'][$key]->category_id."' value='' >";
-		}
 		$data['table_data']='{"total":'.intval( $data['totalRecords'] ).',"recordsFiltered":'.intval( $data['num_rows'] ).',"rows":'.json_encode($data['records']).'}';
         $data['menu']="cad_list";
 		return ($data['table_data']);
