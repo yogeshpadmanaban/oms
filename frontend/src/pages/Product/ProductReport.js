@@ -30,7 +30,7 @@ import SearchNotFound from '../../components/SearchNotFound'; // Common Page
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../../sections/@dashboard/productReport'; // Sepearte page
 
 // apiservice
-import { postData, getData } from '../../Services/apiservice';
+import { postData, getData, baseUrl } from '../../Services/apiservice';
 
 import jsPDF from "jspdf";
 
@@ -310,7 +310,7 @@ export default function ProductReport() {
                                                     <TableCell align="left">{name}</TableCell>
                                                     <TableCell component="th" scope="row" padding="none">
                                                         <Stack direction="row" alignItems="center" spacing={2}>
-                                                            <Avatar alt={name} src={product_image} />
+                                                            <Avatar alt={name} src={baseUrl + product_image} />
                                                         </Stack>
                                                     </TableCell>
                                                     <TableCell align="left">{product_details}</TableCell>

@@ -31,7 +31,7 @@ import SearchNotFound from '../../components/SearchNotFound'; // Common Page
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../../sections/@dashboard/orderReport'; // Sepearte page
 
 // apiservice
-import { postData, getorderData } from '../../Services/apiservice';
+import { postData, getorderData, baseUrl } from '../../Services/apiservice';
 
 //css
 import '../common.css';
@@ -349,7 +349,7 @@ export default function OrderReport() {
                                                     {/* <TableCell align="left">{order_details}</TableCell> */}
                                                     <TableCell component="th" scope="row" padding="none">
                                                         <Stack direction="row" alignItems="center" spacing={2}>
-                                                            <Avatar alt={customer_name} src={order_image} />
+                                                            <Avatar alt={customer_name} src={baseUrl + order_image} />
                                                         </Stack>
                                                     </TableCell>
                                                     <TableCell align="left">{delivery_date ? moment(delivery_date).format('YYYY/MM/DD') : '-'}</TableCell>

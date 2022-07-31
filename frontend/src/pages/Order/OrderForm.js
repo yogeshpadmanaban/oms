@@ -36,7 +36,7 @@ export default function OrderForm() {
 
     const [productnameList, setproductnameList] = useState([]);
     const [customernameList, setcustomernameList] = useState([]);
-    const [order_img, set_orderImage] = useState('');
+    const [temp_order_img, set_orderImage] = useState('');
 
     const purity_options = [
         { label: '95', value: '95' },
@@ -56,7 +56,6 @@ export default function OrderForm() {
     ];
 
 
-
     const ustomerformSchema = Yup.object().shape({
 
         id: '',
@@ -74,6 +73,10 @@ export default function OrderForm() {
         order_image: '',
         order_details: '',
 
+        temp_order_img: '',
+        hdn_rdm_order_id: '',
+        hidden_order_count: ''
+
     });
 
     const formik = useFormik({
@@ -90,7 +93,12 @@ export default function OrderForm() {
             design_by: '',
             delivery_date: '',
             order_image: '',
-            order_details: ''
+            order_details: '',
+
+            temp_order_img: '',
+            hdn_rdm_order_id: '',
+            hidden_order_count: ''
+
         },
         validationSchema: ustomerformSchema,
         onSubmit: async (values) => {
@@ -108,7 +116,13 @@ export default function OrderForm() {
             formData.append("design_by", values.design_by);
             formData.append("delivery_date", values.delivery_date);
             formData.append("order_details", values.order_details);
-            formData.append("order_image", values.order_image);
+            // formData.append("order_id", "1098");
+
+            if (values.order_image) {
+                formData.append("order_image", values.order_image);
+            } else {
+                formData.append("temp_order_img", values.temp_order_img);
+            }
 
             let response = await postData('store_order', formData);
             if (response) {
@@ -130,6 +144,7 @@ export default function OrderForm() {
                 if (responseData && responseData.data.orders) {
                     const { id, product_id, customer_id, purity, jc_number, weight,
                         quantity, design_by, delivery_date, order_image, order_details, metal_provided, metal_provided_date, order_due_date } = responseData.data.orders;
+
                     formik.setFieldValue("id", id);
                     formik.setFieldValue("product_id", product_id);
                     formik.setFieldValue("customer_id", customer_id);
@@ -141,12 +156,13 @@ export default function OrderForm() {
                     formik.setFieldValue("weight", weight);
                     formik.setFieldValue("quantity", quantity);
                     formik.setFieldValue("design_by", design_by);
-                    // formik.setFieldValue("design_by", ["cutting", "radium"]);
                     formik.setFieldValue("delivery_date", delivery_date);
                     formik.setFieldValue("order_details", order_details);
-                    formik.setFieldValue("order_image", order_image);
+
+                    formik.setFieldValue("temp_order_img", order_image);
                     setImage("order_image", 'https://api.omsmdu.com/' + order_image);
 
+                    
                 }
             }
         }
@@ -372,8 +388,8 @@ export default function OrderForm() {
                                     />
 
                                     {
-                                        order_img &&
-                                        <img src={order_img}
+                                        temp_order_img &&
+                                        <img src={temp_order_img}
                                             alt={'Other Upload'}
                                             className="img-thumbnail mt-2"
                                             height={200}

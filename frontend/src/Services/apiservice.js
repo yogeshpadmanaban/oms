@@ -6,6 +6,8 @@ const config = {
     headers: { Authorization: `Bearer ${token}` }
 };
 
+export const baseUrl = 'https://api.omsmdu.com/';
+
 let environment = {};
 
 if (window.location.origin === 'https://omsmdu.com') {

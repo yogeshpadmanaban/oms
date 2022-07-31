@@ -30,7 +30,7 @@ import SearchNotFound from '../../components/SearchNotFound'; // Common Page
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../../sections/@dashboard/customerReport'; // Sepearte page
 
 // apiservice
-import { postData, getData } from '../../Services/apiservice';
+import { postData, getData, baseUrl } from '../../Services/apiservice';
 
 import jsPDF from "jspdf";
 
@@ -303,7 +303,7 @@ export default function CustomerReport() {
                           </TableCell>
                           <TableCell component="th" scope="row" padding="none">
                             <Stack direction="row" alignItems="center" spacing={2}>
-                              <Avatar alt={name} src={profile_picture} />
+                              <Avatar alt={name} src={ baseUrl + profile_picture} />
                             </Stack>
                           </TableCell>
                           <TableCell align="left">{name}</TableCell>
@@ -314,7 +314,7 @@ export default function CustomerReport() {
                           <TableCell align="left">{pan_no}</TableCell>
                           <TableCell component="th" scope="row" padding="none">
                             <Stack direction="row" alignItems="center" spacing={2}>
-                              <Avatar alt={name} src={other_upload} />
+                              <Avatar alt={name} src={ baseUrl + other_upload} />
                             </Stack>
                           </TableCell>
                           <TableCell align="left" onClick={() => onstatusChange(customer_id)}>

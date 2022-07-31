@@ -35,7 +35,7 @@ export default function ProductForm() {
     const params = useParams();
 
     const [category, setCategoryList] = useState([]);
-    const [product_image_img, set_product_image_img] = useState('');
+    const [temp_pdf_img, set_product_image_img] = useState('');
 
     const radioOptions = [
         { label: 'Vigat Product', value: 'Vigat Product' },
@@ -49,6 +49,7 @@ export default function ProductForm() {
         category: Yup.string().required('Product category is required'),
         name: Yup.string().required('Name is required'),
         product_image: '',
+        temp_pdf_img: '',
         product_details: ''
     });
 
@@ -59,6 +60,7 @@ export default function ProductForm() {
             category: '',
             name: '',
             product_image: '',
+            temp_pdf_img: '',
             product_details: ''
         },
         validationSchema: ustomerformSchema,
@@ -70,8 +72,12 @@ export default function ProductForm() {
             formData.append("name", values.name);
             formData.append("category", values.category);
             formData.append("product_details", values.product_details);
-            formData.append("product_image", values.product_image);
 
+            if (values.product_image) {
+                formData.append("product_image", values.product_image);
+            } else {
+                formData.append("temp_pdf_img", values.temp_pdf_img);
+            }
             let response = await postData('store_product', formData);
             console.log(response, 'response');
             if (response) {
@@ -97,7 +103,8 @@ export default function ProductForm() {
                     formik.setFieldValue("category", category);
                     formik.setFieldValue("name", name);
                     formik.setFieldValue("product_details", product_details);
-                    formik.setFieldValue("product_image", product_image);
+                    
+                    formik.setFieldValue("temp_pdf_img", product_image);
                     setImage("product_image", 'https://api.omsmdu.com/' + product_image);
                 }
             }
@@ -216,8 +223,8 @@ export default function ProductForm() {
                                     />
 
                                     {
-                                        product_image_img &&
-                                        <img src={product_image_img}
+                                        temp_pdf_img &&
+                                        <img src={temp_pdf_img}
                                             alt={'Product Image'}
                                             className="img-thumbnail mt-2"
                                             height={200}

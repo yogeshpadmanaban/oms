@@ -75,6 +75,7 @@ function CategoryModal({ open, handleClose, getRecord, oneditedId }) {
             getRecord(); // Record Get
 
             let response = await postData('store_category', values);
+            console.log("response", response);
             if (response.status === 200) {
                 handleClose(); // Modal close
                 resetForm(); // Reset form

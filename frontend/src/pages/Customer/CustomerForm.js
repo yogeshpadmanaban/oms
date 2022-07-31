@@ -31,12 +31,13 @@ export default function CustomerForm() {
     const navigate = useNavigate();
     const params = useParams();
 
-    const [profile_picture_img, set_profile_picture_img] = useState('');
-    const [other_upload_img, set_other_upload_img] = useState('');
+    const [temp_profile_picture, set_profile_picture_img] = useState('');
+    const [temp_other_upload, set_other_upload_img] = useState('');
 
     const ustomerformSchema = Yup.object().shape({
         customer_id: '',
         profile_picture: '',
+        temp_profile_picture: '',
         name: Yup.string().required('Customer Name is requried'),
         address: '',
         city: '',
@@ -44,6 +45,7 @@ export default function CustomerForm() {
         gst_no: '',
         pan_no: '',
         other_upload: '',
+        temp_other_upload: ''
     });
 
 
@@ -51,27 +53,39 @@ export default function CustomerForm() {
         initialValues: {
             customer_id: '',
             profile_picture: '',
-            name: '', 
+            temp_profile_picture: '',
+            name: '',
             address: '',
             city: '',
             state: '',
             gst_no: '',
             pan_no: '',
-            other_upload: ''
+            other_upload: '',
+            temp_other_upload: ''
         },
         validationSchema: ustomerformSchema,
         onSubmit: async (values) => {
 
             let formData = new FormData();
             formData.append("customer_id", values.customer_id);
-            formData.append("profile_picture", values.profile_picture);
             formData.append("name", values.name);
             formData.append("address", values.address);
             formData.append("city", values.city);
             formData.append("state", values.state);
             formData.append("gst_no", values.gst_no);
             formData.append("pan_no", values.pan_no);
-            formData.append("other_upload", values.other_upload);
+
+            if (values.profile_picture) {
+                formData.append("profile_picture", values.profile_picture);
+            } else {
+                formData.append("temp_profile_picture", values.temp_profile_picture);
+            }
+
+            if (values.other_upload) {
+                formData.append("other_upload", values.other_upload);
+            } else {
+                formData.append("temp_other_upload", values.temp_other_upload);
+            }
 
             let response = await postData('store_customer', formData);
             if (response) {
@@ -98,10 +112,12 @@ export default function CustomerForm() {
                     formik.setFieldValue("state", state);
                     formik.setFieldValue("gst_no", gst_no);
                     formik.setFieldValue("pan_no", pan_no);
-                    formik.setFieldValue("profile_picture", profile_picture);
-                    formik.setFieldValue("other_upload", other_upload);
+
+                    formik.setFieldValue("temp_profile_picture", profile_picture);
+                    formik.setFieldValue("temp_other_upload", other_upload);
                     setImage("profile_picture", 'https://api.omsmdu.com/' + profile_picture);
                     setImage("other_upload", 'https://api.omsmdu.com/' + other_upload);
+
                 }
             }
         }
@@ -157,8 +173,8 @@ export default function CustomerForm() {
                                     />
 
                                     {
-                                        profile_picture_img &&
-                                        <img src={profile_picture_img}
+                                        temp_profile_picture &&
+                                        <img src={temp_profile_picture}
                                             alt={'Profile Picture'}
                                             className="img-thumbnail mt-2"
                                             height={200}
@@ -237,8 +253,8 @@ export default function CustomerForm() {
                                     />
 
                                     {
-                                        other_upload_img &&
-                                        <img src={other_upload_img}
+                                        temp_other_upload &&
+                                        <img src={temp_other_upload}
                                             alt={'Other Upload'}
                                             className="img-thumbnail mt-2"
                                             height={200}
