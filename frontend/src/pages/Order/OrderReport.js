@@ -354,9 +354,9 @@ export default function OrderReport() {
                                                     </TableCell>
                                                     <TableCell align="left">{delivery_date ? moment(delivery_date).format('YYYY/MM/DD') : '-'}</TableCell>
                                                     <TableCell align="left">{metal_status === '1' ? 'Yes' : 'No'}</TableCell>
-                                                    <TableCell align="left">{moment(metal_status_date).format('YYYY/MM/DD')}
+                                                    <TableCell align="left">{metal_status_date ? moment(metal_status_date).format('YYYY/MM/DD') : '-'}
                                                     </TableCell>
-                                                    <TableCell align="left">{moment(order_due_date).format('YYYY/MM/DD')}
+                                                    <TableCell align="left">{order_due_date ? moment(order_due_date).format('YYYY/MM/DD') : '-'}
                                                     </TableCell>
                                                     <TableCell align="left" onClick={() => onstatusChange(id)}>
                                                         <Iconify

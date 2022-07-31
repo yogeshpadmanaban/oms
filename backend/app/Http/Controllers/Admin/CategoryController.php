@@ -155,7 +155,7 @@ class CategoryController extends Controller
 		];
 
 		$res = CategoryDetails::updateOrCreate(['category_id'=>$category_id],$category_data); 
-		// Session::flash('session_msg','Category data updated successfully!');
+		$res['message'] = 'Category data updated successfully!';
 		return $res;	
 	}
 }

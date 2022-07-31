@@ -245,7 +245,7 @@ class CustomerController extends Controller
 		];
 
 		$res = CustomerDetails::updateOrCreate(['customer_id'=>$customer_id],$customer_data); 
-		// Session::flash('session_msg','Customer data updated successfully!');
+		$res['message'] = 'Customer data updated successfully!';
 		return $res;	
 	}
 }

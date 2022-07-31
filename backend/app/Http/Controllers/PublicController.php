@@ -211,11 +211,8 @@ class PublicController extends Controller
         }
 
         $res = OrderDetails::updateOrCreate(['id'=>$id],$order_data); 
-
-        // dd($res);
-        // Session::flash('session_msg','Order data updated successfully!');
+		$res['message'] = 'Order data updated successfully!';
         return $res;   
-    
     }
 
     public function randomPassword() {

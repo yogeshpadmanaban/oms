@@ -185,7 +185,7 @@ class ProductController extends Controller
 		];
 
 		$res = ProductDetails::updateOrCreate(['product_id'=>$product_id],$product_data); 
-		// Session::flash('session_msg','Product data updated successfully!');
+		$res['message'] = 'Product data updated successfully!';
 		return $res;
 	
 	}
