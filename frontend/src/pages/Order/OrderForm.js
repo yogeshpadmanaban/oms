@@ -97,7 +97,7 @@ export default function OrderForm() {
 
             temp_order_img: '',
             hdn_rdm_order_id: '',
-            hidden_order_count: ''
+            hidden_order_count: 1
 
         },
         validationSchema: ustomerformSchema,
@@ -116,7 +116,7 @@ export default function OrderForm() {
             formData.append("design_by", values.design_by);
             formData.append("delivery_date", values.delivery_date);
             formData.append("order_details", values.order_details);
-            // formData.append("order_id", "1098");
+            formData.append("hidden_order_count", values.hidden_order_count);
 
             if (values.order_image) {
                 formData.append("order_image", values.order_image);
@@ -143,7 +143,7 @@ export default function OrderForm() {
                 let responseData = await getData(url);
                 if (responseData && responseData.data.orders) {
                     const { id, product_id, customer_id, purity, jc_number, weight,
-                        quantity, design_by, delivery_date, order_image, order_details, metal_provided, metal_provided_date, order_due_date } = responseData.data.orders;
+                        quantity, design_by, delivery_date, order_image, order_details, metal_provided, metal_provided_date, order_due_date, order_id } = responseData.data.orders;
 
                     formik.setFieldValue("id", id);
                     formik.setFieldValue("product_id", product_id);
@@ -159,6 +159,7 @@ export default function OrderForm() {
                     formik.setFieldValue("delivery_date", delivery_date);
                     formik.setFieldValue("order_details", order_details);
 
+                    // formik.setFieldValue("hdn_rdm_order_id", order_id);
                     formik.setFieldValue("temp_order_img", order_image);
                     setImage("order_image", 'https://api.omsmdu.com/' + order_image);
 

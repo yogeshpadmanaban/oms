@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 // @mui
 import { alpha } from '@mui/material/styles';
 import { MenuItem, Avatar, IconButton } from '@mui/material';
@@ -53,7 +53,8 @@ export default function AccountPopover() {
     setOpen(null);
     let response = await postData('logout', { authToken: token });
     if (response.status === 200) {
-      localStorage.removeItem("token", response.data.token);
+      // localStorage.removeItem("token", response.data.token);
+      localStorage.clear();
       toast.success("logout Successfully");
       navigate('/admin/login', { replace: true });
     } else {
