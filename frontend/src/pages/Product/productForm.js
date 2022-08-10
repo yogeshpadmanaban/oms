@@ -14,7 +14,7 @@ import { Stack, Card, Container, TextField, Typography, Button } from '@mui/mate
 import Page from '../../components/Page';
 
 // Serive
-import { postData, getData } from '../../Services/apiservice';
+import { postData, getData, baseUrl } from '../../Services/apiservice';
 import { toast } from 'react-toastify';
 
 
@@ -35,7 +35,7 @@ export default function ProductForm() {
     const params = useParams();
 
     const [category, setCategoryList] = useState([]);
-    const [temp_pdf_img, set_product_image_img] = useState('');
+    const [temp_pdt_img, set_product_image_img] = useState('');
 
     const radioOptions = [
         { label: 'Vigat Product', value: 'Vigat Product' },
@@ -49,7 +49,7 @@ export default function ProductForm() {
         category: Yup.string().required('Product category is required'),
         name: Yup.string().required('Name is required'),
         product_image: '',
-        temp_pdf_img: '',
+        temp_pdt_img: '',
         product_details: ''
     });
 
@@ -60,7 +60,7 @@ export default function ProductForm() {
             category: '',
             name: '',
             product_image: '',
-            temp_pdf_img: '',
+            temp_pdt_img: '',
             product_details: ''
         },
         validationSchema: ustomerformSchema,
@@ -76,7 +76,7 @@ export default function ProductForm() {
             if (values.product_image) {
                 formData.append("product_image", values.product_image);
             } else {
-                formData.append("temp_pdf_img", values.temp_pdf_img);
+                formData.append("temp_pdt_img", values.temp_pdt_img);
             }
             let response = await postData('store_product', formData);
             console.log(response, 'response');
@@ -104,8 +104,8 @@ export default function ProductForm() {
                     formik.setFieldValue("name", name);
                     formik.setFieldValue("product_details", product_details);
                     
-                    formik.setFieldValue("temp_pdf_img", product_image);
-                    setImage("product_image", 'https://api.omsmdu.com/' + product_image);
+                    formik.setFieldValue("temp_pdt_img", product_image);
+                    setImage("product_image", baseUrl + product_image);
                 }
             }
         }
@@ -223,8 +223,8 @@ export default function ProductForm() {
                                     />
 
                                     {
-                                        temp_pdf_img &&
-                                        <img src={temp_pdf_img}
+                                        temp_pdt_img &&
+                                        <img src={temp_pdt_img}
                                             alt={'Product Image'}
                                             className="img-thumbnail mt-2"
                                             height={200}

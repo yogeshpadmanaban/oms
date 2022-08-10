@@ -144,11 +144,11 @@ class ProductController extends Controller
 		$product_name = $request->pdt_name;
 		$product_id = $request->product_id;
 		$result=ProductDetails::select('name')->where('name',$product_name)	
-							->when($product_id != "", function($result) use ($product_id){
+								->when($product_id != "", function($result) use ($product_id){
 								return $result->where('product_id','!=',$product_id);
-							})
-							->where('status','!=','2')
-							->exists();
+								})
+								->where('status','!=','2')
+								->exists();
 		echo $result;
 	}
 
@@ -170,8 +170,7 @@ class ProductController extends Controller
 
 		if($product_id!='')	
 		{
-			if(($request['temp_pdt_img']!='')&&($image==''))
-			{	
+			if(($request['temp_pdt_img']!='')&&($image=='')){	
 				$image=$request['temp_pdt_img'];
 			}
 		}

@@ -30,17 +30,14 @@ class PublicController extends Controller
         $info = pathinfo($file);
         $info['extension'] = strtolower($info['extension']);
 
-
-        if($info['extension'] == 'pdf')
-        {
+        if($info['extension'] == 'pdf'){
             $name = $folder.'.pdf';
             header("Content-type: application/pdf"); 
             header("Content-Length: " . filesize($file)); 
             // Send the file to the browser. 
             readfile($file); 
         }
-        else if($info['extension'] == 'docx')
-        {
+        else if($info['extension'] == 'docx'){
             $name = $folder.'.docx';
         }
 
@@ -119,8 +116,8 @@ class PublicController extends Controller
     public function store(Request $request)
     {
         $id = $request->input('id');    
-        // $user_id = session()->get('sess_arr')['user_id'];
-        // $user_role = session()->get('sess_arr')['user_role'];
+        $user_id = '';
+        $user_role = '';
         $user_status = '';
         $pdt_id = $request->input('product_id');
         $user_status = '0';
@@ -131,31 +128,25 @@ class PublicController extends Controller
         //     $user_status = '1';
         // }
 
-        if($id!='') 
-        {   
-            if(($request['temp_order_img']!='')&&($image==''))
-            {   
+        if($id!='') {   
+            if(($request['temp_order_img']!='')&&($image=='')){   
                 $image=$request['temp_order_img'];
             }
         }
 
-        if($request->input('hdn_rdm_oder_id')!='')
-        {
+        if($request->input('hdn_rdm_oder_id')!=''){
             $rdm_order_id=$request->input('hdn_rdm_oder_id');
         }
-        else
-        {
+        else{
             $rdm_order_id=self::randomPassword();
         }
 
-        if(!empty($request->input('hidden_order_count')))
-        {
+        if(!empty($request->input('hidden_order_count'))){
             for($i=1;$i<$request->input('hidden_order_count');$i++) {
                
                 $array = ['order_id'=>$rdm_order_id, 'order_creator_id'=> $user_id, 'order_creator_role'=> $user_role, 'order_image'=>NULL]; 
 
-                if($request->file('order_image'.$i)!='')
-                {
+                if($request->file('order_image'.$i)!=''){
                     $destinationPath = 'uploads/order/'; // upload path
                     $files = $request->file('order_image'.$i);
                     $profile_path = uniqid() . '_' . trim($files->getClientOriginalName());
@@ -164,13 +155,11 @@ class PublicController extends Controller
                     $array['order_image'] = $order_img_name;
                 }
 
-                if($request->input('hidden_order_img'.$i)!='' && $request->file('order_image'.$i)=='')
-                {
+                if($request->input('hidden_order_img'.$i)!='' && $request->file('order_image'.$i)==''){
                     $array['order_image'] = $request->input('hidden_order_img'.$i) ?? $value;
                 }
                              
-                if(isset($array['order_image']) && $array['order_image'] != "")
-                {
+                if(isset($array['order_image']) && $array['order_image'] != ""){
                     array_push($image, $array); 
                 }
             }
@@ -202,8 +191,7 @@ class PublicController extends Controller
         ];
 
 
-        if(!empty($image))
-        {
+        if(!empty($image)){
             OrderImages::where('order_creator_id', $user_id)->where('order_id',  $order_data['order_id'])->delete();
             foreach ($image as $key => $value) {
                 OrderImages::insert($value);
@@ -220,7 +208,7 @@ class PublicController extends Controller
         $number = 00000;
         $number++;
         $last_id = '';
-        if (OrderDetails::exists()) {
+        if (OrderDetails::exists()){
             $last_id = OrderDetails::orderBy('id', 'desc')
                                     ->withTrashed()
                                     ->first()

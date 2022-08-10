@@ -98,8 +98,7 @@ class CategoryController extends Controller
 	{
 		$data = json_decode(stripslashes($data));
 		$data_len=count($data);
-		for($i=0; $i<$data_len; $i++)
-		{
+		for($i=0; $i<$data_len; $i++){
 			$row_data=CategoryDetails::find($data[$i]);
 			$row_data->status='2';
 			$row_data->save();
@@ -116,8 +115,7 @@ class CategoryController extends Controller
 	{
 		$data = json_decode(stripslashes($data));
 		$data_len=count($data);
-		for($i=0; $i<$data_len; $i++)
-		{
+		for($i=0; $i<$data_len; $i++){
 			$category_status=CategoryDetails::find($data[$i]);
 			if($category_status->status=='1')
 				$status='0';
@@ -137,7 +135,9 @@ class CategoryController extends Controller
 	public function category_name_check(Request $request){
 		$category_name = $request->category_name;
 		$category_id = $request->category_id;
-		$result=CategoryDetails::select('category_name')->where('category_name',$category_name)										->when($category_id != "", function($result) use ($category_id){
+		$result=CategoryDetails::select('category_name')
+								->where('category_name',$category_name)										
+								->when($category_id != "", function($result) use ($category_id){
 									return $result->where('category_id','!=',$category_id);
 								})
 								->where('status','!=','2')

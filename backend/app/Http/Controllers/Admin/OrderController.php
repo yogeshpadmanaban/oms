@@ -115,8 +115,7 @@ use App\OrderImages;
 	{
 		$data = json_decode(stripslashes($data));
 		$data_len=count($data);
-		for($i=0; $i<$data_len; $i++)
-		{
+		for($i=0; $i<$data_len; $i++){
 			$row_data=OrderDetails::find($data[$i]);
 			$row_data->status='2';
 			$row_data->save();
@@ -133,8 +132,7 @@ use App\OrderImages;
 	{
 		$data = json_decode(stripslashes($data));
 		$data_len=count($data);
-		for($i=0; $i<$data_len; $i++)
-		{
+		for($i=0; $i<$data_len; $i++){
 			$product_status=OrderDetails::find($data[$i]);
 			if($product_status->status=='1')
 				$status='0';

@@ -42,44 +42,6 @@ class CustomerController extends Controller
 		$data['records']=$result_two;
 		$data['num_rows'] = $result_two->count();
 
-		foreach ($data['records'] as $key => $value)
-		{
-			$profile_picture = "assets/images/dummy-profile-image.png";
-			$file_name = "";
-
-			if($data['records'][$key]->profile_picture!='')
-			{
-				$profile_picture = $data['records'][$key]->profile_picture;
-			}
-
-			if($data['records'][$key]->other_upload!=''){
-
-				$file_name_arr = explode('/',$data['records'][$key]->other_upload);
-				$file_name = end($file_name_arr);
-
-				$finfo = pathinfo($data['records'][$key]->other_upload);
-
-				$other_upload = '';
-
-				if($finfo['extension'] == 'pdf')
-				{
-					$other_upload = 'assets/images/pdf-file.svg';
-				}
-				if($finfo['extension'] == 'docx')	
-				{
-					$other_upload = 'assets/images/doc-file.svg';
-				}
-
-				$data['records'][$key]->other_upload=$other_upload;
-
-			}
-			else{
-				$data['records'][$key]->other_upload="-";	
-
-			}	
-
-			$data['records'][$key]->profile_picture=$profile_picture;	
-		}
 		$data['table_data']='{"total":'.intval( $data['totalRecords'] ).',"recordsFiltered":'.intval( $data['num_rows'] ).',"rows":'.json_encode($data['records']).'}';
         $data['menu']="product_list";
 
@@ -136,8 +98,7 @@ class CustomerController extends Controller
 	{
 		$data = json_decode(stripslashes($data));
 		$data_len=count($data);
-		for($i=0; $i<$data_len; $i++)
-		{
+		for($i=0; $i<$data_len; $i++){
 			$row_data=CustomerDetails::find($data[$i]);
 			$row_data->status='2';
 			$row_data->save();
@@ -154,8 +115,7 @@ class CustomerController extends Controller
 	{
 		$data = json_decode(stripslashes($data));
 		$data_len=count($data);
-		for($i=0; $i<$data_len; $i++)
-		{
+		for($i=0; $i<$data_len; $i++){
 			$customer_id = CustomerDetails::find($data[$i]);
 			if($customer_id->status=='1')
 				$status='0';
@@ -203,8 +163,7 @@ class CustomerController extends Controller
 
 		$image=$other_upl=null;
 
-		if($request->file('profile_picture'))
-		{
+		if($request->file('profile_picture')){
 			$destinationPath = 'uploads/customer/profile_picture/'; // upload path
 			$files = $request->file('profile_picture');
 			$profile_path = date('YmdHis') . "." . $files->getClientOriginalExtension();
@@ -212,8 +171,7 @@ class CustomerController extends Controller
 			$image=$destinationPath.$profile_path;
 		}
 	
-		if($request->file('other_upload'))
-		{
+		if($request->file('other_upload')){
 			$destinationPath = 'uploads/customer/other_upload/'; // upload path
 			$files = $request->file('other_upload');
 			$other_upload_path = date('YmdHis') . "." . $files->getClientOriginalExtension();
@@ -221,14 +179,11 @@ class CustomerController extends Controller
 			$other_upl=$destinationPath.$other_upload_path;
 		}
 
-		if($customer_id!='')	
-		{
-			if(($request['temp_profile_picture']!='')&&($image==''))
-			{	
+		if($customer_id!=''){
+			if(($request['temp_profile_picture']!='')&&($image=='')){	
 				$image=$request['temp_profile_picture'];
 			}
-			if(($request['temp_other_upload']!='')&&($other_upl==''))
-			{
+			if(($request['temp_other_upload']!='')&&($other_upl=='')){
 				$other_upl=$request['temp_other_upload'];
 			}
 		}

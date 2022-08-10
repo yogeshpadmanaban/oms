@@ -15,7 +15,7 @@ import { Stack, Card, Container, TextField, Typography, Button } from '@mui/mate
 import Page from '../../components/Page';
 
 // Serive
-import { postData, getData } from '../../Services/apiservice';
+import { postData, getData, baseUrl} from '../../Services/apiservice';
 import { toast } from 'react-toastify';
 
 // ----------------------------------------------------------------------
@@ -115,8 +115,8 @@ export default function CustomerForm() {
 
                     formik.setFieldValue("temp_profile_picture", profile_picture);
                     formik.setFieldValue("temp_other_upload", other_upload);
-                    setImage("profile_picture", 'https://api.omsmdu.com/' + profile_picture);
-                    setImage("other_upload", 'https://api.omsmdu.com/' + other_upload);
+                    setImage("profile_picture", baseUrl + profile_picture);
+                    setImage("other_upload", baseUrl + other_upload);
 
                 }
             }
