@@ -42,8 +42,10 @@ export default function CustomerForm() {
         address: '',
         city: '',
         state: '',
-        gst_no: '',
-        pan_no: '',
+        gst_no: Yup.string().matches(/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/,
+            "Invalid Gst Number"),
+        pan_no: Yup.string().matches(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/,
+            "Invalid Pan Number"),
         other_upload: '',
         temp_other_upload: ''
     });
@@ -115,8 +117,12 @@ export default function CustomerForm() {
 
                     formik.setFieldValue("temp_profile_picture", profile_picture);
                     formik.setFieldValue("temp_other_upload", other_upload);
-                    setImage("profile_picture", baseUrl + profile_picture);
-                    setImage("other_upload", baseUrl + other_upload);
+                    if (profile_picture) {
+                        setImage("profile_picture", baseUrl + profile_picture);
+                    }
+                    if (other_upload) {
+                        setImage("other_upload", baseUrl + other_upload);
+                    }
 
                 }
             }
@@ -125,12 +131,24 @@ export default function CustomerForm() {
     }, []);
 
     const onfileupload = async (name, value) => {
-        formik.setFieldValue(name, value);
-        let reader = new FileReader();
-        reader.onloadend = () => {
-            setImage(name, reader.result);
-        };
-        reader.readAsDataURL(value);
+        
+        if (value.size > 2000000) {
+            toast.error("Max upload 2 Mb");
+            return;
+        }
+
+        if (value.type === "image/png" || value.type === "image/jpeg") {
+            formik.setFieldValue(name, value);
+            let reader = new FileReader();
+            reader.onloadend = () => {
+                setImage(name, reader.result);
+            };
+            reader.readAsDataURL(value);
+        } 
+
+        else {
+            toast.error("Invalid File Format");
+        }
 
     }
 
@@ -251,7 +269,7 @@ export default function CustomerForm() {
                                         error={Boolean(touched.other_upload && errors.other_upload)}
                                         helperText={touched.other_upload && errors.other_upload}
                                     />
-
+                                    
                                     {
                                         temp_other_upload &&
                                         <img src={temp_other_upload}

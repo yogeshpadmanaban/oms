@@ -161,9 +161,11 @@ export default function OrderForm() {
 
                     // formik.setFieldValue("hdn_rdm_order_id", order_id);
                     formik.setFieldValue("temp_order_img", order_image);
-                    setImage("order_image", 'https://api.omsmdu.com/' + order_image);
+                    if (order_image) {
+                        setImage("order_image", 'https://api.omsmdu.com/' + order_image);
+                    }
 
-                    
+
                 }
             }
         }
@@ -196,12 +198,24 @@ export default function OrderForm() {
 
 
     const onfileupload = async (name, value) => {
-        formik.setFieldValue(name, value);
-        let reader = new FileReader();
-        reader.onloadend = () => {
-            setImage(name, reader.result);
-        };
-        reader.readAsDataURL(value);
+
+        if (value.size > 2000000) {
+            toast.error("Max upload 2 Mb");
+            return;
+        }
+
+        if (value.type === "image/png" || value.type === "image/jpeg") {
+            formik.setFieldValue(name, value);
+            let reader = new FileReader();
+            reader.onloadend = () => {
+                setImage(name, reader.result);
+            };
+            reader.readAsDataURL(value);
+        }
+
+        else {
+            toast.error("Invalid File Format");
+        }
 
     }
 
@@ -323,7 +337,7 @@ export default function OrderForm() {
 
                                     <TextField
                                         fullWidth
-                                        type="text"
+                                        type="number"
                                         label="Jc Number"
                                         {...getFieldProps('jc_number')}
                                         error={Boolean(touched.jc_number && errors.jc_number)}
@@ -332,7 +346,7 @@ export default function OrderForm() {
 
                                     <TextField
                                         fullWidth
-                                        type="text"
+                                        type="number"
                                         label="Weight"
                                         {...getFieldProps('weight')}
                                         error={Boolean(touched.jc_number && errors.jc_number)}
@@ -342,7 +356,7 @@ export default function OrderForm() {
 
                                     <TextField
                                         fullWidth
-                                        type="text"
+                                        type="number"
                                         label="Quantity"
                                         {...getFieldProps('quantity')}
                                         error={Boolean(touched.quantity && errors.quantity)}

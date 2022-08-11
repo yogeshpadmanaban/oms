@@ -103,9 +103,11 @@ export default function ProductForm() {
                     formik.setFieldValue("category", category);
                     formik.setFieldValue("name", name);
                     formik.setFieldValue("product_details", product_details);
-                    
+
                     formik.setFieldValue("temp_pdt_img", product_image);
-                    setImage("product_image", baseUrl + product_image);
+                    if (product_image) {
+                        setImage("product_image", baseUrl + product_image);
+                    }
                 }
             }
         }
@@ -126,12 +128,23 @@ export default function ProductForm() {
     }
 
     const onfileupload = async (name, value) => {
-        formik.setFieldValue(name, value);
-        let reader = new FileReader();
-        reader.onloadend = () => {
-            setImage(name, reader.result);
-        };
-        reader.readAsDataURL(value);
+
+        if (value.size > 2000000) {
+            toast.error("Max upload 2 Mb");
+            return;
+        }
+
+        if (value.type === "image/png" || value.type === "image/jpeg") {
+            formik.setFieldValue(name, value);
+            let reader = new FileReader();
+            reader.onloadend = () => {
+                setImage(name, reader.result);
+            };
+            reader.readAsDataURL(value);
+        }
+        else {
+            toast.error("Invalid File Format");
+        }
 
     }
 
