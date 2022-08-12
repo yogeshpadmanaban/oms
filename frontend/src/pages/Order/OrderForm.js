@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Link as RouterLink, useNavigate, useParams } from 'react-router-dom';
 import { useFormik, Form, FormikProvider, Field } from 'formik';
 import { LoadingButton } from '@mui/lab';
@@ -33,6 +33,7 @@ export default function OrderForm() {
 
     const navigate = useNavigate();
     const params = useParams();
+    const fileRef = useRef();
 
     const [productnameList, setproductnameList] = useState([]);
     const [customernameList, setcustomernameList] = useState([]);
@@ -55,7 +56,6 @@ export default function OrderForm() {
         { label: 'Cutting', value: 'cutting' },
     ];
 
-
     const ustomerformSchema = Yup.object().shape({
 
         id: '',
@@ -71,6 +71,7 @@ export default function OrderForm() {
         design_by: '',
         delivery_date: '',
         order_image: '',
+        files:'',
         order_details: '',
 
         temp_order_img: '',
@@ -81,6 +82,7 @@ export default function OrderForm() {
 
     const formik = useFormik({
         initialValues: {
+
             product_id: '',
             customer_id: '',
             purity: '',
@@ -92,6 +94,7 @@ export default function OrderForm() {
             quantity: '',
             design_by: '',
             delivery_date: '',
+            files:'',
             order_image: '',
             order_details: '',
 
@@ -388,7 +391,13 @@ export default function OrderForm() {
                                         helperText={touched.delivery_date && errors.delivery_date}
                                     />
 
-
+                                    <Field
+                                        innerRef={fileRef}
+                                        name="files"
+                                        type="file"
+                                        multiple
+                                    />
+                                   
                                     <TextField
                                         fullWidth
                                         type="file"
@@ -434,6 +443,7 @@ export default function OrderForm() {
                                 </Stack>
                             </Form>
                         </FormikProvider>
+                        <button onClick={() => (fileRef.current.value = null)}>Clear</button>
                     </Card>
                 </Container>
             </RootStyle>
