@@ -37,7 +37,9 @@ export default function OrderForm() {
 
     const [productnameList, setproductnameList] = useState([]);
     const [customernameList, setcustomernameList] = useState([]);
-    const [temp_order_img, set_orderImage] = useState('');
+    const [temp_order_img, set_orderImage] = useState([]);
+
+    var array = [];
 
     const purity_options = [
         { label: '95', value: '95' },
@@ -72,7 +74,7 @@ export default function OrderForm() {
         design_by: '',
         delivery_date: '',
         order_image: '',
-        files:'',
+        files: '',
         order_details: '',
 
         temp_order_img: '',
@@ -96,7 +98,7 @@ export default function OrderForm() {
             quantity: '',
             design_by: '',
             delivery_date: '',
-            files:'',
+            files: '',
             order_image: '',
             order_details: '',
 
@@ -204,25 +206,43 @@ export default function OrderForm() {
 
     const onfileupload = async (name, value) => {
 
-        if (value.size > 2000000) {
-            toast.error("Max upload 2 Mb");
-            return;
-        }
+        console.log("value", value);
 
-        if (value.type === "image/png" || value.type === "image/jpeg") {
+        if (value && value.length > 0) {
             formik.setFieldValue(name, value);
-            let reader = new FileReader();
-            reader.onloadend = () => {
-                setImage(name, reader.result);
-            };
-            reader.readAsDataURL(value);
+            let array = [];
+            for (let i = 0; i < value.length; i++) {
+                let data = value[i];
+                let reader = new FileReader();
+                reader.onloadend = () => {
+                    array.push(reader.result);
+                    if (i + 1 == value.length) {
+                        setImage(name, array);
+                    }
+                };
+                reader.readAsDataURL(data);
+            }
         }
-
-        else {
-            toast.error("Invalid File Format");
-        }
-
     }
+
+    // if (value.size > 2000000) {
+    //     toast.error("Max upload 2 Mb");
+    //     return;
+    // }
+
+    // if (value.type === "image/png" || value.type === "image/jpeg") {
+    //     formik.setFieldValue(name, value);
+    //     let reader = new FileReader();
+    //     reader.onloadend = () => {
+    //         setImage(name, reader.result);
+    //     };
+    //     reader.readAsDataURL(value);
+    // }
+
+    // else {
+    //     toast.error("Invalid File Format");
+    // }
+
 
     const setImage = async (fieldName, image) => {
         if (fieldName === 'order_image') {
@@ -392,8 +412,24 @@ export default function OrderForm() {
                                         error={Boolean(touched.delivery_date && errors.delivery_date)}
                                         helperText={touched.delivery_date && errors.delivery_date}
                                     />
+<<<<<<< HEAD
                                    
                                     <TextField
+=======
+
+                                    <Field
+                                        innerRef={fileRef}
+                                        name="order_image"
+                                        type="file"
+                                        // label="Upload Order Image"
+                                        multiple
+                                        onChange={(event) => {
+                                            onfileupload("order_image", Array.from(event.target.files));
+                                        }}
+                                    />
+
+                                    {/* <TextField
+>>>>>>> 963d5f7b2bed463a0599c8f6a47405b4896cbd42
                                         fullWidth
                                         type="file"
                                         label="Upload Order Image"
@@ -404,8 +440,9 @@ export default function OrderForm() {
                                         }}
                                         error={Boolean(touched.order_image && errors.order_image)}
                                         helperText={touched.order_image && errors.order_image}
-                                    />
+                                    /> */}
 
+                                    {/* {temp_order_img}
                                     {
                                         temp_order_img &&
                                         <img src={temp_order_img}
@@ -413,7 +450,7 @@ export default function OrderForm() {
                                             className="img-thumbnail mt-2"
                                             height={200}
                                             width={300} />
-                                    }
+                                    } */}
 
                                     <TextField
                                         fullWidth
@@ -437,6 +474,10 @@ export default function OrderForm() {
                                 </Stack>
                             </Form>
                         </FormikProvider>
+<<<<<<< HEAD
+=======
+                        {/* <button onClick={() => (fileRef.current.value = null)}>Clear</button> */}
+>>>>>>> 963d5f7b2bed463a0599c8f6a47405b4896cbd42
                     </Card>
                 </Container>
             </RootStyle>
