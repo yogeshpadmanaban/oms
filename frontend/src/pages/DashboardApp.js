@@ -46,7 +46,7 @@ export default function DashboardApp() {
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Order Report" path="/admin/order_report" total={count && count.user_count && count.user_count} color="error" icon={'ant-design:user-switch-outlined'} />
+            <AppWidgetSummary title="Order Report" path="/admin/order_report" total={count && count.tot_orders && count.tot_orders} color="error" icon={'ant-design:user-switch-outlined'} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
@@ -54,7 +54,7 @@ export default function DashboardApp() {
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Category Report" path="/admin/category_report" total={count && count.tot_orders && count.tot_orders} color="info" icon={'bx:category-alt'} />
+            <AppWidgetSummary title="Category Report" path="/admin/category_report" total={count && count.tot_category && count.tot_category} color="info" icon={'bx:category-alt'} />
           </Grid>
 
         </Grid>

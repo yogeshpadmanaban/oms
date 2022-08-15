@@ -80,18 +80,15 @@ class OrderDetails extends Model
 
         $result_two= DB::table('order_details',  'od')
 
-            ->select('od.*','cat.category_name', 'pd.name','pd.category','pd.product_type','pd.product_image','cd.name as customer_name','cad.cad_name','cad.status as cad_user_status')
+            ->select('od.*','cat.category_name', 'pd.name','pd.category','pd.product_type','pd.product_image','cd.name as customer_name')
             ->leftJoin('product_details AS pd', 'pd.product_id', '=', 'od.product_id')
             ->leftJoin('customer_details AS cd', 'cd.customer_id', '=', 'od.customer_id')
             ->leftJoin('category_details AS cat', 'cat.category_id', '=', 'pd.category')
-            ->leftJoin('cads AS cad', 'cad.id', '=', 'od.cad_id')   
             
             ->when($search != "" , function($result_two) use ($search){
                 return $result_two->where('pd.name','LIKE','%'.$search.'%');
             })
-            ->when($user_id != "" && $user_role == 'cad', function($result_two) use ($user_id){
-                return $result_two->where('od.cad_id',$user_id);
-            })
+
             ->when($user_id != "" && $user_role == 'vigat_user', function($result_two) use ($user_id, $user_role){
                 return $result_two->where('od.order_creator_role',$user_role)
                                   ->where('od.order_creator_id',$user_id);    
@@ -107,41 +104,31 @@ class OrderDetails extends Model
 
             // $queries = DB::getQueryLog();
 
-            // dd($queries);
-
             $order_images =OrderImages::get()->toArray();
 
             $data['records']=$result_two;
             $data['num_rows'] = $result_two->count();
 
-            // dd($data['num_rows']);
+            // foreach ($data['records'] as $key => $value){
+            //     $o_id = $data['records'][$key]->order_id;
 
-            foreach ($data['records'] as $key => $value)
-            {
+            //     if(!empty($order_images)){
 
-                $o_id = $data['records'][$key]->order_id;
-                // if($data['records'][$key]->order_id!='')
-                // {
-                //     $data['records'][$key]->order_id="<button type='button' style='cursor: default'; class='btn btn-primary'>".$data['records'][$key]->order_id."</button>";
-                // }
+            //         $oimg_array = [];
 
-                if(!empty($order_images)){
+            //         foreach ($order_images as $oimg) {
+            //             if($o_id == $oimg['order_id']){ 
+            //                 array_push($oimg_array, $data['records'][$key]->order_image=$oimg['order_image']);
+            //             }
+            //         }
+            //         $data['records'][$key]->order_image = implode('',$oimg_array);    
 
-                    $oimg_array = [];
+            //     }
+            //     else{
+            //         $data['records'][$key]->order_image=' ';    
+            //     }
 
-                    foreach ($order_images as $oimg) {
-                        if($o_id == $oimg['order_id']){ 
-                            array_push($oimg_array, $data['records'][$key]->order_image=$oimg['order_image']);
-                        }
-                    }
-                    $data['records'][$key]->order_image = implode('',$oimg_array);    
-
-                }
-                else{
-                    $data['records'][$key]->order_image=' ';    
-                }
-
-            }
+            // }
         $data['table_data']='{"total":'.intval( $data['totalRecords'] ).',"recordsFiltered":'.intval( $data['num_rows'] ).',"rows":'.json_encode($data['records']).'}';
 
         $data['menu']="order_list";

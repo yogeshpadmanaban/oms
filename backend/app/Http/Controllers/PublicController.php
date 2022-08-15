@@ -122,46 +122,26 @@ class PublicController extends Controller
         $pdt_id = $request->input('product_id');
         $user_status = '0';
 
-        $image=[];
+        $image='';
 
-        // if($request->input('cad_id')!='' && $request->input('mould_name')!=''){
-        //     $user_status = '1';
-        // }
-
-        if($id!='') {   
-            if(($request['temp_order_img']!='')&&($image=='')){   
-                $image=$request['temp_order_img'];
-            }
-        }
-
-        if($request->input('hdn_rdm_oder_id')!=''){
-            $rdm_order_id=$request->input('hdn_rdm_oder_id');
+        if($request->input('hdn_rdm_order_id')!=''){
+            $rdm_order_id=$request->input('hdn_rdm_order_id');
         }
         else{
             $rdm_order_id=self::randomPassword();
         }
 
-        if(!empty($request->input('hidden_order_count'))){
-            for($i=1;$i<$request->input('hidden_order_count');$i++) {
-               
-                $array = ['order_id'=>$rdm_order_id, 'order_creator_id'=> $user_id, 'order_creator_role'=> $user_role, 'order_image'=>NULL]; 
+        if($request->file('order_image')!=''){
+            $destinationPath = 'uploads/order/'; // upload path
+            $files = $request->file('order_image');
+            $profile_path = uniqid() . '_' . trim($files->getClientOriginalName());
+            $files->move($destinationPath, $profile_path);
+            $image=$destinationPath.$profile_path; 
+        }
 
-                if($request->file('order_image'.$i)!=''){
-                    $destinationPath = 'uploads/order/'; // upload path
-                    $files = $request->file('order_image'.$i);
-                    $profile_path = uniqid() . '_' . trim($files->getClientOriginalName());
-                    $files->move($destinationPath, $profile_path);
-                    $order_img_name=$destinationPath.$profile_path; 
-                    $array['order_image'] = $order_img_name;
-                }
-
-                if($request->input('hidden_order_img'.$i)!='' && $request->file('order_image'.$i)==''){
-                    $array['order_image'] = $request->input('hidden_order_img'.$i) ?? $value;
-                }
-                             
-                if(isset($array['order_image']) && $array['order_image'] != ""){
-                    array_push($image, $array); 
-                }
+        if($id!='') {   
+            if($request['temp_order_img']!=''){   
+                $image=$request['temp_order_img'];
             }
         }
 
@@ -173,29 +153,26 @@ class PublicController extends Controller
             'product_id' => $request->input('product_id'),
             'customer_id' => $request->input('customer_id'),
             // 'mould_id' => $request->input('mould_name'),
-            'purity' => $request->input('purity'),
-            'jc_number' => $request->input('jc_number'),
-            'quantity' => $request->input('quantity'),
+            'purity' => $request->input('purity') == 'null' ? NULL : $request->input('purity'),
+            'jc_number' => $request->input('jc_number') == 'null' ? NULL : $request->input('jc_number'),
+            'quantity' => $request->input('quantity') == 'null' ? NULL : $request->input('quantity'),
             // 'cad_id' => $request->input('cad_id'),
-            'weight' => $request->input('weight'),
+            'weight' => $request->input('weight') == 'null' ? NULL : $request->input('weight'),
             'design_by' => $request->input('design_by'),
-            'delivery_date' => $request->input('delivery_date'),
-            'metal_provided' => $request->input('metal_provided'),
-            'metal_provided_date' => $request->input('metal_provided_date'),
-            'order_due_date' => $request->input('order_due_date'),
-            'order_image' => NULL,
+            'delivery_date' => $request->input('delivery_date') == 'null' ? NULL : $request->input('delivery_date'),
+            'metal_provided' => $request->input('metal_provided') == 'null' ? NULL : $request->input('metal_provided'),
+            'metal_provided_date' => $request->input('metal_provided_date') == 'null' ? NULL : $request->input('metal_provided_date'),
+            'order_due_date' => $request->input('order_due_date') == 'null' ? NULL : $request->input('order_due_date'),
+            'order_image' => $image,
             'order_details' => $request->input('order_details'),
             'user_status' => $user_status,
             // 'order_creator_role' => $user_role,
             // 'order_creator_id'=> $user_id, 
         ];
 
-
         if(!empty($image)){
             OrderImages::where('order_creator_id', $user_id)->where('order_id',  $order_data['order_id'])->delete();
-            foreach ($image as $key => $value) {
-                OrderImages::insert($value);
-            }
+            OrderImages::insert(['order_id'=>$order_data['order_id'],'order_image'=>$image]);
         }
 
         $res = OrderDetails::updateOrCreate(['id'=>$id],$order_data); 

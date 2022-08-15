@@ -54,8 +54,8 @@ const TABLE_HEAD = [
     { id: 'order_image', label: 'Order Image', alignRight: false },
     { id: 'delivery_date', label: 'Delivery Date', alignRight: false },
     // { id: 'user_status', label: 'Assigner Status', alignRight: false },
-    { id: 'metal_status', label: 'Metal Provided', alignRight: false },
-    { id: 'metal_status_date', label: 'Metal Provided Date', alignRight: false },
+    { id: 'metal_provided', label: 'Metal Provided', alignRight: false },
+    { id: 'metal_provided_date', label: 'Metal Provided Date', alignRight: false },
     { id: 'order_due_date', label: 'Due Date', alignRight: false },
     { id: 'status', label: 'Status', alignRight: false },
     { id: '', label: 'Action', alignRight: false }
@@ -222,18 +222,18 @@ export default function OrderReport() {
             buttons: true,
             dangerMode: true,
         })
-            .then(async (willchangeStatus) => {
-                if (willchangeStatus) {
-                    let responseData = await postData(apiUrl);
-                    if (responseData) {
-                        toast.success("Status Changed Successfully");
-                        await getRecord('');
-                        await handletableReset();
-                    } else {
-                        toast.error("Oops ! Somewithing wen wrong");
-                    }
+        .then(async (willchangeStatus) => {
+            if (willchangeStatus) {
+                let responseData = await postData(apiUrl);
+                if (responseData) {
+                    toast.success("Status Changed Successfully");
+                    await getRecord('');
+                    await handletableReset();
+                } else {
+                    toast.error("Oops ! Somewithing wen wrong");
                 }
-            });
+            }
+        });
     }
 
     const handletableReset = () => {
@@ -263,7 +263,7 @@ export default function OrderReport() {
 
         const data = List.map(elt => [elt.id, elt.jc_number, elt.product_type, elt.category_name,
         elt.product_id, elt.customer_name, elt.purity, elt.product_weight, elt.quantity, elt.design_by,
-        elt.order_details, elt.delivery_date, elt.metal_status, elt.metal_status_date, elt.order_due_date, elt.status]);
+        elt.order_details, elt.delivery_date, elt.metal_provided, elt.metal_provided_date, elt.order_due_date, elt.status]);
 
         let content = {
             startY: 50,
@@ -318,7 +318,7 @@ export default function OrderReport() {
                                         filteredList.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
 
                                             const { id, order_id, jc_number, product_type, category_name, name, customer_name, purity, product_weight, quantity, design_by, order_details,
-                                                order_image, delivery_date, status, metal_status, metal_status_date, order_due_date } = row;
+                                                order_image, delivery_date, status, metal_provided, metal_provided_date, order_due_date } = row;
 
                                             const isItemSelected = selected.indexOf(id) !== -1;
 
@@ -353,8 +353,8 @@ export default function OrderReport() {
                                                         </Stack>
                                                     </TableCell>
                                                     <TableCell align="left">{delivery_date ? moment(delivery_date).format('YYYY/MM/DD') : '-'}</TableCell>
-                                                    <TableCell align="left">{metal_status === '1' ? 'Yes' : 'No'}</TableCell>
-                                                    <TableCell align="left">{metal_status_date ? moment(metal_status_date).format('YYYY/MM/DD') : '-'}
+                                                    <TableCell align="left">{metal_provided === '1' ? 'Yes' : 'No'}</TableCell>
+                                                    <TableCell align="left">{metal_provided_date ? moment(metal_provided_date).format('YYYY/MM/DD') : '-'}
                                                     </TableCell>
                                                     <TableCell align="left">{order_due_date ? moment(order_due_date).format('YYYY/MM/DD') : '-'}
                                                     </TableCell>

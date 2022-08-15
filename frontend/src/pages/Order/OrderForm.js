@@ -15,7 +15,7 @@ import { Stack, Card, Container, TextField, Typography, Button } from '@mui/mate
 import Page from '../../components/Page';
 
 // Serive
-import { postData, getData } from '../../Services/apiservice';
+import { postData, getData, baseUrl } from '../../Services/apiservice';
 import { toast } from 'react-toastify';
 
 //css
@@ -59,6 +59,7 @@ export default function OrderForm() {
     const ustomerformSchema = Yup.object().shape({
 
         id: '',
+        order_id: '',
         product_id: Yup.string().required('Product Name is requried'),
         customer_id: Yup.string().required('Customer Name is requried'),
         purity: '',
@@ -82,7 +83,8 @@ export default function OrderForm() {
 
     const formik = useFormik({
         initialValues: {
-
+            id: '',
+            order_id: '',
             product_id: '',
             customer_id: '',
             purity: '',
@@ -107,6 +109,8 @@ export default function OrderForm() {
         onSubmit: async (values) => {
 
             let formData = new FormData();
+            formData.append("id", values.id);
+            formData.append("hdn_rdm_order_id", values.order_id);
             formData.append("product_id", values.product_id);
             formData.append("customer_id", values.customer_id);
             formData.append("purity", values.purity);
@@ -145,6 +149,7 @@ export default function OrderForm() {
                 let url = 'edit_order/' + params.id;
                 let responseData = await getData(url);
                 if (responseData && responseData.data.orders) {
+                    console.log(responseData.data.orders);
                     const { id, product_id, customer_id, purity, jc_number, weight,
                         quantity, design_by, delivery_date, order_image, order_details, metal_provided, metal_provided_date, order_due_date, order_id } = responseData.data.orders;
 
@@ -161,14 +166,11 @@ export default function OrderForm() {
                     formik.setFieldValue("design_by", design_by);
                     formik.setFieldValue("delivery_date", delivery_date);
                     formik.setFieldValue("order_details", order_details);
-
-                    // formik.setFieldValue("hdn_rdm_order_id", order_id);
+                    formik.setFieldValue("order_id", order_id);
                     formik.setFieldValue("temp_order_img", order_image);
                     if (order_image) {
-                        setImage("order_image", 'https://api.omsmdu.com/' + order_image);
+                        setImage("order_image", baseUrl + order_image);
                     }
-
-
                 }
             }
         }
@@ -390,13 +392,6 @@ export default function OrderForm() {
                                         error={Boolean(touched.delivery_date && errors.delivery_date)}
                                         helperText={touched.delivery_date && errors.delivery_date}
                                     />
-
-                                    <Field
-                                        innerRef={fileRef}
-                                        name="files"
-                                        type="file"
-                                        multiple
-                                    />
                                    
                                     <TextField
                                         fullWidth
@@ -420,7 +415,6 @@ export default function OrderForm() {
                                             width={300} />
                                     }
 
-
                                     <TextField
                                         fullWidth
                                         type="text"
@@ -443,7 +437,6 @@ export default function OrderForm() {
                                 </Stack>
                             </Form>
                         </FormikProvider>
-                        <button onClick={() => (fileRef.current.value = null)}>Clear</button>
                     </Card>
                 </Container>
             </RootStyle>
