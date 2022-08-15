@@ -177,6 +177,7 @@ class PublicController extends Controller
 
         $res = OrderDetails::updateOrCreate(['id'=>$id],$order_data); 
 		$res['message'] = 'Order data updated successfully!';
+
         return $res;   
     }
 

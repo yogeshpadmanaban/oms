@@ -159,8 +159,7 @@ class ProductController extends Controller
 
 		$image='';
 
-		if($request->file('product_image'))
-		{
+		if($request->file('product_image')){
 			$destinationPath = 'uploads/product/'; // upload path
 			$files = $request->file('product_image');
 			$profile_path = date('YmdHis') . "." . $files->getClientOriginalExtension();
@@ -168,8 +167,7 @@ class ProductController extends Controller
 			$image=$destinationPath.$profile_path;
 		}
 
-		if($product_id!='')	
-		{
+		if($product_id!='')	{
 			if(($request['temp_pdt_img']!='')&&($image=='')){	
 				$image=$request['temp_pdt_img'];
 			}

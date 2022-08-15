@@ -13,6 +13,7 @@ import { Stack, Card, Container, TextField, Typography, Button } from '@mui/mate
 
 // components
 import Page from '../../components/Page';
+import UploadComponent from '../../components/UploadComponent';
 
 // Serive
 import { postData, getData, baseUrl } from '../../Services/apiservice';
@@ -71,6 +72,7 @@ export default function OrderForm() {
         quantity: '',
         design_by: '',
         delivery_date: '',
+        multi:'',
         order_image: '',
         files:'',
         order_details: '',
@@ -97,6 +99,7 @@ export default function OrderForm() {
             design_by: '',
             delivery_date: '',
             files:'',
+            multi:'',
             order_image: '',
             order_details: '',
 
@@ -107,7 +110,7 @@ export default function OrderForm() {
         },
         validationSchema: ustomerformSchema,
         onSubmit: async (values) => {
-
+            // console.log(values.files);
             let formData = new FormData();
             formData.append("id", values.id);
             formData.append("hdn_rdm_order_id", values.order_id);
@@ -124,6 +127,7 @@ export default function OrderForm() {
             formData.append("delivery_date", values.delivery_date);
             formData.append("order_details", values.order_details);
             formData.append("hidden_order_count", values.hidden_order_count);
+            formData.append("multi", values.files);
 
             if (values.order_image) {
                 formData.append("order_image", values.order_image);
@@ -248,6 +252,19 @@ export default function OrderForm() {
                             <Form autoComplete="off" encType="multipart/form-data" noValidate onSubmit={handleSubmit}>
                                 <Stack spacing={3} sx={{ my: 4 }}>
 
+                                    <div className="required lbl">Upload Order Image:</div>
+
+                                    <UploadComponent setFieldValue={setFieldValue} />
+
+                                    {values.files &&
+                                    values.files.map((file, i) => (
+                                        <li key={i}>
+                                        {`File:${file.name} Type:${file.type} Size:${
+                                            file.size 
+                                        } bytes`}{" "}
+                                        </li>
+                                    ))}
+                                    
                                     <div className="required lbl">Product Name:</div>
                                     <select name="product_id" value={values.product_id}
                                         onChange={(event) => {
@@ -400,6 +417,7 @@ export default function OrderForm() {
                                         name="order_image"
                                         InputLabelProps={{ shrink: true }}
                                         onChange={(event) => {
+                                            console.log(event.currentTarget.files[0]);
                                             onfileupload('order_image', event.currentTarget.files[0]);
                                         }}
                                         error={Boolean(touched.order_image && errors.order_image)}
