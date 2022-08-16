@@ -65,7 +65,7 @@ const TABLE_HEAD = [
 
 function applySortFilter(array, query) {
     if (query) {
-        return filter(array, (_user) => _user.order_id.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+        return filter(array, (_user) => _user.customer_name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
     }
     else {
         return array;

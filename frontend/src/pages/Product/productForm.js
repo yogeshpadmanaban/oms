@@ -154,6 +154,14 @@ export default function ProductForm() {
         }
     }
 
+    const onDeleteImg = async (fieldName) => {
+        if (fieldName === 'product_image') {
+            set_product_image_img('');
+            formik.setFieldValue("temp_pdt_img", '');
+        }
+    }
+
+
 
     const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps, setFieldValue } = formik;
     return (
@@ -235,13 +243,15 @@ export default function ProductForm() {
                                         helperText={touched.product_image && errors.product_image}
                                     />
 
+
                                     {
                                         temp_pdt_img &&
-                                        <img src={temp_pdt_img}
-                                            alt={'Product Image'}
-                                            className="img-thumbnail mt-2"
-                                            height={200}
-                                            width={300} />
+                                        <div className="image-area">
+                                            <img src={temp_pdt_img} alt="Preview" />
+                                            <a onClick={(event) => {
+                                                onDeleteImg('product_image')
+                                            }} className="remove-image" href="javascript:void(0)" style={{ display: "Inline" }}>&#215;</a>
+                                        </div>
                                     }
 
 
