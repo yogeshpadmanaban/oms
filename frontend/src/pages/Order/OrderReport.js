@@ -40,26 +40,26 @@ import jsPDF from "jspdf";
 
 const TABLE_HEAD = [
 
-    { id: 'order_id', label: 'Order Id', alignRight: false },
-    { id: 'jc_number', label: 'Jc Number', alignRight: false },
-    { id: 'product_type', label: 'Product Type', alignRight: false },
-    { id: 'category_name', label: 'Product Category', alignRight: false },
-    { id: 'product_id', label: 'Product Name', alignRight: false },
     { id: 'customer_name', label: 'Customer Name', alignRight: false },
-    { id: 'purity', label: 'Purity', alignRight: false },
+    { id: 'product_id', label: 'Product Name', alignRight: false },
     { id: 'product_weight', label: 'Product Weight', alignRight: false },
-    { id: 'quantity', label: 'Quantity', alignRight: false },
-    { id: 'design_by', label: 'Design Using', alignRight: false },
-    // { id: 'order_details', label: 'Order Details', alignRight: false },
     { id: 'order_image', label: 'Order Image', alignRight: false },
     { id: 'delivery_date', label: 'Delivery Date', alignRight: false },
-    // { id: 'user_status', label: 'Assigner Status', alignRight: false },
     { id: 'metal_provided', label: 'Metal Provided', alignRight: false },
     { id: 'metal_provided_date', label: 'Metal Provided Date', alignRight: false },
     { id: 'order_due_date', label: 'Due Date', alignRight: false },
     { id: 'status', label: 'Status', alignRight: false },
     { id: '', label: 'Action', alignRight: false }
 
+    // { id: 'order_id', label: 'Order Id', alignRight: false },
+    // { id: 'jc_number', label: 'Jc Number', alignRight: false },
+    // { id: 'product_type', label: 'Product Type', alignRight: false },
+    // { id: 'category_name', label: 'Product Category', alignRight: false },
+    // { id: 'purity', label: 'Purity', alignRight: false },
+    // { id: 'quantity', label: 'Quantity', alignRight: false },
+    // { id: 'design_by', label: 'Design Using', alignRight: false },
+    // { id: 'order_details', label: 'Order Details', alignRight: false },
+    // { id: 'user_status', label: 'Assigner Status', alignRight: false },
 ];
 
 
@@ -332,18 +332,9 @@ export default function OrderReport() {
                                                     <TableCell padding="checkbox">
                                                         <Checkbox checked={isItemSelected} onChange={(event) => handleClick(id)} />
                                                     </TableCell>
-                                                    <TableCell className='highlight_cell' align="left">{order_id}</TableCell>
-                                                    <TableCell align="left">{jc_number}</TableCell>
-                                                    <TableCell align="left">{product_type}</TableCell>
-                                                    <TableCell align="left">{category_name}</TableCell>
-                                                    <TableCell align="left">{name}</TableCell>
                                                     <TableCell align="left">{customer_name}</TableCell>
-                                                    <TableCell align="left">{purity}</TableCell>
+                                                    <TableCell align="left">{name}</TableCell>
                                                     <TableCell align="left">{product_weight}</TableCell>
-
-                                                    <TableCell align="left">{quantity}</TableCell>
-                                                    <TableCell align="left">{design_by}</TableCell>
-                                                    {/* <TableCell align="left">{order_details}</TableCell> */}
                                                     <TableCell component="th" scope="row" padding="none">
                                                         <Stack direction="row" alignItems="center" spacing={2}>
                                                             <Avatar alt={customer_name} src={baseUrl + order_image} />
@@ -351,6 +342,17 @@ export default function OrderReport() {
                                                     </TableCell>
                                                     <TableCell align="left">{delivery_date ? moment(delivery_date).format('YYYY/MM/DD') : '-'}</TableCell>
                                                     <TableCell align="left">{metal_provided === '1' ? 'Yes' : 'No'}</TableCell>
+
+                                                    {/* <TableCell className='highlight_cell' align="left">{order_id}</TableCell>
+                                                    <TableCell align="left">{jc_number}</TableCell>
+                                                    <TableCell align="left">{product_type}</TableCell>
+                                                    <TableCell align="left">{category_name}</TableCell>
+                                                    <TableCell align="left">{purity}</TableCell>
+                                                    <TableCell align="left">{quantity}</TableCell>
+                                                    <TableCell align="left">{design_by}</TableCell> */}
+                                                    {/* <TableCell align="left">{order_details}</TableCell> */}
+
+
                                                     <TableCell align="left">{metal_provided_date ? moment(metal_provided_date).format('YYYY/MM/DD') : '-'}
                                                     </TableCell>
                                                     <TableCell align="left">{order_due_date ? moment(order_due_date).format('YYYY/MM/DD') : '-'}
