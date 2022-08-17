@@ -61,7 +61,7 @@ export default function App() {
     timer = setTimeout(() => {
       let lastInteractionTime = localStorage.getItem('lastInteractionTime');
       const diff = moment.duration(moment().diff(moment(lastInteractionTime)));
-      console.log("diff", diff._milliseconds);
+      // console.log("diff", diff._milliseconds);
       if (diff._milliseconds > 600000) { // setIdle Timeout 10 minutes.
         console.log("logout Triggereddddd");
         removeEvents();

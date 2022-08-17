@@ -17,6 +17,7 @@ import Page from '../../components/Page';
 // Serive
 import { postData, getData, baseUrl} from '../../Services/apiservice';
 import { toast } from 'react-toastify';
+import '../common.css'
 
 // ----------------------------------------------------------------------
 
@@ -131,7 +132,7 @@ export default function CustomerForm() {
     }, []);
 
     const onfileupload = async (name, value) => {
-        
+
         if (value.size > 2000000) {
             toast.error("Max upload 2 Mb");
             return;
@@ -144,7 +145,7 @@ export default function CustomerForm() {
                 setImage(name, reader.result);
             };
             reader.readAsDataURL(value);
-        } 
+        }
 
         else {
             toast.error("Invalid File Format");
@@ -158,6 +159,17 @@ export default function CustomerForm() {
         } else {
             set_other_upload_img(image);
         }
+    }
+
+    const onDeleteImg = async (fieldName) => {
+        if (fieldName === 'profile_picture') {
+            set_profile_picture_img('');
+            formik.setFieldValue("temp_profile_picture", '');
+        } else {
+            set_other_upload_img('');
+            formik.setFieldValue("temp_other_upload", '');
+        }
+
     }
 
     const { errors, touched, isSubmitting, handleSubmit, getFieldProps } = formik;
@@ -192,11 +204,12 @@ export default function CustomerForm() {
 
                                     {
                                         temp_profile_picture &&
-                                        <img src={temp_profile_picture}
-                                            alt={'Profile Picture'}
-                                            className="img-thumbnail mt-2"
-                                            height={200}
-                                            width={300} />
+                                        <div className="image-area">
+                                            <img src={temp_profile_picture} alt="Preview" />
+                                            <a onClick={(event) => {
+                                                onDeleteImg('profile_picture')
+                                            }} className="remove-image" href="javascript:void(0)" style={{ display: "Inline" }}>&#215;</a>
+                                        </div>
                                     }
 
 
@@ -269,14 +282,15 @@ export default function CustomerForm() {
                                         error={Boolean(touched.other_upload && errors.other_upload)}
                                         helperText={touched.other_upload && errors.other_upload}
                                     />
-                                    
+
                                     {
                                         temp_other_upload &&
-                                        <img src={temp_other_upload}
-                                            alt={'Other Upload'}
-                                            className="img-thumbnail mt-2"
-                                            height={200}
-                                            width={300} />
+                                        <div className="image-area">
+                                            <img src={temp_other_upload} alt="Preview" />
+                                            <a onClick={(event) => {
+                                                onDeleteImg('other_upload')
+                                            }} className="remove-image" href="javascript:void(0)" style={{ display: "Inline" }}>&#215;</a>
+                                        </div>
                                     }
 
                                     <Stack direction="row" alignItems="center" justifyContent="center" mb={5}>
@@ -294,6 +308,6 @@ export default function CustomerForm() {
                     </Card>
                 </Container>
             </RootStyle>
-        </Page>
+        </Page >
     );
 } 

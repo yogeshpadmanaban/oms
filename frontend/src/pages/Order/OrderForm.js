@@ -98,8 +98,8 @@ export default function OrderForm() {
             quantity: '',
             design_by: '',
             delivery_date: '',
-            files:'',
-            multi:'',
+            files: '',
+            multi: '',
             order_image: '',
             order_details: '',
 
@@ -110,7 +110,7 @@ export default function OrderForm() {
         },
         validationSchema: ustomerformSchema,
         onSubmit: async (values) => {
-            // console.log(values.files);
+
             let formData = new FormData();
             formData.append("id", values.id);
             formData.append("hdn_rdm_order_id", values.order_id);
@@ -130,6 +130,7 @@ export default function OrderForm() {
             formData.append("multi", values.files);
 
             if (values.order_image) {
+                console.log("values.order_image", values.order_image);
                 formData.append("order_image", values.order_image);
             } else {
                 formData.append("temp_order_img", values.temp_order_img);
@@ -170,11 +171,14 @@ export default function OrderForm() {
                     formik.setFieldValue("design_by", design_by);
                     formik.setFieldValue("delivery_date", delivery_date);
                     formik.setFieldValue("order_details", order_details);
+
                     formik.setFieldValue("order_id", order_id);
                     formik.setFieldValue("temp_order_img", order_image);
+
                     if (order_image) {
-                        setImage("order_image", baseUrl + order_image);
+                        setImage("order_image", order_image);
                     }
+
                 }
             }
         }
@@ -206,31 +210,37 @@ export default function OrderForm() {
     }
 
 
-    const onfileupload = async (name, value) => {
+    // const onfileupload = async (name, value) => {
 
-        if (value.size > 2000000) {
-            toast.error("Max upload 2 Mb");
-            return;
-        }
+    //     if (value.size > 2000000) {
+    //         toast.error("Max upload 2 Mb");
+    //         return;
+    //     }
 
-        if (value.type === "image/png" || value.type === "image/jpeg") {
-            formik.setFieldValue(name, value);
-            let reader = new FileReader();
-            reader.onloadend = () => {
-                setImage(name, reader.result);
-            };
-            reader.readAsDataURL(value);
-        }
+    //     if (value.type === "image/png" || value.type === "image/jpeg") {
+    //         formik.setFieldValue(name, value);
+    //         let reader = new FileReader();
+    //         reader.onloadend = () => {
+    //             setImage(name, reader.result);
+    //         };
+    //         reader.readAsDataURL(value);
+    //     }
 
-        else {
-            toast.error("Invalid File Format");
-        }
+    //     else {
+    //         toast.error("Invalid File Format");
+    //     }
 
-    }
+    // }
 
-    const setImage = async (fieldName, image) => {
-        if (fieldName === 'order_image') {
-            set_orderImage(image);
+    const setImage = async (fieldName, images) => {
+        if (fieldName === 'order_image' && images.length > 0) {
+            let array = [];
+            images.forEach((data, index) => {
+                array.push(baseUrl + data);
+                if (images.length == index + 1) {
+                    set_orderImage(array);
+                }
+            });
         }
     }
 
@@ -253,18 +263,20 @@ export default function OrderForm() {
                                 <Stack spacing={3} sx={{ my: 4 }}>
 
                                     <div className="required lbl">Upload Order Image:</div>
+                                    <UploadComponent setFieldValue={setFieldValue} set_orderImage={set_orderImage} />
 
-                                    <UploadComponent setFieldValue={setFieldValue} />
+                                    {temp_order_img &&
+                                        temp_order_img.map((data, i) => (
+                                            // <li key={i}>
+                                            <img src={data}
+                                                alt={'Other Upload'}
+                                                className="img-thumbnail mt-2"
+                                                height={100}
+                                                width={100} />
+                                            // </li>
 
-                                    {values.files &&
-                                    values.files.map((file, i) => (
-                                        <li key={i}>
-                                        {`File:${file.name} Type:${file.type} Size:${
-                                            file.size 
-                                        } bytes`}{" "}
-                                        </li>
-                                    ))}
-                                    
+                                        ))}
+
                                     <div className="required lbl">Product Name:</div>
                                     <select name="product_id" value={values.product_id}
                                         onChange={(event) => {
@@ -409,8 +421,8 @@ export default function OrderForm() {
                                         error={Boolean(touched.delivery_date && errors.delivery_date)}
                                         helperText={touched.delivery_date && errors.delivery_date}
                                     />
-                                   
-                                    <TextField
+
+                                    {/* <TextField
                                         fullWidth
                                         type="file"
                                         label="Upload Order Image"
@@ -422,16 +434,16 @@ export default function OrderForm() {
                                         }}
                                         error={Boolean(touched.order_image && errors.order_image)}
                                         helperText={touched.order_image && errors.order_image}
-                                    />
+                                    /> */}
 
-                                    {
+                                    {/* {
                                         temp_order_img &&
                                         <img src={temp_order_img}
                                             alt={'Other Upload'}
                                             className="img-thumbnail mt-2"
                                             height={200}
                                             width={300} />
-                                    }
+                                    } */}
 
                                     <TextField
                                         fullWidth
