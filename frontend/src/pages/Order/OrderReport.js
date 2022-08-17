@@ -42,7 +42,7 @@ const TABLE_HEAD = [
 
     { id: 'customer_name', label: 'Customer Name', alignRight: false },
     { id: 'product_id', label: 'Product Name', alignRight: false },
-    { id: 'product_weight', label: 'Product Weight', alignRight: false },
+    { id: 'weight', label: 'Product Weight', alignRight: false },
     { id: 'order_image', label: 'Order Image', alignRight: false },
     { id: 'delivery_date', label: 'Delivery Date', alignRight: false },
     { id: 'metal_provided', label: 'Metal Provided', alignRight: false },
@@ -65,7 +65,11 @@ const TABLE_HEAD = [
 
 function applySortFilter(array, query) {
     if (query) {
-        return filter(array, (_user) => _user.customer_name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+        return filter(array, (_user) => 
+        _user.customer_name && _user.customer_name.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+        _user.weight && _user.weight.toLowerCase().indexOf(query.toLowerCase()) !== -1
+        // _user.name && _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
+        );
     }
     else {
         return array;
@@ -262,7 +266,7 @@ export default function OrderReport() {
         ]];
 
         const data = List.map(elt => [elt.id, elt.jc_number, elt.product_type, elt.category_name,
-        elt.product_id, elt.customer_name, elt.purity, elt.product_weight, elt.quantity, elt.design_by,
+        elt.product_id, elt.customer_name, elt.purity, elt.weight, elt.quantity, elt.design_by,
         elt.order_details, elt.delivery_date, elt.metal_provided, elt.metal_provided_date, elt.order_due_date, elt.status]);
 
         let content = {
@@ -314,7 +318,7 @@ export default function OrderReport() {
                                     {filteredList &&
                                         filteredList.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
 
-                                            const { id, order_id, jc_number, product_type, category_name, name, customer_name, purity, product_weight, quantity, design_by, order_details,
+                                            const { id, order_id, jc_number, product_type, category_name, name, customer_name, purity, weight, quantity, design_by, order_details,
                                                 order_image, delivery_date, status, metal_provided, metal_provided_date, order_due_date } = row;
 
                                             const isItemSelected = selected.indexOf(id) !== -1;
@@ -334,7 +338,7 @@ export default function OrderReport() {
                                                     </TableCell>
                                                     <TableCell align="left">{customer_name}</TableCell>
                                                     <TableCell align="left">{name}</TableCell>
-                                                    <TableCell align="left">{product_weight}</TableCell>
+                                                    <TableCell align="left">{weight}</TableCell>
                                                     <TableCell component="th" scope="row" padding="none">
                                                         <Stack direction="row" alignItems="center" spacing={2}>
                                                             <Avatar alt={customer_name} src={baseUrl + order_image} />

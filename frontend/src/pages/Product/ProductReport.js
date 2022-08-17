@@ -47,7 +47,13 @@ const TABLE_HEAD = [
 
 function applySortFilter(array, query) {
     if (query) {
-        return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+        return filter(array, (_user) => 
+        _user.product_type && _user.product_type.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+        _user.category_name && _user.category_name.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+        _user.name && _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+        _user.product_details && _user.product_details.toLowerCase().indexOf(query.toLowerCase()) !== -1
+        
+        );
     }
     else {
         return array;

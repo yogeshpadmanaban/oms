@@ -50,7 +50,14 @@ const TABLE_HEAD = [
 
 function applySortFilter(array, query) {
   if (query) {
-    return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return filter(array, (_user) =>
+      _user.name && _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+      _user.address && _user.address.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+      _user.city && _user.city.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+      _user.state && _user.state.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+      _user.gst_no && _user.gst_no.toLowerCase().indexOf(query.toLowerCase()) !== -1 || 
+      _user.pan_no && _user.pan_no.toLowerCase().indexOf(query.toLowerCase()) !== -1
+    );
   }
   else {
     return array;

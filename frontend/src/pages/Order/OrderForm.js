@@ -34,7 +34,6 @@ export default function OrderForm() {
 
     const navigate = useNavigate();
     const params = useParams();
-    const fileRef = useRef();
 
     const [productnameList, setproductnameList] = useState([]);
     const [customernameList, setcustomernameList] = useState([]);
@@ -72,14 +71,14 @@ export default function OrderForm() {
         quantity: '',
         design_by: '',
         delivery_date: '',
-        multi:'',
         order_image: '',
-        files:'',
         order_details: '',
-
         temp_order_img: '',
-        hdn_rdm_order_id: '',
-        hidden_order_count: ''
+
+        // multi:'',
+        // files:'',
+        // hdn_rdm_order_id: '',
+        // hidden_order_count: ''
 
     });
 
@@ -98,14 +97,14 @@ export default function OrderForm() {
             quantity: '',
             design_by: '',
             delivery_date: '',
-            files: '',
-            multi: '',
             order_image: '',
             order_details: '',
-
             temp_order_img: '',
-            hdn_rdm_order_id: '',
-            hidden_order_count: 1
+
+            // files: '',
+            // multi: '',
+            // hdn_rdm_order_id: '',
+            // hidden_order_count: 1
 
         },
         validationSchema: ustomerformSchema,
@@ -126,10 +125,11 @@ export default function OrderForm() {
             formData.append("design_by", values.design_by);
             formData.append("delivery_date", values.delivery_date);
             formData.append("order_details", values.order_details);
-            formData.append("hidden_order_count", values.hidden_order_count);
-            formData.append("multi", values.files);
 
-            if (values.order_image) {
+            // formData.append("hidden_order_count", values.hidden_order_count);
+            // formData.append("multi", values.files);
+
+            if (values.order_image && values.order_image.length > 0) {
                 console.log("values.order_image", values.order_image);
                 formData.append("order_image", values.order_image);
             } else {
@@ -171,7 +171,6 @@ export default function OrderForm() {
                     formik.setFieldValue("design_by", design_by);
                     formik.setFieldValue("delivery_date", delivery_date);
                     formik.setFieldValue("order_details", order_details);
-
                     formik.setFieldValue("order_id", order_id);
                     formik.setFieldValue("temp_order_img", order_image);
 
