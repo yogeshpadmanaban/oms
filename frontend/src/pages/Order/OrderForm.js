@@ -234,12 +234,14 @@ export default function OrderForm() {
     const setImage = async (fieldName, images) => {
         if (fieldName === 'order_image' && images.length > 0) {
             let array = [];
-            images.forEach((data, index) => {
-                array.push(baseUrl + data);
-                if (images.length == index + 1) {
-                    set_orderImage(array);
-                }
-            });
+            if (images && images.length < 0) {
+                images.forEach((data, index) => {
+                    array.push(baseUrl + data);
+                    if (images.length == index + 1) {
+                        set_orderImage(array);
+                    }
+                });
+            }
         }
     }
 

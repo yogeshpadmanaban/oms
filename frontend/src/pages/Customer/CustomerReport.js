@@ -48,20 +48,41 @@ const TABLE_HEAD = [
 ];
 
 
-function applySortFilter(array, query) {
+function descendingComparator(a, b, orderBy) {
+  if (b[orderBy] < a[orderBy]) {
+    return -1;
+  }
+  if (b[orderBy] > a[orderBy]) {
+    return 1;
+  }
+  return 0;
+}
+
+function getComparator(order, orderBy) {
+  return order === 'desc'
+    ? (a, b) => descendingComparator(a, b, orderBy)
+    : (a, b) => -descendingComparator(a, b, orderBy);
+}
+
+
+function applySortFilter(array, comparator, query) {
+  const stabilizedThis = array.map((el, index) => [el, index]);
+  stabilizedThis.sort((a, b) => {
+    const order = comparator(a[0], b[0]);
+    if (order !== 0) return order;
+    return a[1] - b[1];
+  });
   if (query) {
-    return filter(array, (_user) =>
-      _user.name && _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
-      _user.address && _user.address.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
-      _user.city && _user.city.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
-      _user.state && _user.state.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
-      _user.gst_no && _user.gst_no.toLowerCase().indexOf(query.toLowerCase()) !== -1 || 
-      _user.pan_no && _user.pan_no.toLowerCase().indexOf(query.toLowerCase()) !== -1
-    );
+    return filter(array, (_user) => 
+    _user.name && _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+    _user.address && _user.address.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+    _user.city && _user.city.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+    _user.state && _user.state.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+    _user.gst_no && _user.gst_no.toLowerCase().indexOf(query.toLowerCase()) !== -1 || 
+    _user.pan_no && _user.pan_no.toLowerCase().indexOf(query.toLowerCase()) !== -1
+  );
   }
-  else {
-    return array;
-  }
+  return stabilizedThis.map((el) => el[0]);
 }
 
 export default function CustomerReport() {
@@ -72,7 +93,7 @@ export default function CustomerReport() {
 
   const [order, setOrder] = useState('asc');  // asc || dsc
 
-  const [orderBy, setOrderBy] = useState('customer_id'); // By Default customer_id
+  const [orderBy, setOrderBy] = useState('name'); // By Default customer_id
 
   const [filterName, setFilterName] = useState(''); // search filter customer_id set and it's fun
 
@@ -257,7 +278,8 @@ export default function CustomerReport() {
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - customerList.length) : 0;
 
-  const filteredUsers = applySortFilter(customerList, filterName);
+  const filteredUsers = applySortFilter(customerList, getComparator(order, orderBy), filterName);
+
 
   const isDataNotFound = !filteredUsers || filteredUsers.length === 0;
 
