@@ -129,8 +129,14 @@ export default function OrderForm() {
             // formData.append("hidden_order_count", values.hidden_order_count);
             // formData.append("multi", values.files);
 
-            if (values.order_image && values.order_image.length > 0) {
-                console.log("values.order_image", values.order_image);
+            // if (values.order_image && values.order_image.length > 0) {
+            //     console.log("values.order_image", values.order_image);
+            //     formData.append("order_image", values.order_image);
+            // } else {
+            //     formData.append("temp_order_img", values.temp_order_img);
+            // }
+
+            if (values.order_image) {
                 formData.append("order_image", values.order_image);
             } else {
                 formData.append("temp_order_img", values.temp_order_img);
@@ -175,7 +181,7 @@ export default function OrderForm() {
                     formik.setFieldValue("temp_order_img", order_image);
 
                     if (order_image) {
-                        setImage("order_image", order_image);
+                        setImage("order_image", baseUrl + order_image);
                     }
 
                 }
@@ -209,41 +215,55 @@ export default function OrderForm() {
     }
 
 
-    // const onfileupload = async (name, value) => {
+    const onfileupload = async (name, value) => {
 
-    //     if (value.size > 2000000) {
-    //         toast.error("Max upload 2 Mb");
-    //         return;
-    //     }
+        if (value.size > 2000000) {
+            toast.error("Max upload 2 Mb");
+            return;
+        }
 
-    //     if (value.type === "image/png" || value.type === "image/jpeg") {
-    //         formik.setFieldValue(name, value);
-    //         let reader = new FileReader();
-    //         reader.onloadend = () => {
-    //             setImage(name, reader.result);
-    //         };
-    //         reader.readAsDataURL(value);
-    //     }
+        if (value.type === "image/png" || value.type === "image/jpeg") {
+            formik.setFieldValue(name, value);
+            let reader = new FileReader();
+            reader.onloadend = () => {
+                setImage(name, reader.result);
+            };
+            reader.readAsDataURL(value);
+        }
 
-    //     else {
-    //         toast.error("Invalid File Format");
-    //     }
+        else {
+            toast.error("Invalid File Format");
+        }
 
-    // }
+    }
 
-    const setImage = async (fieldName, images) => {
-        if (fieldName === 'order_image' && images.length > 0) {
-            let array = [];
-            if (images && images.length < 0) {
-                images.forEach((data, index) => {
-                    array.push(baseUrl + data);
-                    if (images.length == index + 1) {
-                        set_orderImage(array);
-                    }
-                });
-            }
+    const setImage = async (fieldName, image) => {
+        if (fieldName === 'order_image') {
+            set_orderImage(image);
         }
     }
+
+
+    const onDeleteImg = async (fieldName) => {
+        if (fieldName === 'order_image') {
+            set_orderImage('');
+            formik.setFieldValue("temp_order_img", '');
+        }
+    }
+
+    // const setImage = async (fieldName, images) => {
+    //     if (fieldName === 'order_image' && images.length > 0) {
+    //         let array = [];
+    //         if (images && images.length < 0) {
+    //             images.forEach((data, index) => {
+    //                 array.push(baseUrl + data);
+    //                 if (images.length == index + 1) {
+    //                     set_orderImage(array);
+    //                 }
+    //             });
+    //         }
+    //     }
+    // }
 
     const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps, setFieldValue } = formik;
 
@@ -262,42 +282,6 @@ export default function OrderForm() {
                         <FormikProvider value={formik}>
                             <Form autoComplete="off" encType="multipart/form-data" noValidate onSubmit={handleSubmit}>
                                 <Stack spacing={3} sx={{ my: 4 }}>
-
-                                    <div className="required lbl">Upload Order Image:</div>
-                                    <UploadComponent setFieldValue={setFieldValue} set_orderImage={set_orderImage} />
-
-                                    {temp_order_img &&
-                                        temp_order_img.map((data, i) => (
-                                            // <li key={i}>
-                                            <img src={data}
-                                                alt={'Other Upload'}
-                                                className="img-thumbnail mt-2"
-                                                height={100}
-                                                width={100} />
-                                            // </li>
-
-                                        ))}
-
-                                    <div className="required lbl">Product Name:</div>
-                                    <select name="product_id" value={values.product_id}
-                                        onChange={(event) => {
-                                            setFieldValue("product_id", event.target.value)
-                                        }}
-                                        className="selectfield"
-                                    >
-                                        {
-                                            productnameList &&
-                                            productnameList.map((list, index) => {
-                                                return (
-                                                    <option className="seloptionfield" value={list.product_id} label={list.name}> </option>
-                                                )
-                                            })
-
-                                        }
-                                    </select>
-                                    {errors.product_id && touched.product_id &&
-                                        <div className="selerr">{errors.product_id}</div>
-                                    }
 
 
                                     <div className="required lbl">Customer Name:</div>
@@ -320,22 +304,96 @@ export default function OrderForm() {
                                         <div className="selerr">{errors.customer_id}</div>
                                     }
 
-
-                                    <div className="lbl">Purity:</div>
-                                    <div role="group" aria-labelledby="my-radio-group">
+                                    <div className="required lbl">Product Name:</div>
+                                    <select name="product_id" value={values.product_id}
+                                        onChange={(event) => {
+                                            setFieldValue("product_id", event.target.value)
+                                        }}
+                                        className="selectfield"
+                                    >
                                         {
-                                            purity_options &&
-                                            purity_options.map((option, index) => {
+                                            productnameList &&
+                                            productnameList.map((list, index) => {
                                                 return (
-                                                    <div className="ml10">
-                                                        <label className='mb-2'><Field type="radio" name="purity" value={option.value} /> {option.label}</label>
-                                                    </div>
+                                                    <option className="seloptionfield" value={list.product_id} label={list.name}> </option>
                                                 )
                                             })
-                                        }
-                                    </div>
 
-                                    <div className="lbl">Metal Status:</div>
+                                        }
+                                    </select>
+                                    {errors.product_id && touched.product_id &&
+                                        <div className="selerr">{errors.product_id}</div>
+                                    }
+
+                                    <TextField
+                                        fullWidth
+                                        type="number"
+                                        label="Weight"
+                                        {...getFieldProps('weight')}
+                                        error={Boolean(touched.jc_number && errors.jc_number)}
+                                        helperText={touched.jc_number && errors.jc_number}
+                                    />
+
+                                    <TextField
+                                        fullWidth
+                                        type="file"
+                                        label="Upload Order Image"
+                                        name="order_image"
+                                        InputLabelProps={{ shrink: true }}
+                                        onChange={(event) => {
+                                            console.log(event.currentTarget.files[0]);
+                                            onfileupload('order_image', event.currentTarget.files[0]);
+                                        }}
+                                        error={Boolean(touched.order_image && errors.order_image)}
+                                        helperText={touched.order_image && errors.order_image}
+                                    />
+
+                                    {/* {
+                                        temp_order_img &&
+                                        <img src={temp_order_img}
+                                            alt={'Other Upload'}
+                                            className="img-thumbnail mt-2"
+                                            height={200}
+                                            width={300} />
+                                    } */}
+
+                                    {
+                                        temp_order_img &&
+                                        <div className="image-area">
+                                            <img src={temp_order_img} alt="Preview" />
+                                            <a onClick={(event) => {
+                                                onDeleteImg('order_image')
+                                            }} className="remove-image" href="javascript:void(0)" style={{ display: "Inline" }}>&#215;</a>
+                                        </div>
+                                    }
+
+                                    {/* <div className="required lbl">Upload Order Image:</div>
+                                    <UploadComponent setFieldValue={setFieldValue} set_orderImage={set_orderImage} />
+
+                                    {temp_order_img &&
+                                        temp_order_img.map((data, i) => (
+                                            // <li key={i}>
+                                            <img src={data}
+                                                alt={'Other Upload'}
+                                                className="img-thumbnail mt-2"
+                                                height={100}
+                                                width={100} />
+                                            // </li>
+
+                                        ))} */}
+
+                                    <TextField
+                                        fullWidth
+                                        type="date"
+                                        label="Order Date"
+                                        {...getFieldProps('delivery_date')}
+                                        InputLabelProps={{ shrink: true }}
+                                        error={Boolean(touched.delivery_date && errors.delivery_date)}
+                                        helperText={touched.delivery_date && errors.delivery_date}
+                                    />
+
+
+                                    {/* <div className="lbl">Metal Status:</div>
                                     <div role="group" aria-labelledby="my-radio-group1">
                                         {
                                             metalstatus_options &&
@@ -347,7 +405,7 @@ export default function OrderForm() {
                                                 )
                                             })
                                         }
-                                    </div>
+                                    </div> */}
 
 
                                     <TextField
@@ -370,20 +428,25 @@ export default function OrderForm() {
                                         helperText={touched.order_due_date && errors.order_due_date}
                                     />
 
+                                    <div className="lbl">Purity:</div>
+                                    <div role="group" aria-labelledby="my-radio-group">
+                                        {
+                                            purity_options &&
+                                            purity_options.map((option, index) => {
+                                                return (
+                                                    <div className="ml10">
+                                                        <label className='mb-2'><Field type="radio" name="purity" value={option.value} /> {option.label}</label>
+                                                    </div>
+                                                )
+                                            })
+                                        }
+                                    </div>
+
                                     <TextField
                                         fullWidth
                                         type="number"
                                         label="Jc Number"
                                         {...getFieldProps('jc_number')}
-                                        error={Boolean(touched.jc_number && errors.jc_number)}
-                                        helperText={touched.jc_number && errors.jc_number}
-                                    />
-
-                                    <TextField
-                                        fullWidth
-                                        type="number"
-                                        label="Weight"
-                                        {...getFieldProps('weight')}
                                         error={Boolean(touched.jc_number && errors.jc_number)}
                                         helperText={touched.jc_number && errors.jc_number}
                                     />
@@ -413,40 +476,9 @@ export default function OrderForm() {
                                         }
                                     </div>
 
-                                    <TextField
-                                        fullWidth
-                                        type="date"
-                                        label="Delivery Date"
-                                        {...getFieldProps('delivery_date')}
-                                        InputLabelProps={{ shrink: true }}
-                                        error={Boolean(touched.delivery_date && errors.delivery_date)}
-                                        helperText={touched.delivery_date && errors.delivery_date}
-                                    />
+
 
                                     {/* <TextField
-                                        fullWidth
-                                        type="file"
-                                        label="Upload Order Image"
-                                        name="order_image"
-                                        InputLabelProps={{ shrink: true }}
-                                        onChange={(event) => {
-                                            console.log(event.currentTarget.files[0]);
-                                            onfileupload('order_image', event.currentTarget.files[0]);
-                                        }}
-                                        error={Boolean(touched.order_image && errors.order_image)}
-                                        helperText={touched.order_image && errors.order_image}
-                                    /> */}
-
-                                    {/* {
-                                        temp_order_img &&
-                                        <img src={temp_order_img}
-                                            alt={'Other Upload'}
-                                            className="img-thumbnail mt-2"
-                                            height={200}
-                                            width={300} />
-                                    } */}
-
-                                    <TextField
                                         fullWidth
                                         type="text"
                                         label="Order Details"
@@ -455,7 +487,7 @@ export default function OrderForm() {
                                         {...getFieldProps('order_details')}
                                         error={Boolean(touched.product_details && errors.product_details)}
                                         helperText={touched.product_details && errors.product_details}
-                                    />
+                                    /> */}
 
 
                                     <Stack direction="row" alignItems="center" justifyContent="center" mb={5}>

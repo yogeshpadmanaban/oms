@@ -44,7 +44,7 @@ const TABLE_HEAD = [
     { id: 'product_id', label: 'Product Name', alignRight: false },
     { id: 'weight', label: 'Product Weight', alignRight: false },
     { id: 'order_image', label: 'Order Image', alignRight: false },
-    { id: 'delivery_date', label: 'Delivery Date', alignRight: false },
+    { id: 'delivery_date', label: 'Order Date', alignRight: false },
     { id: 'metal_provided', label: 'Metal Provided', alignRight: false },
     { id: 'metal_provided_date', label: 'Metal Provided Date', alignRight: false },
     { id: 'order_due_date', label: 'Due Date', alignRight: false },
@@ -262,6 +262,44 @@ export default function OrderReport() {
             });
     }
 
+
+    // on metal status Change
+    const onmetalstatusChange = async (id) => {
+
+        let apiUrl, selectedArray = [];
+
+        if (selected && selected.length > 1 && id) {
+            selectedArray = selected;
+            apiUrl = 'order_bulk_metal_status_change/' + '[' + selectedArray + ']';
+        }
+        else {
+            if (selected && selected.length > 0) {
+                apiUrl = 'order_metal_change_status/' + selected;
+            } else {
+                apiUrl = 'order_metal_change_status/' + id;
+            }
+        }
+        swal({
+            title: "Are you sure you want to change Metal status ?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then(async (willchangeStatus) => {
+                if (willchangeStatus) {
+                    let responseData = await postData(apiUrl);
+                    if (responseData) {
+                        toast.success("Metal Status Changed Successfully");
+                        await getRecord('');
+                        await handletableReset();
+                    } else {
+                        toast.error("Oops ! Somewithing wen wrong");
+                    }
+                }
+            });
+    }
+
+
     const handletableReset = () => {
         setRowsPerPage(Number(5));
         setPage(0);
@@ -322,7 +360,7 @@ export default function OrderReport() {
 
                 <Card>
                     <UserListToolbar data={List.length} numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName}
-                        onDelete={ondeleteClick} onstausChange={onstatusChange} getRecord={getRecord} onexport={exportPDF} />
+                        onDelete={ondeleteClick} onstausChange={onstatusChange} getRecord={getRecord} onexport={exportPDF} onmetalstatusChange={onmetalstatusChange} />
 
                     <Scrollbar>
                         <TableContainer sx={{ minWidth: 800 }}>
@@ -367,7 +405,16 @@ export default function OrderReport() {
                                                         </Stack>
                                                     </TableCell>
                                                     <TableCell align="left">{delivery_date ? moment(delivery_date).format('YYYY/MM/DD') : '-'}</TableCell>
-                                                    <TableCell align="left">{metal_provided === '1' ? 'Yes' : 'No'}</TableCell>
+
+                                                    {/* <TableCell align="left">{metal_provided === '1' ? 'Yes' : 'No'}</TableCell> */}
+
+                                                    <TableCell align="left" onClick={() => onmetalstatusChange(id)}>
+                                                        <Iconify
+                                                            icon={metal_provided === '1' ? 'charm:cross' :
+                                                                'typcn:tick'}
+                                                            sx={{ width: 25, height: 25, ml: 1 }}
+                                                        />
+                                                    </TableCell>
 
                                                     {/* <TableCell className='highlight_cell' align="left">{order_id}</TableCell>
                                                     <TableCell align="left">{jc_number}</TableCell>

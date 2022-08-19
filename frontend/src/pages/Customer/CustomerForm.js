@@ -44,9 +44,9 @@ export default function CustomerForm() {
         city: '',
         state: '',
         gst_no: Yup.string().matches(/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/,
-            "Invalid Gst Number"),
+            "Invalid Gst Number").nullable(),
         pan_no: Yup.string().matches(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/,
-            "Invalid Pan Number"),
+            "Invalid Pan Number").nullable(),
         other_upload: '',
         temp_other_upload: ''
     });

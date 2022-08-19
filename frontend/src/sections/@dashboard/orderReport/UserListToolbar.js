@@ -49,13 +49,14 @@ UserListToolbar.propTypes = {
   onFilterName: PropTypes.func,
   onDelete: PropTypes.func,
   onstausChange: PropTypes.func,
+  onmetalstatusChange: PropTypes.func,
   getRecord: PropTypes.func,
   onexport: PropTypes.func
 };
 
 
 export default function UserListToolbar({ numSelected, filterName, onFilterName,
-  onDelete, onstausChange, getRecord, onexport, data }) {
+  onDelete, onstausChange, getRecord, onexport, data, onmetalstatusChange }) {
 
   const filterSchema = Yup.object().shape({
     from_date: Yup.string(),
@@ -117,6 +118,12 @@ export default function UserListToolbar({ numSelected, filterName, onFilterName,
           <div>
             <Tooltip title="Bulk Status Change">
               <IconButton className='stausButton' onClick={onstausChange}>
+                <Iconify icon="el:lock" />
+              </IconButton>
+            </Tooltip>
+
+            <Tooltip title="Bulk Metal Status Change">
+              <IconButton className='stausButton' onClick={onmetalstatusChange}>
                 <Iconify icon="el:lock" />
               </IconButton>
             </Tooltip>
