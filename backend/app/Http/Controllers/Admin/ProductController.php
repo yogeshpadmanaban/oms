@@ -16,33 +16,35 @@ use Session;
 
 class ProductController extends Controller
 {
-	//to view product listing
+    /**
+     * Display a listing of product.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
 	public function listing(Request $request)
 	{
 		$data['menu']="product_list";
 		return view('admin.product.list',['menu'=>$data['menu']]);
 	}
 
-	//to fetch cad data
+    /**
+     * To fetch product records.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
 	public function fetch_product_details(Request $request)
 	{
-		// $sort=$_REQUEST['order'];
-		// $search=(isset($_REQUEST['search']))?$_REQUEST['search']:'';
-		// $limit=(int)$_REQUEST['limit'];
-		// $offset=(int)$_REQUEST['offset'];
-
 		$result =ProductDetails::where('deleted_at',NULL)->get(); // to get except soft-deleted data
 		$data['totalRecords']=$result->count();
 
 		$result_two= DB::table('product_details',  'pd')
-			->select('pd.*','cd.category_name')
-			->leftJoin('category_details AS cd', 'cd.category_id', '=', 'pd.category')
-			// ->where('pd.name','LIKE','%'.$search.'%')
-			->where('pd.deleted_at',NULL) // to get except soft-deleted data
-			->where('pd.status','!=','2')
-			// ->limit($limit)->offset($offset)
-			// ->orderBy('pd.product_id',$sort)
-			->get();
+						->select('pd.*','cd.category_name')
+						->leftJoin('category_details AS cd', 'cd.category_id', '=', 'pd.category')
+						->where('pd.deleted_at',NULL) // to get except soft-deleted data
+						->where('pd.status','!=','2')
+						->get();
 
 		$data['records']=$result_two;
 		$data['num_rows'] = $result_two->count();
@@ -52,7 +54,12 @@ class ProductController extends Controller
 		return ($data['table_data']);
 	}
 
-	//to create product 
+    /**
+     * Show the form for creating a new product.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
 	public function create(Request $request)
 	{
 		$data['menu']="product_list";
@@ -61,7 +68,12 @@ class ProductController extends Controller
 		return ['menu'=>$data['menu'],'category'=>$data['category']];
 	}
 
-	//to get data of particular id for update
+    /**
+     * To edit the product.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
 	public function edit_product(Request $request)
 	{
 		$data['product']=ProductDetails::where('product_id',base64_decode($request->id))->first();	
@@ -70,7 +82,12 @@ class ProductController extends Controller
 		return ['products'=>$data['product'],'menu'=>$data['menu'],'category'=>$data['category']];
 	}
 
-	//to change status of particular id
+    /**
+     * To change status of product.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
 	public function status_change($id)
 	{
 		$product_status=ProductDetails::find($id);
@@ -89,7 +106,12 @@ class ProductController extends Controller
 		]);
 	}
 
-	//to delete data of particular id
+    /**
+     * Remove the specified product from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
 	public function delete($id)
 	{
 		$row_data = ProductDetails::where('product_id',$id)->update(['status' => '2']);	
@@ -100,6 +122,12 @@ class ProductController extends Controller
 		]);
 	}
 
+	/**
+     * Remove the multiple product from storage.
+     *
+     * @param  int  $data
+     * @return \Illuminate\Http\Response
+     */
 	public function multiple_delete($data)
 	{
 		$data = json_decode(stripslashes($data));
@@ -118,6 +146,12 @@ class ProductController extends Controller
 		]);
 	}
 
+	/**
+     * To change multiple status 
+     *
+     * @param  int  $data
+     * @return \Illuminate\Http\Response
+     */
 	public function bulk_status_change($data)
 	{
 		$data = json_decode(stripslashes($data));
@@ -140,6 +174,12 @@ class ProductController extends Controller
 		]);
 	}
 
+	/**
+     * To check product number 
+     *
+     * @param  int  $data
+     * @return \Illuminate\Http\Response
+     */
 	public function product_name_check(Request $request){
 		$product_name = $request->pdt_name;
 		$product_id = $request->product_id;
@@ -152,7 +192,12 @@ class ProductController extends Controller
 		echo $result;
 	}
 
-	//to store product details 
+    /**
+     * To store product details.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */ 
 	public function store(Request $request)
 	{
 		$product_id=$request['product_id'];

@@ -95,6 +95,7 @@ class OrderDetails extends Model
             })
             ->where('od.deleted_at',NULL) // to get except soft-deleted data
             ->where('od.status','!=','2')
+            ->where('pd.deleted_at',NULL)
             ->when($from_date != "" && $to_date != "", function($result_two) use ($from_date, $to_date){
                 return $result_two->whereBetween('od.delivery_date', [$from_date, $to_date]);
             })

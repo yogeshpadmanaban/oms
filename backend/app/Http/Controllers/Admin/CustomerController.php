@@ -13,31 +13,29 @@ use Session;
 
 class CustomerController extends Controller
 {
-	//to view customer listing
+    /**
+     * Display a listing of customer.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
 	public function listing(Request $request)
 	{
 		$data['menu']="customer_list";
 		return $data['menu'];
 	}
 
-	//to fetch customer data
+    /**
+     * To fetch customer records.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
 	public function fetch_customer_details(Request $request)
 	{
-		// $sort=$_REQUEST['order'];
-		// $search=(isset($_REQUEST['search']))?$_REQUEST['search']:'';
-		// $limit=(int)$_REQUEST['limit'];
-		// $offset=(int)$_REQUEST['offset'];
-
 		$result =CustomerDetails::where('status','!=','2')->get(); // to get except soft-deleted data
 		$data['totalRecords']=$result->count();
-		$result_two=CustomerDetails::
-		
-		
-		// limit($limit)->offset($offset)
-					// ->where('name','LIKE','%'.$search.'%')
-					where('status','!=','2') // to get except soft-deleted data
-					// ->orderBy('customer_id',$sort)
-					->get();
+		$result_two=CustomerDetails::where('status','!=','2')->get();
 
 		$data['records']=$result_two;
 		$data['num_rows'] = $result_two->count();
@@ -46,17 +44,26 @@ class CustomerController extends Controller
         $data['menu']="product_list";
 
 		return ($data['table_data']);
-
 	}
 
-	//to create customer 
+    /**
+     * Show the form for creating a new customer.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
 	public function create(Request $request)
 	{
 		$data['menu']="customer_list";
 		return view('admin.customer.create',['menu'=>$data['menu']]);
 	}
 
-	 //to get data of particular id for update
+    /**
+     * To edit the customer.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
 	public function edit_customer(Request $request)
 	{
 		$data['customer']=CustomerDetails::where('customer_id',base64_decode($request->id))->first();	
@@ -64,7 +71,12 @@ class CustomerController extends Controller
 		return ['customer'=>$data['customer'],'menu'=>$data['menu']];
 	}
 
-	//to change status of particular id
+    /**
+     * To change status of category.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
 	public function status_change($id)
 	{
 		$customer_id = CustomerDetails::find($id);
@@ -83,7 +95,12 @@ class CustomerController extends Controller
 		]);
 	}
 
-	//to delete data of particular id
+    /**
+     * Remove the specified customer from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
 	public function delete($id)
 	{
 		$row_data = CustomerDetails::where('customer_id',$id)->update(['status' => '2']);	
@@ -94,6 +111,12 @@ class CustomerController extends Controller
 		]);
 	}
 
+	/**
+     * Remove the multiple customer from storage.
+     *
+     * @param  int  $data
+     * @return \Illuminate\Http\Response
+     */
 	public function multiple_delete($data)
 	{
 		$data = json_decode(stripslashes($data));
@@ -102,7 +125,6 @@ class CustomerController extends Controller
 			$row_data=CustomerDetails::find($data[$i]);
 			$row_data->status='2';
 			$row_data->save();
-
 			$row_data->delete();
 		}
 		return response()->json([
@@ -111,6 +133,12 @@ class CustomerController extends Controller
 		]);
 	}
 
+	/**
+     * To change multiple status 
+     *
+     * @param  int  $data
+     * @return \Illuminate\Http\Response
+     */
 	public function bulk_status_change($data)
 	{
 		$data = json_decode(stripslashes($data));
@@ -132,6 +160,12 @@ class CustomerController extends Controller
 		]);
 	}
 
+	/**
+     * To check GST number 
+     *
+     * @param  int  $data
+     * @return \Illuminate\Http\Response
+     */
 	public function gst_no_check(Request $request){
 		$gst_no = $request->gst_no;
 		$customer_id = $request->customer_id;
@@ -144,6 +178,12 @@ class CustomerController extends Controller
 		echo $result;
 	}	
 
+	/**
+     * To check PAN number 
+     *
+     * @param  int  $data
+     * @return \Illuminate\Http\Response
+     */
 	public function pan_no_check(Request $request){
 		$pan_no = $request->pan_no;
 		$customer_id = $request->customer_id;
@@ -156,7 +196,12 @@ class CustomerController extends Controller
 		echo $result;
 	}
 
-	//to store customer details 
+    /**
+     * To store customer details.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
 	public function store_customer(Request $request)
 	{
 		$customer_id=$request['customer_id'];

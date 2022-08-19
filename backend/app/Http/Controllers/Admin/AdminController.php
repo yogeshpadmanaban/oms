@@ -16,7 +16,12 @@ use Config;
 
 class AdminController extends Controller
 {
-	//to view dashboard
+    /**
+     * Display a count.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
 	public function dashboard(Request $request)
 	{
 		$data['menu']="dashboard";            

@@ -15,31 +15,30 @@ use Session;
 
 class CategoryController extends Controller
 {
-	//to view category listing
+    /**
+     * Display a listing of category.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
 	public function listing(Request $request)
 	{
 		$data['menu']="category_list";
 		return view('admin.category.list',['menu'=>$data['menu']]);
 	}
 
-	//to fetch cad data
+    /**
+     * To fetch category records.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
 	public function fetch_category_details(Request $request)
 	{
-		// $sort=$_REQUEST['order'];
-		// $search=(isset($_REQUEST['search']))?$_REQUEST['search']:'';
-		// $limit=(int)$_REQUEST['limit'];
-		// $offset=(int)$_REQUEST['offset'];
-
 		$result =CategoryDetails::where('deleted_at',NULL)->get(); // to get except soft-deleted data
 		$data['totalRecords']=$result->count();
 
-		$result_two=CategoryDetails::
-		
-		// limit($limit)->offset($offset)
-					// where('category_name','LIKE','%'.$search.'%')
-					where('deleted_at',NULL) // to get except soft-deleted data
-					// ->orderBy('category_id',$sort)
-					->get();
+		$result_two=CategoryDetails::where('deleted_at',NULL)->get();
 		$data['records']=$result_two;
 		$data['num_rows'] = $result_two->count();
 
@@ -48,14 +47,24 @@ class CategoryController extends Controller
 		return ($data['table_data']);
 	}
 
-	//to create category 
+    /**
+     * Show the form for creating a new category.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
 	public function create(Request $request)
 	{
 		$data['menu']="category_list";
 		return view('admin.category.create',['menu'=>$data['menu']]);
 	}
 
-	//to get data of particular id for update
+    /**
+     * To edit the category.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
 	public function edit_category($id)
 	{
 		$data['category']=CategoryDetails::where('category_id',$id)->first();	
@@ -64,7 +73,12 @@ class CategoryController extends Controller
 		exit();
 	}
 
-	//to change status of particular id
+    /**
+     * To change status of category
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
 	public function status_change($id)
 	{
 		$category_status=CategoryDetails::find($id);
@@ -83,7 +97,12 @@ class CategoryController extends Controller
 		]);
 	}
 
-	//to delete data of particular id
+    /**
+     * Remove the specified category from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
 	public function delete($id)
 	{
 		CategoryDetails::where('category_id',$id)->update(['status' => '2']);	
@@ -94,6 +113,12 @@ class CategoryController extends Controller
 		]);
 	}
 
+	/**
+     * Remove the multiple category from storage.
+     *
+     * @param  int  $data
+     * @return \Illuminate\Http\Response
+     */
 	public function multiple_delete($data)
 	{
 		$data = json_decode(stripslashes($data));
@@ -111,6 +136,12 @@ class CategoryController extends Controller
 		]);
 	}
 
+	/**
+     * To change multiple status 
+     *
+     * @param  int  $data
+     * @return \Illuminate\Http\Response
+     */
 	public function bulk_status_change($data)
 	{
 		$data = json_decode(stripslashes($data));
@@ -132,6 +163,12 @@ class CategoryController extends Controller
 		]);
 	}
 
+    /**
+     * To check category duplicate name 
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
 	public function category_name_check(Request $request){
 		$category_name = $request->category_name;
 		$category_id = $request->category_id;
@@ -145,7 +182,12 @@ class CategoryController extends Controller
 		echo $result;
 	}
 
-	//to store category details 
+    /**
+     * To store category details.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
 	public function store_category(Request $request)
 	{
 		$category_id=$request['id'];

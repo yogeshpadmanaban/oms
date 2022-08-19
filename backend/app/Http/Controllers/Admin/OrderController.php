@@ -15,25 +15,29 @@ use App\CustomerDetails;
 use App\OrderDetails;
 use App\OrderImages;
 
-	class OrderController extends Controller
+class OrderController extends Controller
 {
-	//to view order listing
+    /**
+     * Display a listing of order.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
 	public function listing(Request $request)
 	{
 		$data['menu']="order_list";
 		return view('admin.order.list',['menu'=>$data['menu']]);
 	}
 
-	//to fetch order data
+    /**
+     * To fetch order records.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
 	public function fetch_order_details(Request $request)
 	{
 		$arr_data = [
-						// 'user_id' => session()->get('sess_arr')['user_id'],
-						// 'user_role' => session()->get('sess_arr')['user_role'],
-						// 'sort' => $_REQUEST['order'],
-						// 'search' => (isset($_REQUEST['search']))?$_REQUEST['search']:'',
-						// 'limit' => (int)$_REQUEST['limit'],
-						// 'offset' => (int)$_REQUEST['offset'],
 						'from_date' => $request->query('from_date'),
 						'to_date' => $request->query('to_date'),
 						'user_id' => $request->query('user_id'),
@@ -48,25 +52,38 @@ use App\OrderImages;
 		return $fetch_data;
 	}
 
-	//to view order 
+    /**
+     * To view orders
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
 	public function view_orders(Request $request)
 	{
 		$data['menu']="view_orders";
 		return view('admin.order.view_orders',['menu'=>$data['menu']]);
 	}
 
-	//to create order 
+    /**
+     * Show the form for creating a new order.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */ 
 	public function create(Request $request)
 	{
 		$data['menu']="order_list";
 		$data['products'] = ProductDetails::where('status','=','0')->get();
 		$data['customers'] = CustomerDetails::where('status','=','0')->get();
-		// $data['cads'] = Cad::where('status','=','0')->get();
-		// $data['order_img'] = DB::table('order_images')->select('*')->get()->toArray();
 		return ['products' => $data['products'] ,'customers' => $data['customers'],'order_img' => NULL,'menu'=>$data['menu']];
 	}
 
-	//to get data of particular id for update
+    /**
+     * To edit the order.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
 	public function edit_order(Request $request)
 	{
 		$data['menu']="order_list";
@@ -81,7 +98,12 @@ use App\OrderImages;
 		return ['orders'=>$data['orders'],'products' => $data['products'],'customers' => $data['customers'],'order_img' => $data['order_img'],'menu'=>$data['menu']];
 	}
 
-	//to change status of particular id
+    /**
+     * To change status of order.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
 	public function status_change($id)
 	{
 		$order_status=OrderDetails::find($id);
@@ -100,7 +122,12 @@ use App\OrderImages;
 		]);
 	}
 
-	//to delete data of particular id
+    /**
+     * Remove the specified order from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
 	public function delete($id)
 	{
 		$row_data = OrderDetails::where('id',$id)->update(['status' => '2']);	
@@ -111,6 +138,12 @@ use App\OrderImages;
 		]);
 	}
 
+	/**
+     * Remove the multiple order from storage.
+     *
+     * @param  int  $data
+     * @return \Illuminate\Http\Response
+     */
 	public function multiple_delete($data)
 	{
 		$data = json_decode(stripslashes($data));
@@ -127,7 +160,13 @@ use App\OrderImages;
 			'status'=>$row_data
 		]);
 	}
-
+	
+	/**
+     * To change multiple status 
+     *
+     * @param  int  $data
+     * @return \Illuminate\Http\Response
+     */
 	public function bulk_status_change($data)
 	{
 		$data = json_decode(stripslashes($data));
