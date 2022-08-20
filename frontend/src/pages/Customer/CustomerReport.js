@@ -32,6 +32,8 @@ import { UserListHead, UserListToolbar, UserMoreMenu } from '../../sections/@das
 // apiservice
 import { postData, getData, baseUrl } from '../../Services/apiservice';
 
+//css
+import '../common.css';
 import jsPDF from "jspdf";
 
 const TABLE_HEAD = [
@@ -332,7 +334,7 @@ export default function CustomerReport() {
                           </TableCell>
                           <TableCell component="th" scope="row" padding="none">
                             <Stack direction="row" alignItems="center" spacing={2}>
-                              <Avatar alt={name} src={ baseUrl + profile_picture} />
+                              <Avatar className="img_enlarge" alt={name} src={ baseUrl + profile_picture} />
                             </Stack>
                           </TableCell>
                           <TableCell align="left">{name}</TableCell>
@@ -343,7 +345,7 @@ export default function CustomerReport() {
                           <TableCell align="left">{pan_no}</TableCell>
                           <TableCell component="th" scope="row" padding="none">
                             <Stack direction="row" alignItems="center" spacing={2}>
-                              <Avatar alt={name} src={ baseUrl + other_upload} />
+                              <Avatar className="img_enlarge" alt={name} src={ baseUrl + other_upload} />
                             </Stack>
                           </TableCell>
                           <TableCell align="left" onClick={() => onstatusChange(customer_id)}>

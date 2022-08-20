@@ -98,12 +98,12 @@ export default function ProductForm() {
                 let responseData = await getData(url);
                 if (responseData && responseData.data.products) {
                     const { name, product_details, product_image, product_id, product_type, category } = responseData.data.products;
-                    formik.setFieldValue("product_id", product_id);
-                    formik.setFieldValue("product_type", product_type);
-                    formik.setFieldValue("category", category);
-                    formik.setFieldValue("name", name);
-                    formik.setFieldValue("product_details", product_details);
-                    formik.setFieldValue("temp_pdt_img", product_image);
+                    formik.setFieldValue("product_id", product_id ? product_id : '');
+                    formik.setFieldValue("product_type", product_type ? product_type : '');
+                    formik.setFieldValue("category", category ? category : '');
+                    formik.setFieldValue("name", name ? name : '');
+                    formik.setFieldValue("product_details", product_details ? product_details : '');
+                    formik.setFieldValue("temp_pdt_img", product_image ? product_image: '');
                     if (product_image) {
                         setImage("product_image", baseUrl + product_image);
                     }

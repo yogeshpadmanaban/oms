@@ -108,16 +108,18 @@ export default function CustomerForm() {
                 let responseData = await getData(url);
                 if (responseData && responseData.data.customer) {
                     const { name, address, city, state, gst_no, pan_no, profile_picture, other_upload, customer_id } = responseData.data.customer;
-                    formik.setFieldValue("customer_id", customer_id);
-                    formik.setFieldValue("name", name);
-                    formik.setFieldValue("address", address);
-                    formik.setFieldValue("city", city);
-                    formik.setFieldValue("state", state);
-                    formik.setFieldValue("gst_no", gst_no);
-                    formik.setFieldValue("pan_no", pan_no);
 
-                    formik.setFieldValue("temp_profile_picture", profile_picture);
-                    formik.setFieldValue("temp_other_upload", other_upload);
+                    formik.setFieldValue("customer_id", customer_id ? customer_id : '');
+                    formik.setFieldValue("name", name ? name : '');
+                    formik.setFieldValue("address", address ? address : '');
+                    formik.setFieldValue("city", city ? city : '');
+                    formik.setFieldValue("state", state ? state : '');
+                    formik.setFieldValue("gst_no", gst_no ? gst_no : '');
+                    formik.setFieldValue("pan_no", pan_no ? pan_no : '');
+
+                    formik.setFieldValue("temp_profile_picture", profile_picture ? profile_picture : '');
+                    formik.setFieldValue("temp_other_upload", other_upload ? other_upload : '');
+
                     if (profile_picture) {
                         setImage("profile_picture", baseUrl + profile_picture);
                     }
@@ -154,9 +156,9 @@ export default function CustomerForm() {
     }
 
     const setImage = async (fieldName, image) => {
-        if (fieldName === 'profile_picture') {
+        if (fieldName === 'profile_picture' && image) {
             set_profile_picture_img(image);
-        } else {
+        } else if (image && fieldName === 'other_upload') {
             set_other_upload_img(image);
         }
     }
