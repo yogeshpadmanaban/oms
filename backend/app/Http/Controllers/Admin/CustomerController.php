@@ -21,7 +21,7 @@ class CustomerController extends Controller
      */
 	public function listing(Request $request)
 	{
-		$data['menu']="customer_list";
+		$data['menu'] = "customer_list";
 		return $data['menu'];
 	}
 
@@ -34,14 +34,14 @@ class CustomerController extends Controller
 	public function fetch_customer_details(Request $request)
 	{
 		$result =CustomerDetails::where('status','!=','2')->get(); // to get except soft-deleted data
-		$data['totalRecords']=$result->count();
+		$data['totalRecords'] = $result->count();
 		$result_two=CustomerDetails::where('status','!=','2')->get();
 
-		$data['records']=$result_two;
+		$data['records'] = $result_two;
 		$data['num_rows'] = $result_two->count();
 
 		$data['table_data']='{"total":'.intval( $data['totalRecords'] ).',"recordsFiltered":'.intval( $data['num_rows'] ).',"rows":'.json_encode($data['records']).'}';
-        $data['menu']="product_list";
+        $data['menu'] = "product_list";
 
 		return ($data['table_data']);
 	}
@@ -54,8 +54,8 @@ class CustomerController extends Controller
      */
 	public function create(Request $request)
 	{
-		$data['menu']="customer_list";
-		return view('admin.customer.create',['menu'=>$data['menu']]);
+		$data['menu'] = "customer_list";
+		return view('admin.customer.create',['menu' => $data['menu']]);
 	}
 
     /**
@@ -66,9 +66,9 @@ class CustomerController extends Controller
      */
 	public function edit_customer(Request $request)
 	{
-		$data['customer']=CustomerDetails::where('customer_id',base64_decode($request->id))->first();	
-		$data['menu']="customer_list";
-		return ['customer'=>$data['customer'],'menu'=>$data['menu']];
+		$data['customer'] = CustomerDetails::where('customer_id',base64_decode($request->id))->first();	
+		$data['menu'] = "customer_list";
+		return ['customer' => $data['customer'],'menu' => $data['menu']];
 	}
 
     /**
@@ -79,19 +79,13 @@ class CustomerController extends Controller
      */
 	public function status_change($id)
 	{
-		$customer_id = CustomerDetails::find($id);
-		if($customer_id->status=='1')
-			$status='0';
-		else
-			$status='1';
-
-		$row_data=CustomerDetails::find($id);
-		$row_data->status=$status;
-		$row_data->save();
+		$customer_details = CustomerDetails::find($id);
+		$status = $customer_details->status == '1' ? '0' : '1';
+		$row_data = CustomerDetails::where('customer_id',$id)->update(['status' => $status]);
 		
 		return response()->json([
 			'success' => 'status changed successfully!',
-			'status'=>$row_data->status
+			'status' => $status
 		]);
 	}
 
@@ -120,16 +114,16 @@ class CustomerController extends Controller
 	public function multiple_delete($data)
 	{
 		$data = json_decode(stripslashes($data));
-		$data_len=count($data);
+		$data_len = count($data);
 		for($i=0; $i<$data_len; $i++){
-			$row_data=CustomerDetails::find($data[$i]);
+			$row_data = CustomerDetails::find($data[$i]);
 			$row_data->status='2';
 			$row_data->save();
 			$row_data->delete();
 		}
 		return response()->json([
 			'success' => 'status changed successfully!',
-			'status'=>$row_data
+			'status' => $row_data
 		]);
 	}
 
@@ -142,21 +136,17 @@ class CustomerController extends Controller
 	public function bulk_status_change($data)
 	{
 		$data = json_decode(stripslashes($data));
-		$data_len=count($data);
-		for($i=0; $i<$data_len; $i++){
-			$customer_id = CustomerDetails::find($data[$i]);
-			if($customer_id->status=='1')
-				$status='0';
-			else
-				$status='1';
+		$data_len = count($data);
 
-			$row_data=CustomerDetails::find($data[$i]);
-			$row_data->status=$status;
-			$row_data->save();
+		for($i=0; $i<$data_len; $i++){
+			$customer_details = CustomerDetails::find($data[$i]);
+			$status = $customer_details->status == '1' ? '0' : '1';
+			$row_data = CustomerDetails::where('customer_id',$data[$i])->update(['status' => $status]);
 		}
+		
 		return response()->json([
 			'success' => 'status changed successfully!',
-			'status'=>$row_data
+			'status' => $status
 		]);
 	}
 
@@ -169,7 +159,7 @@ class CustomerController extends Controller
 	public function gst_no_check(Request $request){
 		$gst_no = $request->gst_no;
 		$customer_id = $request->customer_id;
-		$result=CustomerDetails::select('gst_no')->where('gst_no',$gst_no)
+		$result = CustomerDetails::select('gst_no')->where('gst_no',$gst_no)
 								->when($customer_id != "", function($result) use ($customer_id){
 									return $result->where('customer_id','!=',$customer_id);
 								})
@@ -187,7 +177,7 @@ class CustomerController extends Controller
 	public function pan_no_check(Request $request){
 		$pan_no = $request->pan_no;
 		$customer_id = $request->customer_id;
-		$result=CustomerDetails::select('pan_no')->where('pan_no',$pan_no)								
+		$result = CustomerDetails::select('pan_no')->where('pan_no',$pan_no)								
 								->when($customer_id != "", function($result) use ($customer_id){
 									return $result->where('customer_id','!=',$customer_id);
 								})
@@ -204,16 +194,16 @@ class CustomerController extends Controller
      */
 	public function store_customer(Request $request)
 	{
-		$customer_id=$request['customer_id'];
+		$customer_id = $request['customer_id'];
 
-		$image=$other_upl=null;
+		$image=$other_upl = null;
 
 		if($request->file('profile_picture')){
 			$destinationPath = 'uploads/customer/profile_picture/'; // upload path
 			$files = $request->file('profile_picture');
 			$profile_path = date('YmdHis') . "." . $files->getClientOriginalExtension();
 			$files->move(public_path($destinationPath),$profile_path);
-			$image=$destinationPath.$profile_path;
+			$image = $destinationPath.$profile_path;
 		}
 	
 		if($request->file('other_upload')){
@@ -221,7 +211,7 @@ class CustomerController extends Controller
 			$files = $request->file('other_upload');
 			$other_upload_path = date('YmdHis') . "." . $files->getClientOriginalExtension();
 			$files->move($destinationPath, $other_upload_path);
-			$other_upl=$destinationPath.$other_upload_path;
+			$other_upl = $destinationPath.$other_upload_path;
 		}
 
 		if($customer_id!=''){
@@ -234,14 +224,14 @@ class CustomerController extends Controller
 		}
 
 		$customer_data = [
-			'profile_picture'=>$image,
-			'name'=>$request->input('name'),
-			'address'=>$request->input('address'),
-			'city'=>$request->input('city'),
-			'state'=>$request->input('state'),
-			'gst_no'=>$request->input('gst_no'),
-			'pan_no'=>$request->input('pan_no'),
-			'other_upload'=>$other_upl
+			'profile_picture' => $image,
+			'name' => $request->input('name'),
+			'address' => $request->input('address'),
+			'city' => $request->input('city'),
+			'state' => $request->input('state'),
+			'gst_no' => $request->input('gst_no'),
+			'pan_no' => $request->input('pan_no'),
+			'other_upload' => $other_upl
 		];
 
 		$res = CustomerDetails::updateOrCreate(['customer_id'=>$customer_id],$customer_data); 

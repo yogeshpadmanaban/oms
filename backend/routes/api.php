@@ -80,6 +80,8 @@ Route::post('/login/admin', [LoginController::class,'login'])->name('login.submi
         Route::get('/admin/edit_order/{id}', [OrderController::class,'edit_order']);
 
         Route::get('/admin/order_details/{user_id?}/{user_role?}', [OrderController::class,'fetch_order_details']);
+        Route::post('/admin/order_metal_change_status/{id}', [OrderController::class,'metal_status_change']);
+        Route::post('/admin/order_bulk_metal_status_change/{data}', [OrderController::class,'bulk_metal_status_change']);
         Route::post('/admin/order_change_status/{id}', [OrderController::class,'status_change']);
         Route::post('/admin/order_delete/{id}', [OrderController::class,'delete']);
         Route::post('/admin/order_bulk_status_change/{data}', [OrderController::class,'bulk_status_change']);

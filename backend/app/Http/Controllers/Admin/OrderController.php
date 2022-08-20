@@ -92,10 +92,50 @@ class OrderController extends Controller
 		$data['orders']['design_by'] = explode(',',$data['orders']['design_by']);
 		$data['products'] = ProductDetails::where('status','=','0')->get();
 		$data['customers'] = CustomerDetails::where('status','=','0')->get();
-		// $data['cads'] = Cad::where('status','=','0')->get();
 		$data['order_img'] = OrderImages::where('order_id','=',$data['orders']['order_id'])->get()->toArray();	
-		// echo "<pre>";  print_r($data['orders']);exit();
 		return ['orders'=>$data['orders'],'products' => $data['products'],'customers' => $data['customers'],'order_img' => $data['order_img'],'menu'=>$data['menu']];
+	}
+
+	/**
+     * To change status of metal.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+	public function metal_status_change($id)
+	{
+		$order_status = OrderDetails::find($id);
+		$status = $order_status->metal_provided == '1' ? '0' : '1';
+		$row_data = OrderDetails::where('id',$id)->update(['metal_provided' => $status]);
+		
+		return response()->json([
+			'success' => 'metal status changed successfully!',
+			'status' => $status
+		]);
+	}
+
+	/**
+     * To change multiple metal status 
+     *
+     * @param  int  $data
+     * @return \Illuminate\Http\Response
+     */
+	public function bulk_metal_status_change($data)
+	{
+		$data = json_decode(stripslashes($data));
+		$data_len = count($data);
+
+		for($i=0; $i<$data_len; $i++){
+			$order_status = OrderDetails::find($data[$i]);
+
+			$status = $order_status->metal_provided == '1' ? '0' : '1';
+			$row_data = OrderDetails::where('id',$data[$i])->update(['metal_provided' => $status]);
+		}
+
+		return response()->json([
+			'success' => 'status changed successfully!',
+			'status' => $status
+		]);
 	}
 
     /**
@@ -106,19 +146,13 @@ class OrderController extends Controller
      */
 	public function status_change($id)
 	{
-		$order_status=OrderDetails::find($id);
-		if($order_status->status=='1')
-			$status='0';
-		else
-			$status='1';
-
-		$row_data=OrderDetails::find($id);
-		$row_data->status=$status;
-		$row_data->save();
+		$order_details=OrderDetails::find($id);
+		$status = $order_details->status == '1' ? '0' : '1';
+		$row_data = OrderDetails::where('id',$id)->update(['status' => $status]);
 		
 		return response()->json([
 			'success' => 'status changed successfully!',
-			'status'=>$row_data->status
+			'status' => $status
 		]);
 	}
 
@@ -148,6 +182,7 @@ class OrderController extends Controller
 	{
 		$data = json_decode(stripslashes($data));
 		$data_len=count($data);
+
 		for($i=0; $i<$data_len; $i++){
 			$row_data=OrderDetails::find($data[$i]);
 			$row_data->status='2';
@@ -155,9 +190,10 @@ class OrderController extends Controller
 
 			$row_data->delete();
 		}
+
 		return response()->json([
 			'success' => 'Records has been deleted successfully!',
-			'status'=>$row_data
+			'status' => $row_data
 		]);
 	}
 	
@@ -171,20 +207,17 @@ class OrderController extends Controller
 	{
 		$data = json_decode(stripslashes($data));
 		$data_len=count($data);
-		for($i=0; $i<$data_len; $i++){
-			$product_status=OrderDetails::find($data[$i]);
-			if($product_status->status=='1')
-				$status='0';
-			else
-				$status='1';
 
-			$row_data=OrderDetails::find($data[$i]);
-			$row_data->status=$status;
-			$row_data->save();
+		for($i=0; $i<$data_len; $i++){
+			$order_details=OrderDetails::find($data[$i]);
+
+			$status = $order_details->status == '1' ? '0' : '1';
+			$row_data = OrderDetails::where('id',$data[$i])->update(['status'=>$status]);
 		}
+
 		return response()->json([
 			'success' => 'status changed successfully!',
-			'status'=>$status
+			'status' => $status
 		]);
 	}
 

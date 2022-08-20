@@ -22,7 +22,12 @@ use Symfony\Component\Finder\SplFileInfo;
 
 class PublicController extends Controller
 {
-
+    /**
+     * To download file.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
 	public function ajax_file_download($folder ='', $id = '')
     {
         $file = public_path('uploads/customer/'.$folder.'/'.$id);
@@ -46,8 +51,12 @@ class PublicController extends Controller
         return response()->download($file, $name, $headers);    
     }
 
-
-    //to download order
+    /**
+     * To download order PDF.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function execPDF($order_id){
         
         $url = url('/')."/generatePDF/".$order_id;
@@ -63,6 +72,12 @@ class PublicController extends Controller
         return Response::download($file, 'order.pdf', $headers);
     }
 
+    /**
+     * To generate PDF.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function generatePDF($order_id='')
     {   
         $data = DB::table('order_details','od')
@@ -84,6 +99,12 @@ class PublicController extends Controller
         return view('admin/order/orderPDF')->with(['data' => $data]);
     }
 
+    /**
+     * To check user password.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function check_user_password(Request $request){
         $password= $request->input('password');
         $user_id= $request->input('user_id');
@@ -99,6 +120,12 @@ class PublicController extends Controller
         }
     }
 
+    /**
+     * To update user password.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */ 
     public function update_user_password(Request $request){
         $confirm_pwd= $request->input('confirm_pwd');
         $password = Hash::make($confirm_pwd);
@@ -112,7 +139,12 @@ class PublicController extends Controller
         return json_encode($success);
     }
 
-    //to store order details 
+    /**
+     * To store order details.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */ 
     public function store(Request $request)
     {
         $id = $request->input('id');    

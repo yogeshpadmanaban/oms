@@ -23,8 +23,8 @@ class CategoryController extends Controller
      */
 	public function listing(Request $request)
 	{
-		$data['menu']="category_list";
-		return view('admin.category.list',['menu'=>$data['menu']]);
+		$data['menu'] = "category_list";
+		return view('admin.category.list',['menu' => $data['menu']]);
 	}
 
     /**
@@ -36,14 +36,14 @@ class CategoryController extends Controller
 	public function fetch_category_details(Request $request)
 	{
 		$result =CategoryDetails::where('deleted_at',NULL)->get(); // to get except soft-deleted data
-		$data['totalRecords']=$result->count();
+		$data['totalRecords'] = $result->count();
 
 		$result_two=CategoryDetails::where('deleted_at',NULL)->get();
-		$data['records']=$result_two;
+		$data['records'] = $result_two;
 		$data['num_rows'] = $result_two->count();
 
-		$data['table_data']='{"total":'.intval( $data['totalRecords'] ).',"recordsFiltered":'.intval( $data['num_rows'] ).',"rows":'.json_encode($data['records']).'}';
-        $data['menu']="cad_list";
+		$data['table_data'] ='{"total":'.intval( $data['totalRecords'] ).',"recordsFiltered":'.intval( $data['num_rows'] ).',"rows":'.json_encode($data['records']).'}';
+        $data['menu'] = "cad_list";
 		return ($data['table_data']);
 	}
 
@@ -55,8 +55,8 @@ class CategoryController extends Controller
      */
 	public function create(Request $request)
 	{
-		$data['menu']="category_list";
-		return view('admin.category.create',['menu'=>$data['menu']]);
+		$data['menu'] = "category_list";
+		return view('admin.category.create',['menu' => $data['menu']]);
 	}
 
     /**
@@ -67,8 +67,8 @@ class CategoryController extends Controller
      */
 	public function edit_category($id)
 	{
-		$data['category']=CategoryDetails::where('category_id',$id)->first();	
-		$data['menu']="category_list";
+		$data['category'] = CategoryDetails::where('category_id',$id)->first();	
+		$data['menu'] = "category_list";
 		return ['category' => $data['category'],'menu'=>$data['menu']];
 		exit();
 	}
@@ -81,19 +81,13 @@ class CategoryController extends Controller
      */
 	public function status_change($id)
 	{
-		$category_status=CategoryDetails::find($id);
-		if($category_status->status=='1')
-			$status='0';
-		else
-			$status='1';
-
-		$row_data=CategoryDetails::find($id);
-		$row_data->status=$status;
-		$row_data->save();
-		
+		$category_details = CategoryDetails::find($id);
+		$status = $category_details->status == '1' ? '0' : '1';
+		$row_data = CategoryDetails::where('category_id',$id)->update(['status' => $status]);
+	
 		return response()->json([
 			'success' => 'status changed successfully!',
-			'status'=>$row_data->status
+			'status' => $status
 		]);
 	}
 
@@ -122,7 +116,7 @@ class CategoryController extends Controller
 	public function multiple_delete($data)
 	{
 		$data = json_decode(stripslashes($data));
-		$data_len=count($data);
+		$data_len = count($data);
 		for($i=0; $i<$data_len; $i++){
 			$row_data=CategoryDetails::find($data[$i]);
 			$row_data->status='2';
@@ -132,7 +126,7 @@ class CategoryController extends Controller
 		}
 		return response()->json([
 			'success' => 'status changed successfully!',
-			'status'=>$row_data
+			'status' => $row_data
 		]);
 	}
 
@@ -146,20 +140,17 @@ class CategoryController extends Controller
 	{
 		$data = json_decode(stripslashes($data));
 		$data_len=count($data);
-		for($i=0; $i<$data_len; $i++){
-			$category_status=CategoryDetails::find($data[$i]);
-			if($category_status->status=='1')
-				$status='0';
-			else
-				$status='1';
 
-			$row_data=CategoryDetails::find($data[$i]);
-			$row_data->status=$status;
-			$row_data->save();
+		for($i=0; $i<$data_len; $i++){
+			$category_details=CategoryDetails::find($data[$i]);
+
+			$status = $category_details->status == '1' ? '0' : '1';
+			$row_data=CategoryDetails::where('category_id',$data[$i])->update(['status'=>$status]);
 		}
+		
 		return response()->json([
 			'success' => 'status changed successfully!',
-			'status'=>$status
+			'status' => $status
 		]);
 	}
 
@@ -190,13 +181,13 @@ class CategoryController extends Controller
      */
 	public function store_category(Request $request)
 	{
-		$category_id=$request['id'];
+		$category_id =$request['id'];
 
 		$category_data = [
-			'category_name'=>$request->input('category_name')
+			'category_name' => $request->input('category_name')
 		];
 
-		$res = CategoryDetails::updateOrCreate(['category_id'=>$category_id],$category_data); 
+		$res = CategoryDetails::updateOrCreate(['category_id' => $category_id],$category_data); 
 		$res['message'] = 'Category data updated successfully!';
 		return $res;	
 	}
