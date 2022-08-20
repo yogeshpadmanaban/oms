@@ -401,7 +401,7 @@ export default function OrderReport() {
                                                     <TableCell align="left">{weight}</TableCell>
                                                     <TableCell component="th" scope="row" padding="none">
                                                         <Stack direction="row" alignItems="center" spacing={2}>
-                                                            <Avatar alt={customer_name} src={baseUrl + order_image} />
+                                                            <Avatar className="img_enlarge"  alt={customer_name} src={baseUrl + order_image} />
                                                         </Stack>
                                                     </TableCell>
                                                     <TableCell align="left">{delivery_date ? moment(delivery_date).format('YYYY/MM/DD') : '-'}</TableCell>

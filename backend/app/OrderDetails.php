@@ -80,28 +80,28 @@ class OrderDetails extends Model
 
         $result_two= DB::table('order_details',  'od')
 
-            ->select('od.*','cat.category_name', 'pd.name','pd.category','pd.product_type','pd.product_image','cd.name as customer_name')
-            ->leftJoin('product_details AS pd', 'pd.product_id', '=', 'od.product_id')
-            ->leftJoin('customer_details AS cd', 'cd.customer_id', '=', 'od.customer_id')
-            ->leftJoin('category_details AS cat', 'cat.category_id', '=', 'pd.category')
-            
-            ->when($search != "" , function($result_two) use ($search){
-                return $result_two->where('pd.name','LIKE','%'.$search.'%');
-            })
+                            ->select('od.*','cat.category_name', 'pd.name','pd.category','pd.product_type','pd.product_image','cd.name as customer_name')
+                            ->leftJoin('product_details AS pd', 'pd.product_id', '=', 'od.product_id')
+                            ->leftJoin('customer_details AS cd', 'cd.customer_id', '=', 'od.customer_id')
+                            ->leftJoin('category_details AS cat', 'cat.category_id', '=', 'pd.category')
+                            
+                            ->when($search != "" , function($result_two) use ($search){
+                                return $result_two->where('pd.name','LIKE','%'.$search.'%');
+                            })
 
-            ->when($user_id != "" && $user_role == 'vigat_user', function($result_two) use ($user_id, $user_role){
-                return $result_two->where('od.order_creator_role',$user_role)
-                                  ->where('od.order_creator_id',$user_id);    
-            })
-            ->where('od.deleted_at',NULL) // to get except soft-deleted data
-            ->where('od.status','!=','2')
-            ->where('pd.deleted_at',NULL)
-            ->when($from_date != "" && $to_date != "", function($result_two) use ($from_date, $to_date){
-                return $result_two->whereBetween('od.delivery_date', [$from_date, $to_date]);
-            })
-            // ->limit($limit)->offset($offset)
-            ->orderBy('od.id',$sort)    
-            ->get();
+                            ->when($user_id != "" && $user_role == 'vigat_user', function($result_two) use ($user_id, $user_role){
+                                return $result_two->where('od.order_creator_role',$user_role)
+                                                ->where('od.order_creator_id',$user_id);    
+                            })
+                            ->where('od.deleted_at',NULL) // to get except soft-deleted data
+                            ->where('od.status','!=','2')
+                            ->where('pd.deleted_at',NULL)
+                            ->when($from_date != "" && $to_date != "", function($result_two) use ($from_date, $to_date){
+                                return $result_two->whereBetween('od.delivery_date', [$from_date, $to_date]);
+                            })
+                            // ->limit($limit)->offset($offset)
+                            ->orderBy('od.id',$sort)    
+                            ->get();
 
             // $queries = DB::getQueryLog();
 

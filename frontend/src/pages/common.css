@@ -76,6 +76,11 @@
     height: auto;
 }
 
+.img_enlarge:hover {
+    transform: scale(2);
+    cursor: pointer;
+}
+
 .remove-image {
     display: none;
     position: absolute;

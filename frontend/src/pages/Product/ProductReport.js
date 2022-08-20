@@ -337,7 +337,7 @@ export default function ProductReport() {
                                                     <TableCell align="left">{name}</TableCell>
                                                     <TableCell component="th" scope="row" padding="none">
                                                         <Stack direction="row" alignItems="center" spacing={2}>
-                                                            <Avatar alt={name} src={baseUrl + product_image} />
+                                                            <Avatar className="img_enlarge" alt={name} src={baseUrl + product_image} />
                                                         </Stack>
                                                     </TableCell>
                                                     <TableCell align="left">{product_details}</TableCell>
