@@ -103,7 +103,6 @@ export default function ProductForm() {
                     formik.setFieldValue("category", category);
                     formik.setFieldValue("name", name);
                     formik.setFieldValue("product_details", product_details);
-
                     formik.setFieldValue("temp_pdt_img", product_image);
                     if (product_image) {
                         setImage("product_image", baseUrl + product_image);
