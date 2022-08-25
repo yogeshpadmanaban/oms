@@ -28,7 +28,7 @@ import Page from '../../components/Page';
 import Scrollbar from '../../components/Scrollbar';
 import Iconify from '../../components/Iconify';
 import SearchNotFound from '../../components/SearchNotFound'; // Common Page
-import { UserListHead, UserListToolbar, UserMoreMenu } from '../../sections/@dashboard/categoryReport'; // Sepearte page
+import { UserListHead, UserListToolbar, UserMoreMenu } from '../../sections/@dashboard/producttypeReport'; // Sepearte page
 
 // apiservice
 import { postData, getData } from '../../Services/apiservice';
@@ -41,7 +41,7 @@ import jsPDF from "jspdf";
 
 
 const TABLE_HEAD = [
-    { id: 'category_name', label: 'Category Name', alignRight: false },
+    { id: 'product_type', label: 'Product Type', alignRight: false },
     { id: 'status', label: 'Status', alignRight: false },
     { id: '', label: 'Action', alignRight: false },
 ];
@@ -74,22 +74,22 @@ function applySortFilter(array, comparator, query) {
     });
     if (query) {
         return filter(array, (_user) =>
-            _user.category_name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+            _user.product_type.toLowerCase().indexOf(query.toLowerCase()) !== -1);
     }
     return stabilizedThis.map((el) => el[0]);
 }
 
 
-function CategoryModal({ open, handleClose, getRecord, oneditedId }) {
+function ProducttypeModal({ open, handleClose, getRecord, oneditedId }) {
     const categorySchema = Yup.object().shape({
-        category_id: '',
-        category_name: Yup.string().required('Category Name is required')
+        product_type_id: '',
+        product_type: Yup.string().required('Product Type is required')
     });
 
     const formik = useFormik({
         initialValues: {
-            id: '',
-            category_name: '',
+            product_type_id: '',
+            product_type: '',
         },
         validationSchema: categorySchema,
         onSubmit: async (values, { resetForm }) => {
@@ -97,7 +97,7 @@ function CategoryModal({ open, handleClose, getRecord, oneditedId }) {
             resetForm(); // Reset form
             getRecord(); // Record Get
 
-            let response = await postData('store_category', values);
+            let response = await postData('store_product_type', values);
             console.log("response", response);
             if (response.status === 200) {
                 handleClose(); // Modal close
@@ -115,16 +115,16 @@ function CategoryModal({ open, handleClose, getRecord, oneditedId }) {
 
         const initData = async () => {
             if (oneditedId) {
-                let url = 'edit_category/' + oneditedId;
+                let url = 'edit_product_type/' + oneditedId;
                 let responseData = await getData(url);
-                if (responseData && responseData.data.category) {
-                    const { category_id, category_name } = responseData.data.category;
-                    formik.setFieldValue("id", category_id);
-                    formik.setFieldValue("category_name", category_name);
+                if (responseData && responseData.data.producttype) {
+                    const { product_type_id, product_type } = responseData.data.producttype;
+                    formik.setFieldValue("product_type_id", product_type_id);
+                    formik.setFieldValue("product_type", product_type);
                 }
             } else {
-                formik.setFieldValue("id", '');
-                formik.setFieldValue("category_name", '');
+                formik.setFieldValue("product_type_id", '');
+                formik.setFieldValue("product_type", '');
             }
         }
         initData()
@@ -138,17 +138,17 @@ function CategoryModal({ open, handleClose, getRecord, oneditedId }) {
 
         <div>
             <Modal center open={open} onClose={handleClose}>
-                <h2>{oneditedId ? 'Edit Category' : 'Add Category'}</h2>
+                <h2>{oneditedId ? 'Edit ProductType' : 'Add ProductType'}</h2>
 
                 <FormikProvider value={formik}>
                     <Form autoComplete="off" encType="multipart/form-data" noValidate onSubmit={handleSubmit}>
                         <Stack spacing={2} sx={{ my: 1 }}>
                             <TextField
                                 type="text"
-                                label="Category Name"
-                                {...getFieldProps('category_name')}
-                                error={Boolean(touched.category_name && errors.category_name)}
-                                helperText={touched.category_name && errors.category_name}
+                                label="Prodcut Type"
+                                {...getFieldProps('product_type')}
+                                error={Boolean(touched.product_type && errors.product_type)}
+                                helperText={touched.product_type && errors.product_type}
                             />
 
                             <Stack direction="row" alignItems="center" justifyContent="center">
@@ -172,7 +172,7 @@ function CategoryModal({ open, handleClose, getRecord, oneditedId }) {
 
 
 
-export default function CategoryReport() {
+export default function ProducttypeReport() {
 
     const [page, setPage] = useState(0); // By default set page number
 
@@ -180,7 +180,7 @@ export default function CategoryReport() {
 
     const [order, setOrder] = useState('asc');  // asc || dsc
 
-    const [orderBy, setOrderBy] = useState('category_name');
+    const [orderBy, setOrderBy] = useState('product_type');
 
     const [filterName, setFilterName] = useState('');
 
@@ -205,7 +205,7 @@ export default function CategoryReport() {
 
     useEffect(() => {
         const initData = async () => {
-            let response = await getData('category_details');
+            let response = await getData('product_type_details');
             if (response && response.data.rows) {
                 setList(response.data.rows);
             }
@@ -216,7 +216,7 @@ export default function CategoryReport() {
 
 
     const getRecord = async () => {
-        let response = await getData('category_details');
+        let response = await getData('product_type_details');
         if (response && response.data.rows) {
             setList(response.data.rows);
         }
@@ -232,7 +232,7 @@ export default function CategoryReport() {
     // all checkbox Click
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelecteds = list.map((n) => n.category_id);
+            const newSelecteds = list.map((n) => n.product_type_id);
             setSelected(newSelecteds);
             return;
         }
@@ -240,11 +240,11 @@ export default function CategoryReport() {
     };
 
     // Single checkbox Click
-    const handleClick = (category_id) => {
-        const selectedIndex = selected.indexOf(category_id);
+    const handleClick = (product_type_id) => {
+        const selectedIndex = selected.indexOf(product_type_id);
         let newSelected = [];
         if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, category_id);
+            newSelected = newSelected.concat(selected, product_type_id);
         } else if (selectedIndex === 0) {
             newSelected = newSelected.concat(selected.slice(1));
         } else if (selectedIndex === selected.length - 1) {
@@ -261,18 +261,18 @@ export default function CategoryReport() {
     };
 
     // On Delete
-    const ondeleteClick = async (category_id) => {
+    const ondeleteClick = async (product_type_id) => {
 
         let apiUrl, selectedArray = [];
-        if (selected && selected.length > 1 && category_id) {
+        if (selected && selected.length > 1 && product_type_id) {
             selectedArray = selected;
-            apiUrl = 'category_multi_delete/' + '[' + selectedArray + ']';
+            apiUrl = 'product_type_multi_delete/' + '[' + selectedArray + ']';
         }
         else {
             if (selected && selected.length > 0) {
-                apiUrl = 'category_delete/' + selected;
+                apiUrl = 'product_type_delete/' + selected;
             } else {
-                apiUrl = 'category_delete/' + category_id;
+                apiUrl = 'product_type_delete/' + product_type_id;
             }
         }
         swal({
@@ -298,8 +298,8 @@ export default function CategoryReport() {
 
     // On Edit
 
-    const oneditClick = async (category_id) => {
-        await setoneditedId(category_id);
+    const oneditClick = async (product_type_id) => {
+        await setoneditedId(product_type_id);
         await setOpen(true);
     }
     // On ChangeRowsperPage
@@ -314,19 +314,19 @@ export default function CategoryReport() {
     };
 
     // onStatus Change
-    const onstatusChange = async (category_id) => {
+    const onstatusChange = async (product_type_id) => {
 
         let apiUrl, selectedArray = [];
 
-        if (selected && selected.length > 1 && category_id) {
+        if (selected && selected.length > 1 && product_type_id) {
             selectedArray = selected;
-            apiUrl = 'category_bulk_status_change/' + '[' + selectedArray + ']';
+            apiUrl = 'product_type_bulk_status_change/' + '[' + selectedArray + ']';
         }
         else {
             if (selected && selected.length > 0) {
-                apiUrl = 'category_change_status/' + selected;
+                apiUrl = 'product_type_status_change/' + selected;
             } else {
-                apiUrl = 'category_change_status/' + category_id;
+                apiUrl = 'product_type_status_change/' + product_type_id;
             }
         }
         swal({
@@ -366,10 +366,10 @@ export default function CategoryReport() {
 
         doc.setFontSize(15);
 
-        const title = "Category Report";
-        const headers = [['Id', "Category Name", "Status"]];
+        const title = "Producttype Report";
+        const headers = [['Id', "Product Type", "Status"]];
 
-        const data = list.map(elt => [elt.category_id, elt.category_name, elt.status]);
+        const data = list.map(elt => [elt.product_type_id, elt.product_type, elt.status]);
 
         let content = {
             startY: 50,
@@ -379,7 +379,7 @@ export default function CategoryReport() {
 
         doc.text(title, marginLeft, 40);
         doc.autoTable(content);
-        doc.save("categoryreport.pdf")
+        doc.save("producttypeReport.pdf")
     }
 
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - list.length) : 0;
@@ -389,15 +389,15 @@ export default function CategoryReport() {
     const isDataNotFound = !filteredUsers || filteredUsers.length === 0;
 
     return (
-        <Page title="Category Report">
+        <Page title="ProductType Report">
             <Container>
                 <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
                     <Typography variant="h4" gutterBottom>
-                        Category Report
+                        ProductType Report
                     </Typography>
 
                     <Button variant="contained" onClick={handleOpen} startIcon={<Iconify icon="eva:plus-fill" />}>
-                        Add Category
+                        Add ProductType
                     </Button>
 
                 </Stack>
@@ -422,13 +422,13 @@ export default function CategoryReport() {
                                     {filteredUsers &&
                                         filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
 
-                                            const { category_id, status, category_name } = row;
-                                            const isItemSelected = selected.indexOf(category_id) !== -1;
+                                            const { product_type_id, status, product_type } = row;
+                                            const isItemSelected = selected.indexOf(product_type_id) !== -1;
 
                                             return (
                                                 <TableRow
                                                     hover
-                                                    key={category_id}
+                                                    key={product_type_id}
                                                     tabIndex={-1}
                                                     role="checkbox"
                                                     selected={isItemSelected}
@@ -436,11 +436,11 @@ export default function CategoryReport() {
                                                 >
 
                                                     <TableCell padding="checkbox">
-                                                        <Checkbox checked={isItemSelected} onChange={(event) => handleClick(category_id)} />
+                                                        <Checkbox checked={isItemSelected} onChange={(event) => handleClick(product_type_id)} />
                                                     </TableCell>
 
-                                                    <TableCell align="left">{category_name}</TableCell>
-                                                    <TableCell align="left" onClick={() => onstatusChange(category_id)}>
+                                                    <TableCell align="left">{product_type}</TableCell>
+                                                    <TableCell align="left" onClick={() => onstatusChange(product_type_id)}>
                                                         <Iconify
                                                             icon={status === '1' ? 'charm:cross' :
                                                                 'typcn:tick'}
@@ -453,7 +453,7 @@ export default function CategoryReport() {
                                                             selectedList={selected}
                                                             onDelete={ondeleteClick}
                                                             onEdit={oneditClick}
-                                                            rowId={category_id}
+                                                            rowId={product_type_id}
                                                         />
                                                     </TableCell>
                                                 </TableRow>
@@ -498,7 +498,7 @@ export default function CategoryReport() {
             </Container>
 
             {
-                open && <CategoryModal
+                open && <ProducttypeModal
                     open={open}
                     handleClose={handleClose}
                     getRecord={getRecord}

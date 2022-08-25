@@ -25,6 +25,12 @@ const navConfig = [
     icon: getIcon('ant-design:unordered-list-outlined'),
   },
   {
+    title: 'ProductType Report',
+    path: '/admin/product_type_report',
+    activePath: ['/admin/product_type_report'],
+    icon: getIcon('ant-design:unordered-list-outlined'),
+  },
+  {
     title: 'Product Report',
     path: '/admin/product_report',
     activePath: ['/admin/product_report', '/admin/add_product', 'edit_product'],

@@ -17,6 +17,7 @@ import CustomerReport from './pages/Customer/CustomerReport';
 import CustomerForm from './pages/Customer/CustomerForm';
 
 import CategoryReport from './pages/Category/CategoryReport';
+import ProducttypeReport from './pages/ProductType/ProductTypeReport';
 
 
 import ProductReport from './pages/Product/ProductReport';
@@ -46,6 +47,8 @@ export default function Router() {
         { path: 'edit_customer/:id', element: <CustomerForm /> },
 
         { path: 'category_report', element: <CategoryReport /> },
+
+        { path: 'product_type_report', element: <ProducttypeReport /> },
 
 
         { path: 'product_report', element: <ProductReport /> },
