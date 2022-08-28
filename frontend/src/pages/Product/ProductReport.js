@@ -35,7 +35,7 @@ import { postData, getData, baseUrl } from '../../Services/apiservice';
 import jsPDF from "jspdf";
 
 const TABLE_HEAD = [
-    { id: 'product_type', label: 'Product Type', alignRight: false },
+    { id: 'product_type', label: 'Creditors', alignRight: false },
     { id: 'category_name', label: 'Product Category', alignRight: false },
     { id: 'name', label: 'Product Name', alignRight: false },
     { id: 'product_image', label: 'Product Image', alignRight: false },

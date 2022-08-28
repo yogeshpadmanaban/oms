@@ -41,7 +41,8 @@ import jsPDF from "jspdf";
 
 
 const TABLE_HEAD = [
-    { id: 'dealer_name', label: 'Dealer Name', alignRight: false },
+    { id: 'dealer_name', label: 'Creditors', alignRight: false },
+    { id: 'due_days', label: 'Due Days', alignRight: false },
     { id: 'status', label: 'Status', alignRight: false },
     { id: '', label: 'Action', alignRight: false },
 ];
@@ -74,7 +75,8 @@ function applySortFilter(array, comparator, query) {
     });
     if (query) {
         return filter(array, (_user) =>
-            _user.dealer.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+            _user.dealer_name.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+            _user.due_days.toLowerCase().indexOf(query.toLowerCase()) !== -1);
     }
     return stabilizedThis.map((el) => el[0]);
 }
@@ -83,13 +85,15 @@ function applySortFilter(array, comparator, query) {
 function ProducttypeModal({ open, handleClose, getRecord, oneditedId }) {
     const categorySchema = Yup.object().shape({
         dealer_id: '',
-        dealer_name: Yup.string().required('Dealer Name is required')
+        dealer_name: Yup.string().required('Creditors is required'),
+        due_days:  Yup.number()
     });
 
     const formik = useFormik({
         initialValues: {
             id: '',
             dealer_name: '',
+            due_days: ''
         },
         validationSchema: categorySchema,
         onSubmit: async (values, { resetForm }) => {
@@ -121,10 +125,13 @@ function ProducttypeModal({ open, handleClose, getRecord, oneditedId }) {
                     const { dealer_id, dealer_name } = responseData.data.dealer;
                     formik.setFieldValue("id", dealer_id);
                     formik.setFieldValue("dealer_name", dealer_name);
+                    formik.setFieldValue("due_days", dealer_name);
+
                 }
             } else {
                 formik.setFieldValue("id", '');
                 formik.setFieldValue("dealer_name", '');
+                formik.setFieldValue("due_days", '')
             }
         }
         initData()
@@ -138,17 +145,26 @@ function ProducttypeModal({ open, handleClose, getRecord, oneditedId }) {
 
         <div>
             <Modal center open={open} onClose={handleClose}>
-                <h2>{oneditedId ? 'Edit DealerName' : 'Add DealerName'}</h2>
+                <h2>{oneditedId ? 'Edit Creditors' : 'Add Creditors'}</h2>
 
                 <FormikProvider value={formik}>
                     <Form autoComplete="off" encType="multipart/form-data" noValidate onSubmit={handleSubmit}>
                         <Stack spacing={2} sx={{ my: 1 }}>
+
                             <TextField
                                 type="text"
-                                label="Dealer Name"
+                                label="Creditors"
                                 {...getFieldProps('dealer_name')}
                                 error={Boolean(touched.dealer_name && errors.dealer_name)}
                                 helperText={touched.dealer_name && errors.dealer_name}
+                            />
+
+                            <TextField
+                                type="number"
+                                label="Due Days"
+                                {...getFieldProps('due_days')}
+                                error={Boolean(touched.due_days && errors.due_days)}
+                                helperText={touched.due_days && errors.due_days}
                             />
 
                             <Stack direction="row" alignItems="center" justifyContent="center">
@@ -390,15 +406,15 @@ export default function ProducttypeReport() {
     const isDataNotFound = !filteredUsers || filteredUsers.length === 0;
 
     return (
-        <Page title="Dealer Report">
+        <Page title="Creditors Report">
             <Container>
                 <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
                     <Typography variant="h4" gutterBottom>
-                        Dealer Report
+                        Creditors Report
                     </Typography>
 
                     <Button variant="contained" onClick={handleOpen} startIcon={<Iconify icon="eva:plus-fill" />}>
-                        Add Dealer
+                        Add Creditors
                     </Button>
 
                 </Stack>
@@ -423,7 +439,7 @@ export default function ProducttypeReport() {
                                     {filteredUsers &&
                                         filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
 
-                                            const { dealer_id, status, dealer_name } = row;
+                                            const { dealer_id, status, dealer_name, due_days } = row;
                                             const isItemSelected = selected.indexOf(dealer_id) !== -1;
 
                                             return (
@@ -441,6 +457,7 @@ export default function ProducttypeReport() {
                                                     </TableCell>
 
                                                     <TableCell align="left">{dealer_name}</TableCell>
+                                                    <TableCell align="left">{due_days}</TableCell>
                                                     <TableCell align="left" onClick={() => onstatusChange(dealer_id)}>
                                                         <Iconify
                                                             icon={status === '1' ? 'charm:cross' :
@@ -471,7 +488,7 @@ export default function ProducttypeReport() {
                                 {isDataNotFound && (
                                     <TableBody>
                                         <TableRow>
-                                            <TableCell align="center" colSpan={3} sx={{ py: 3 }}>
+                                            <TableCell align="center" colSpan={4} sx={{ py: 3 }}>
                                                 <SearchNotFound searchQuery={filterName} />
                                             </TableCell>
                                         </TableRow>

@@ -49,6 +49,10 @@
     background-color: #e16363;
 }
 
+.setwarning {
+    background-color: orange;
+}
+
 
 .highlight_cell {
     color: #2065d1;

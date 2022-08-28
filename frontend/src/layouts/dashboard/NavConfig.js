@@ -25,9 +25,9 @@ const navConfig = [
     icon: getIcon('ant-design:unordered-list-outlined'),
   },
   {
-    title: 'ProductType Report',
-    path: '/admin/product_type_report',
-    activePath: ['/admin/product_type_report'],
+    title: 'Creditors Report',
+    path: '/admin/creditors_report',
+    activePath: ['/admin/creditors_report'],
     icon: getIcon('ant-design:unordered-list-outlined'),
   },
   {

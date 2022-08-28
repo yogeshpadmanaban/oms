@@ -379,15 +379,29 @@ export default function OrderReport() {
                                         filteredList.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
 
                                             const { id, order_id, jc_number, product_type, category_name, name, customer_name, purity, weight, quantity, design_by, order_details,
-                                                order_image, delivery_date, status, metal_provided, metal_provided_date, order_due_date } = row;
+                                                order_image, delivery_date, status, metal_provided, metal_provided_date, order_due_date, due_days } = row;
 
                                             const isItemSelected = selected.indexOf(id) !== -1;
+
+                                          
+                                            let due_day = 2;
+                                            var new_date = moment(order_due_date).subtract(due_day, 'days');
+
+                                            let clsname = '';
+                                            
+                                            if (new Date() > new Date(order_due_date)) {
+                                                clsname = 'setmark';
+                                            }
+
+                                            else if (new Date() > new Date(new_date)) {
+                                                clsname = 'setwarning';
+                                            }
 
                                             return (
                                                 <TableRow
                                                     // hover
                                                     key={id}
-                                                    className={new Date() > new Date(order_due_date) ? "setmark" : ""}
+                                                    className={clsname}
                                                     tabIndex={-1}
                                                     role="checkbox"
                                                     selected={isItemSelected}
@@ -401,7 +415,7 @@ export default function OrderReport() {
                                                     <TableCell align="left">{weight}</TableCell>
                                                     <TableCell component="th" scope="row" padding="none">
                                                         <Stack direction="row" alignItems="center" spacing={2}>
-                                                            <Avatar className="img_enlarge"  alt={customer_name} src={baseUrl + order_image} />
+                                                            <Avatar className="img_enlarge" alt={customer_name} src={baseUrl + order_image} />
                                                         </Stack>
                                                     </TableCell>
                                                     <TableCell align="left">{delivery_date ? moment(delivery_date).format('YYYY/MM/DD') : '-'}</TableCell>

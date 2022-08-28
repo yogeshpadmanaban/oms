@@ -35,17 +35,18 @@ export default function ProductForm() {
     const params = useParams();
 
     const [category, setCategoryList] = useState([]);
+    const [creditors, setcreditorsList] = useState([]);
     const [temp_pdt_img, set_product_image_img] = useState('');
 
-    const radioOptions = [
-        { label: 'Vigat Product', value: 'Vigat Product' },
-        { label: 'Customized product', value: 'Customized product' },
-    ];
+    // const radioOptions = [
+    //     { label: 'Vigat Product', value: 'Vigat Product' },
+    //     { label: 'Customized product', value: 'Customized product' },
+    // ];
 
 
     const ustomerformSchema = Yup.object().shape({
         product_id: '',
-        product_type: Yup.string().required('Product type is required'),
+        creditors: Yup.string().required('Creditors is required'),
         category: Yup.string().required('Product category is required'),
         name: Yup.string().required('Name is required'),
         product_image: '',
@@ -56,7 +57,7 @@ export default function ProductForm() {
     const formik = useFormik({
         initialValues: {
             product_id: '',
-            product_type: '',
+            creditors: '',
             category: '',
             name: '',
             product_image: '',
@@ -68,7 +69,7 @@ export default function ProductForm() {
 
             let formData = new FormData();
             formData.append("product_id", values.product_id);
-            formData.append("product_type", values.product_type);
+            formData.append("creditors", values.creditors);
             formData.append("name", values.name);
             formData.append("category", values.category);
             formData.append("product_details", values.product_details);
@@ -93,17 +94,18 @@ export default function ProductForm() {
     useEffect(() => {
         const initData = async () => {
             await getcategory();
+            await getcreditors();
             if (params && params.id) {
                 let url = 'edit_product/' + params.id;
                 let responseData = await getData(url);
                 if (responseData && responseData.data.products) {
-                    const { name, product_details, product_image, product_id, product_type, category } = responseData.data.products;
+                    const { name, product_details, product_image, product_id, creditors, category } = responseData.data.products;
                     formik.setFieldValue("product_id", product_id ? product_id : '');
-                    formik.setFieldValue("product_type", product_type ? product_type : '');
+                    formik.setFieldValue("creditors", creditors ? creditors : '');
                     formik.setFieldValue("category", category ? category : '');
                     formik.setFieldValue("name", name ? name : '');
                     formik.setFieldValue("product_details", product_details ? product_details : '');
-                    formik.setFieldValue("temp_pdt_img", product_image ? product_image: '');
+                    formik.setFieldValue("temp_pdt_img", product_image ? product_image : '');
                     if (product_image) {
                         setImage("product_image", baseUrl + product_image);
                     }
@@ -124,6 +126,20 @@ export default function ProductForm() {
             formik.setFieldValue("category", categoryList[0].category_id);
         }
         setCategoryList(categoryList);
+    }
+
+    const getcreditors = async () => {
+        let responseData = await getData("add_product");
+        let creditorsList = [];
+        creditorsList = responseData.data.creditors;
+        creditorsList.unshift({
+            "creditors_id": '',
+            "creditors": "Select Creditors",
+        })
+        if (params.id === null || params.id === '') {
+            formik.setFieldValue("creditors", creditorsList[0].creditors_id);
+        }
+        setcreditorsList(creditorsList);
     }
 
     const onfileupload = async (name, value) => {
@@ -179,7 +195,7 @@ export default function ProductForm() {
                             <Form autoComplete="off" encType="multipart/form-data" noValidate onSubmit={handleSubmit}>
                                 <Stack spacing={3} sx={{ my: 4 }}>
 
-                                    <div className="required lbl">Product Type:</div>
+                                    {/* <div className="required lbl">Product Type:</div>
                                     <div role="group" aria-labelledby="my-radio-group">
                                         {
                                             radioOptions &&
@@ -194,6 +210,30 @@ export default function ProductForm() {
                                     </div>
                                     {errors.product_type && touched.product_type &&
                                         <div className="selerr">{errors.product_type}</div>
+                                    } */}
+
+
+                                    <div className="required lbl">Creditors:</div>
+                                    <select name="creditors" value={values.creditors}
+                                        onChange={(event) => {
+                                            setFieldValue("creditors", event.target.value)
+                                        }}
+
+                                        className="selectfield"
+                                    >
+                                        {
+                                            creditors &&
+                                            creditors.map((list, index) => {
+                                                return (
+                                                    <option className="seloptionfield" value={list.creditors_id} label={list.creditors}> </option>
+                                                )
+                                            })
+                                        }
+
+                                    </select>
+
+                                    {errors.creditors && touched.creditors &&
+                                        <div className="selerr">{errors.creditors}</div>
                                     }
 
                                     <div className="required lbl">Product Category:</div>

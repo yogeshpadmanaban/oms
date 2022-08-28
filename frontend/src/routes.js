@@ -48,7 +48,7 @@ export default function Router() {
 
         { path: 'category_report', element: <CategoryReport /> },
 
-        { path: 'product_type_report', element: <ProducttypeReport /> },
+        { path: 'creditors_report', element: <ProducttypeReport /> },
 
 
         { path: 'product_report', element: <ProductReport /> },
