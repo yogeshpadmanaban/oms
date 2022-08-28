@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\DealerController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\OrderController;
@@ -62,6 +63,15 @@ Route::post('/login/admin', [LoginController::class,'login'])->name('login.submi
         Route::post('/admin/category_change_status/{id}', [CategoryController::class, 'status_change']);
         Route::post('/admin/category_bulk_status_change/{data}', [CategoryController::class, 'bulk_status_change']);
         Route::post('/admin/category_multi_delete/{id}', [CategoryController::class, 'multiple_delete']);
+
+        Route::post('/admin/store_dealer', [DealerController::class, 'store_dealer'])->name('store_dealer');
+        Route::post('/admin/dealer_name_check', [DealerController::class, 'dealer_name_check']);
+        Route::get('/admin/dealer_details', [DealerController::class, 'fetch_dealer_details']);
+        Route::get('/admin/edit_dealer/{id}', [DealerController::class, 'edit_dealer']);
+        Route::post('/admin/dealer_delete/{id}', [DealerController::class, 'delete']);
+        Route::post('/admin/dealer_change_status/{id}', [DealerController::class, 'status_change']);
+        Route::post('/admin/dealer_bulk_status_change/{data}', [DealerController::class, 'bulk_status_change']);
+        Route::post('/admin/dealer_multi_delete/{id}', [DealerController::class, 'multiple_delete']);
 
         Route::get('/admin/add_product', [ProductController::class,'create']);
         Route::post('/admin/store_product', [ProductController::class,'store']);

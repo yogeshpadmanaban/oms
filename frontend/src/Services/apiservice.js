@@ -6,9 +6,9 @@ const config = {
     headers: { Authorization: `Bearer ${token}` }
 };
 
-// export const baseUrl = 'http://localhost:8000/';
+export const baseUrl = 'http://localhost:8000/';
 
-export const baseUrl = 'https://api.omsmdu.com/';
+// export const baseUrl = 'https://api.omsmdu.com/';
 
 let environment = {};
 
@@ -17,11 +17,11 @@ if (window.location.origin === 'https://omsmdu.com') {
     environment.loginUrl = 'https://api.omsmdu.com/api/';
 } else {
 
-    environment.baseUrl = 'https://api.omsmdu.com/api/admin/';
-    environment.loginUrl = 'https://api.omsmdu.com/api/';
+    // environment.baseUrl = 'https://api.omsmdu.com/api/admin/';
+    // environment.loginUrl = 'https://api.omsmdu.com/api/';
 
-    // environment.baseUrl = 'http://localhost:8000/api/admin/';
-    // environment.loginUrl = 'http://localhost:8000/api/';
+    environment.baseUrl = 'http://localhost:8000/api/admin/';
+    environment.loginUrl = 'http://localhost:8000/api/';
 
 }
 

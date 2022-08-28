@@ -41,7 +41,7 @@ import jsPDF from "jspdf";
 
 
 const TABLE_HEAD = [
-    { id: 'product_type', label: 'Product Type', alignRight: false },
+    { id: 'dealer_name', label: 'Dealer Name', alignRight: false },
     { id: 'status', label: 'Status', alignRight: false },
     { id: '', label: 'Action', alignRight: false },
 ];
@@ -74,7 +74,7 @@ function applySortFilter(array, comparator, query) {
     });
     if (query) {
         return filter(array, (_user) =>
-            _user.product_type.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+            _user.dealer.toLowerCase().indexOf(query.toLowerCase()) !== -1);
     }
     return stabilizedThis.map((el) => el[0]);
 }
@@ -82,14 +82,14 @@ function applySortFilter(array, comparator, query) {
 
 function ProducttypeModal({ open, handleClose, getRecord, oneditedId }) {
     const categorySchema = Yup.object().shape({
-        product_type_id: '',
-        product_type: Yup.string().required('Product Type is required')
+        dealer_id: '',
+        dealer_name: Yup.string().required('Dealer Name is required')
     });
 
     const formik = useFormik({
         initialValues: {
-            product_type_id: '',
-            product_type: '',
+            id: '',
+            dealer_name: '',
         },
         validationSchema: categorySchema,
         onSubmit: async (values, { resetForm }) => {
@@ -97,7 +97,7 @@ function ProducttypeModal({ open, handleClose, getRecord, oneditedId }) {
             resetForm(); // Reset form
             getRecord(); // Record Get
 
-            let response = await postData('store_product_type', values);
+            let response = await postData('store_dealer', values);
             console.log("response", response);
             if (response.status === 200) {
                 handleClose(); // Modal close
@@ -115,16 +115,16 @@ function ProducttypeModal({ open, handleClose, getRecord, oneditedId }) {
 
         const initData = async () => {
             if (oneditedId) {
-                let url = 'edit_product_type/' + oneditedId;
+                let url = 'edit_dealer/' + oneditedId;
                 let responseData = await getData(url);
-                if (responseData && responseData.data.producttype) {
-                    const { product_type_id, product_type } = responseData.data.producttype;
-                    formik.setFieldValue("product_type_id", product_type_id);
-                    formik.setFieldValue("product_type", product_type);
+                if (responseData && responseData.data.dealer) {
+                    const { dealer_id, dealer_name } = responseData.data.dealer;
+                    formik.setFieldValue("id", dealer_id);
+                    formik.setFieldValue("dealer_name", dealer_name);
                 }
             } else {
-                formik.setFieldValue("product_type_id", '');
-                formik.setFieldValue("product_type", '');
+                formik.setFieldValue("id", '');
+                formik.setFieldValue("dealer_name", '');
             }
         }
         initData()
@@ -138,17 +138,17 @@ function ProducttypeModal({ open, handleClose, getRecord, oneditedId }) {
 
         <div>
             <Modal center open={open} onClose={handleClose}>
-                <h2>{oneditedId ? 'Edit ProductType' : 'Add ProductType'}</h2>
+                <h2>{oneditedId ? 'Edit DealerName' : 'Add DealerName'}</h2>
 
                 <FormikProvider value={formik}>
                     <Form autoComplete="off" encType="multipart/form-data" noValidate onSubmit={handleSubmit}>
                         <Stack spacing={2} sx={{ my: 1 }}>
                             <TextField
                                 type="text"
-                                label="Prodcut Type"
-                                {...getFieldProps('product_type')}
-                                error={Boolean(touched.product_type && errors.product_type)}
-                                helperText={touched.product_type && errors.product_type}
+                                label="Dealer Name"
+                                {...getFieldProps('dealer_name')}
+                                error={Boolean(touched.dealer_name && errors.dealer_name)}
+                                helperText={touched.dealer_name && errors.dealer_name}
                             />
 
                             <Stack direction="row" alignItems="center" justifyContent="center">
@@ -180,7 +180,7 @@ export default function ProducttypeReport() {
 
     const [order, setOrder] = useState('asc');  // asc || dsc
 
-    const [orderBy, setOrderBy] = useState('product_type');
+    const [orderBy, setOrderBy] = useState('dealer');
 
     const [filterName, setFilterName] = useState('');
 
@@ -205,7 +205,8 @@ export default function ProducttypeReport() {
 
     useEffect(() => {
         const initData = async () => {
-            let response = await getData('product_type_details');
+            let response = await getData('dealer_details');
+            console.log(response);
             if (response && response.data.rows) {
                 setList(response.data.rows);
             }
@@ -216,7 +217,7 @@ export default function ProducttypeReport() {
 
 
     const getRecord = async () => {
-        let response = await getData('product_type_details');
+        let response = await getData('dealer_details');
         if (response && response.data.rows) {
             setList(response.data.rows);
         }
@@ -232,7 +233,7 @@ export default function ProducttypeReport() {
     // all checkbox Click
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelecteds = list.map((n) => n.product_type_id);
+            const newSelecteds = list.map((n) => n.dealer_id);
             setSelected(newSelecteds);
             return;
         }
@@ -240,11 +241,11 @@ export default function ProducttypeReport() {
     };
 
     // Single checkbox Click
-    const handleClick = (product_type_id) => {
-        const selectedIndex = selected.indexOf(product_type_id);
+    const handleClick = (dealer_id) => {
+        const selectedIndex = selected.indexOf(dealer_id);
         let newSelected = [];
         if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, product_type_id);
+            newSelected = newSelected.concat(selected, dealer_id);
         } else if (selectedIndex === 0) {
             newSelected = newSelected.concat(selected.slice(1));
         } else if (selectedIndex === selected.length - 1) {
@@ -261,18 +262,18 @@ export default function ProducttypeReport() {
     };
 
     // On Delete
-    const ondeleteClick = async (product_type_id) => {
+    const ondeleteClick = async (dealer_id) => {
 
         let apiUrl, selectedArray = [];
-        if (selected && selected.length > 1 && product_type_id) {
+        if (selected && selected.length > 1 && dealer_id) {
             selectedArray = selected;
-            apiUrl = 'product_type_multi_delete/' + '[' + selectedArray + ']';
+            apiUrl = 'dealer_multi_delete/' + '[' + selectedArray + ']';
         }
         else {
             if (selected && selected.length > 0) {
-                apiUrl = 'product_type_delete/' + selected;
+                apiUrl = 'dealer_delete/' + selected;
             } else {
-                apiUrl = 'product_type_delete/' + product_type_id;
+                apiUrl = 'dealer_delete/' + dealer_id;
             }
         }
         swal({
@@ -298,8 +299,8 @@ export default function ProducttypeReport() {
 
     // On Edit
 
-    const oneditClick = async (product_type_id) => {
-        await setoneditedId(product_type_id);
+    const oneditClick = async (dealer_id) => {
+        await setoneditedId(dealer_id);
         await setOpen(true);
     }
     // On ChangeRowsperPage
@@ -314,19 +315,19 @@ export default function ProducttypeReport() {
     };
 
     // onStatus Change
-    const onstatusChange = async (product_type_id) => {
+    const onstatusChange = async (dealer_id) => {
 
         let apiUrl, selectedArray = [];
 
-        if (selected && selected.length > 1 && product_type_id) {
+        if (selected && selected.length > 1 && dealer_id) {
             selectedArray = selected;
-            apiUrl = 'product_type_bulk_status_change/' + '[' + selectedArray + ']';
+            apiUrl = 'dealer_bulk_status_change/' + '[' + selectedArray + ']';
         }
         else {
             if (selected && selected.length > 0) {
-                apiUrl = 'product_type_status_change/' + selected;
+                apiUrl = 'dealer_change_status/' + selected;
             } else {
-                apiUrl = 'product_type_status_change/' + product_type_id;
+                apiUrl = 'dealer_change_status/' + dealer_id;
             }
         }
         swal({
@@ -367,9 +368,9 @@ export default function ProducttypeReport() {
         doc.setFontSize(15);
 
         const title = "Producttype Report";
-        const headers = [['Id', "Product Type", "Status"]];
+        const headers = [['Id', "Dealer Name", "Status"]];
 
-        const data = list.map(elt => [elt.product_type_id, elt.product_type, elt.status]);
+        const data = list.map(elt => [elt.dealer_id, elt.dealer_name, elt.status]);
 
         let content = {
             startY: 50,
@@ -379,7 +380,7 @@ export default function ProducttypeReport() {
 
         doc.text(title, marginLeft, 40);
         doc.autoTable(content);
-        doc.save("producttypeReport.pdf")
+        doc.save("DealerReport.pdf")
     }
 
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - list.length) : 0;
@@ -389,15 +390,15 @@ export default function ProducttypeReport() {
     const isDataNotFound = !filteredUsers || filteredUsers.length === 0;
 
     return (
-        <Page title="ProductType Report">
+        <Page title="Dealer Report">
             <Container>
                 <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
                     <Typography variant="h4" gutterBottom>
-                        ProductType Report
+                        Dealer Report
                     </Typography>
 
                     <Button variant="contained" onClick={handleOpen} startIcon={<Iconify icon="eva:plus-fill" />}>
-                        Add ProductType
+                        Add Dealer
                     </Button>
 
                 </Stack>
@@ -422,13 +423,13 @@ export default function ProducttypeReport() {
                                     {filteredUsers &&
                                         filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
 
-                                            const { product_type_id, status, product_type } = row;
-                                            const isItemSelected = selected.indexOf(product_type_id) !== -1;
+                                            const { dealer_id, status, dealer_name } = row;
+                                            const isItemSelected = selected.indexOf(dealer_id) !== -1;
 
                                             return (
                                                 <TableRow
                                                     hover
-                                                    key={product_type_id}
+                                                    key={dealer_id}
                                                     tabIndex={-1}
                                                     role="checkbox"
                                                     selected={isItemSelected}
@@ -436,11 +437,11 @@ export default function ProducttypeReport() {
                                                 >
 
                                                     <TableCell padding="checkbox">
-                                                        <Checkbox checked={isItemSelected} onChange={(event) => handleClick(product_type_id)} />
+                                                        <Checkbox checked={isItemSelected} onChange={(event) => handleClick(dealer_id)} />
                                                     </TableCell>
 
-                                                    <TableCell align="left">{product_type}</TableCell>
-                                                    <TableCell align="left" onClick={() => onstatusChange(product_type_id)}>
+                                                    <TableCell align="left">{dealer_name}</TableCell>
+                                                    <TableCell align="left" onClick={() => onstatusChange(dealer_id)}>
                                                         <Iconify
                                                             icon={status === '1' ? 'charm:cross' :
                                                                 'typcn:tick'}
@@ -453,7 +454,7 @@ export default function ProducttypeReport() {
                                                             selectedList={selected}
                                                             onDelete={ondeleteClick}
                                                             onEdit={oneditClick}
-                                                            rowId={product_type_id}
+                                                            rowId={dealer_id}
                                                         />
                                                     </TableCell>
                                                 </TableRow>

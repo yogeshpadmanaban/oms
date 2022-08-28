@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Input;
 use Config;
-use Session;
 use App\Cad;
 use App\ProductDetails;
 use App\CustomerDetails;

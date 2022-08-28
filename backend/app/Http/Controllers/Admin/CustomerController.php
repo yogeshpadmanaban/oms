@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Input;
 use App\CustomerDetails;
-use Session;
 
 class CustomerController extends Controller
 {

@@ -11,8 +11,6 @@ use Illuminate\Support\Facades\Input;
 use App\ProductDetails;
 use App\CategoryDetails;
 use Config;
-use Session;
-
 
 class ProductController extends Controller
 {
