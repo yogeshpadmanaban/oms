@@ -38,6 +38,8 @@ import '../common.css';
 
 import jsPDF from "jspdf";
 
+import { Loader } from "react-full-page-loader-overlay";
+
 const TABLE_HEAD = [
 
     { id: 'customer_name', label: 'Customer Name', alignRight: false },
@@ -115,6 +117,8 @@ export default function OrderReport() {
 
     const [List, setList] = useState([]);
 
+    const [loading, setLoading] = useState(true);
+
     useEffect(() => {
         const initData = async (data) => {
             let response = await getorderData('order_details', data);
@@ -124,6 +128,7 @@ export default function OrderReport() {
                     return new Date(a.order_due_date) - new Date(b.order_due_date);
                 });
                 setList(responseData);
+                setLoading(false);
             }
         }
         initData('');
@@ -132,12 +137,14 @@ export default function OrderReport() {
 
     const getRecord = async (data) => {
         let response = await getorderData('order_details', data);
+        setLoading(true);
         if (response && response.data.rows) {
             let responseData = response.data.rows;
             responseData.sort(function (a, b) {
                 return new Date(a.order_due_date) - new Date(b.order_due_date);
             });
             setList(responseData);
+            setLoading(false);
         }
     }
 
@@ -348,6 +355,8 @@ export default function OrderReport() {
 
     return (
         <Page title="Order Report">
+            <Loader show={loading} centerBorder={'#4647f1'}/>
+
             <Container>
                 <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
                     <Typography variant="h4" gutterBottom>

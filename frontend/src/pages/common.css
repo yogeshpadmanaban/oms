@@ -116,4 +116,9 @@
     right: -11px;
 }
 
+.react-loader-container-main {
+    left: 50% !important;
+    top : 50% !important
+}
+
 /* Customised Form Css end*/
