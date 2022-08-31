@@ -133,11 +133,11 @@ export default function ProductForm() {
         let creditorsList = [];
         creditorsList = responseData.data.creditors;
         creditorsList.unshift({
-            "creditors_id": '',
-            "creditors": "Select Creditors",
+            "creditor_id": '',
+            "creditor_name": "Select Creditors",
         })
         if (params.id === null || params.id === '') {
-            formik.setFieldValue("creditors", creditorsList[0].creditors_id);
+            formik.setFieldValue("creditors", creditorsList[0].creditor_id);
         }
         setcreditorsList(creditorsList);
     }
@@ -225,7 +225,7 @@ export default function ProductForm() {
                                             creditors &&
                                             creditors.map((list, index) => {
                                                 return (
-                                                    <option className="seloptionfield" value={list.creditors_id} label={list.creditors}> </option>
+                                                    <option className="seloptionfield" value={list.creditor_id} label={list.creditor_name}> </option>
                                                 )
                                             })
                                         }

@@ -8,10 +8,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Input;
-use App\DealerDetails;
+use App\Creditors;
 use Config;
 
-class DealerController extends Controller
+class CreditorController extends Controller
 {
     /**
      * Display a listing of category.
@@ -33,28 +33,16 @@ class DealerController extends Controller
      */
 	public function fetch_dealer_details(Request $request)
 	{
-		$result = DealerDetails::where('deleted_at',NULL)->get(); // to get except soft-deleted data
+		$result = Creditors::where('deleted_at',NULL)->get(); // to get except soft-deleted data
 		$data['totalRecords'] = $result->count();
 
-		$result_two= DealerDetails::where('deleted_at',NULL)->get();
+		$result_two= Creditors::where('deleted_at',NULL)->get();
 		$data['records'] = $result_two;
 		$data['num_rows'] = $result_two->count();
 
 		$data['table_data'] ='{"total":'.intval( $data['totalRecords'] ).',"recordsFiltered":'.intval( $data['num_rows'] ).',"rows":'.json_encode($data['records']).'}';
 
 		return ($data['table_data']);
-	}
-
-    /**
-     * Show the form for creating a new category.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-	public function create(Request $request)
-	{
-		$data['menu'] = "dealer_list";
-		return view('admin.category.create',['menu' => $data['menu']]);
 	}
 
     /**
@@ -65,7 +53,7 @@ class DealerController extends Controller
      */
 	public function edit_dealer($id)
 	{
-		$data['dealer'] =  DealerDetails::where('dealer_id',$id)->first();	
+		$data['dealer'] =  Creditors::where('creditor_id',$id)->first();	
 		$data['menu'] = "dealer_list";
 		return ['dealer' => $data['dealer'],'menu'=>$data['menu']];
 		exit();
@@ -79,9 +67,9 @@ class DealerController extends Controller
      */
 	public function status_change($id)
 	{
-		$dealer_details =  DealerDetails::find($id);
+		$dealer_details =  Creditors::find($id);
 		$status = $dealer_details->status == '1' ? '0' : '1';
-		$row_data =  DealerDetails::where('dealer_id',$id)->update(['status' => $status]);
+		$row_data =  Creditors::where('creditor_id',$id)->update(['status' => $status]);
 	
 		return response()->json([
 			'success' => 'status changed successfully!',
@@ -97,8 +85,8 @@ class DealerController extends Controller
      */
 	public function delete($id)
 	{
-		 DealerDetails::where('dealer_id',$id)->update(['status' => '2']);	
-		 DealerDetails::find($id)->delete();
+		 Creditors::where('creditor_id',$id)->update(['status' => '2']);	
+		 Creditors::find($id)->delete();
 		return response()->json([
 			'success' => 'Record has been deleted successfully!',
 			'status' => $row_data
@@ -116,7 +104,7 @@ class DealerController extends Controller
 		$data = json_decode(stripslashes($data));
 		$data_len = count($data);
 		for($i=0; $i<$data_len; $i++){
-			$row_data= DealerDetails::find($data[$i]);
+			$row_data= Creditors::find($data[$i]);
 			$row_data->status='2';
 			$row_data->save();
 
@@ -140,10 +128,10 @@ class DealerController extends Controller
 		$data_len=count($data);
 
 		for($i=0; $i<$data_len; $i++){
-			$dealer_details= DealerDetails::find($data[$i]);
+			$dealer_details= Creditors::find($data[$i]);
 
 			$status = $dealer_details->status == '1' ? '0' : '1';
-			$row_data= DealerDetails::where('dealer_id',$data[$i])->update(['status'=>$status]);
+			$row_data= Creditors::where('creditor_id',$data[$i])->update(['status'=>$status]);
 		}
 		
 		return response()->json([
@@ -160,13 +148,14 @@ class DealerController extends Controller
      */
 	public function store_dealer(Request $request)
 	{
-		$dealer_id =$request['id'];
+		$creditor_id =$request['id'];
 
 		$dealer_data = [
-			'dealer_name' => $request->input('dealer_name')
+			'dealer_name' => $request->input('dealer_name'),
+			'due_days' => $request->input('due_days')
 		];
 
-		$res =  DealerDetails::updateOrCreate(['dealer_id' => $dealer_id],$dealer_data); 
+		$res =  Creditors::updateOrCreate(['creditor_id' => $creditor_id],$dealer_data); 
 		$res['message'] = 'Dealer data updated successfully!';
 		return $res;	
 	}

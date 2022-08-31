@@ -313,7 +313,7 @@ export default function ProductReport() {
                                     {filteredUsers &&
                                         filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
 
-                                            const { product_id, name, status, category_name, product_image, product_details, product_type } = row;
+                                            const { product_id, name, status, category_name, product_image, product_details, creditor_name } = row;
 
                                             const isItemSelected = selected.indexOf(product_id) !== -1;
 
@@ -332,7 +332,7 @@ export default function ProductReport() {
                                                         <Checkbox checked={isItemSelected} onChange={(event) => handleClick(product_id)} />
                                                     </TableCell>
 
-                                                    <TableCell align="left">{product_type}</TableCell>
+                                                    <TableCell align="left">{creditor_name}</TableCell>
                                                     <TableCell align="left">{category_name}</TableCell>
                                                     <TableCell align="left">{name}</TableCell>
                                                     <TableCell component="th" scope="row" padding="none">

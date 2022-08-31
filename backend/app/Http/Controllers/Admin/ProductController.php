@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Input;
 use App\ProductDetails;
 use App\CategoryDetails;
+use App\Creditors;
 use Config;
 
 class ProductController extends Controller
@@ -38,8 +39,9 @@ class ProductController extends Controller
 		$data['totalRecords']=$result->count();
 
 		$result_two = DB::table('product_details',  'pd')
-						->select('pd.*','cd.category_name')
+						->select('pd.*','cd.category_name','cdt.creditor_name')
 						->leftJoin('category_details AS cd', 'cd.category_id', '=', 'pd.category')
+						->leftJoin('creditors AS cdt', 'cdt.creditor_id', '=', 'pd.creditors')
 						->where('pd.deleted_at',NULL) // to get except soft-deleted data
 						->where('pd.status','!=','2')
 						->get();
@@ -62,8 +64,9 @@ class ProductController extends Controller
 	{
 		$data['menu'] = "product_list";
 		$data['category'] = CategoryDetails::where('status','=','0')->get();
+		$data['creditors'] = Creditors::where('status','=','0')->get();
 
-		return ['menu' => $data['menu'],'category' => $data['category']];
+		return ['menu' => $data['menu'],'creditors' => $data['creditors'],'category' => $data['category']];
 	}
 
     /**
@@ -76,8 +79,9 @@ class ProductController extends Controller
 	{
 		$data['product'] = ProductDetails::where('product_id',base64_decode($request->id))->first();	
 		$data['category'] = CategoryDetails::where('status','=','0')->get();
+		$data['creditors'] = Creditors::where('status','=','0')->get();
 		$data['menu'] = "product_list";
-		return ['products' => $data['product'],'menu' => $data['menu'],'category' => $data['category']];
+		return ['products' => $data['product'],'menu' => $data['menu'],'creditors' => $data['creditors'],'category' => $data['category']];
 	}
 
     /**
@@ -208,6 +212,7 @@ class ProductController extends Controller
 
 		$product_data = [
 			'category' => $request->input('category'),
+			'creditors' => $request->input('creditors'),
 			'product_image' => $image,
 			'name' => $request->input('name'),
 			'product_details' => $request->input('product_details'),

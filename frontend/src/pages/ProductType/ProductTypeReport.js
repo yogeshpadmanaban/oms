@@ -41,7 +41,7 @@ import jsPDF from "jspdf";
 
 
 const TABLE_HEAD = [
-    { id: 'dealer_name', label: 'Creditors', alignRight: false },
+    { id: 'creditor_name', label: 'Creditors', alignRight: false },
     { id: 'due_days', label: 'Due Days', alignRight: false },
     { id: 'status', label: 'Status', alignRight: false },
     { id: '', label: 'Action', alignRight: false },
@@ -75,8 +75,7 @@ function applySortFilter(array, comparator, query) {
     });
     if (query) {
         return filter(array, (_user) =>
-            _user.dealer_name.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
-            _user.due_days.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+            _user.creditor_name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
     }
     return stabilizedThis.map((el) => el[0]);
 }
@@ -84,15 +83,15 @@ function applySortFilter(array, comparator, query) {
 
 function ProducttypeModal({ open, handleClose, getRecord, oneditedId }) {
     const categorySchema = Yup.object().shape({
-        dealer_id: '',
-        dealer_name: Yup.string().required('Creditors is required'),
+        creditor_id: '',
+        creditor_name: Yup.string().required('Creditors is required'),
         due_days:  Yup.number()
     });
 
     const formik = useFormik({
         initialValues: {
             id: '',
-            dealer_name: '',
+            creditor_name: '',
             due_days: ''
         },
         validationSchema: categorySchema,
@@ -122,15 +121,15 @@ function ProducttypeModal({ open, handleClose, getRecord, oneditedId }) {
                 let url = 'edit_dealer/' + oneditedId;
                 let responseData = await getData(url);
                 if (responseData && responseData.data.dealer) {
-                    const { dealer_id, dealer_name } = responseData.data.dealer;
-                    formik.setFieldValue("id", dealer_id);
-                    formik.setFieldValue("dealer_name", dealer_name);
-                    formik.setFieldValue("due_days", dealer_name);
+                    const { creditor_id, creditor_name, due_days } = responseData.data.dealer;
+                    formik.setFieldValue("id", creditor_id);
+                    formik.setFieldValue("creditor_name", creditor_name);
+                    formik.setFieldValue("due_days", due_days);
 
                 }
             } else {
                 formik.setFieldValue("id", '');
-                formik.setFieldValue("dealer_name", '');
+                formik.setFieldValue("creditor_name", '');
                 formik.setFieldValue("due_days", '')
             }
         }
@@ -154,9 +153,9 @@ function ProducttypeModal({ open, handleClose, getRecord, oneditedId }) {
                             <TextField
                                 type="text"
                                 label="Creditors"
-                                {...getFieldProps('dealer_name')}
-                                error={Boolean(touched.dealer_name && errors.dealer_name)}
-                                helperText={touched.dealer_name && errors.dealer_name}
+                                {...getFieldProps('creditor_name')}
+                                error={Boolean(touched.creditor_name && errors.creditor_name)}
+                                helperText={touched.creditor_name && errors.creditor_name}
                             />
 
                             <TextField
@@ -249,7 +248,7 @@ export default function ProducttypeReport() {
     // all checkbox Click
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelecteds = list.map((n) => n.dealer_id);
+            const newSelecteds = list.map((n) => n.creditor_id);
             setSelected(newSelecteds);
             return;
         }
@@ -257,11 +256,11 @@ export default function ProducttypeReport() {
     };
 
     // Single checkbox Click
-    const handleClick = (dealer_id) => {
-        const selectedIndex = selected.indexOf(dealer_id);
+    const handleClick = (creditor_id) => {
+        const selectedIndex = selected.indexOf(creditor_id);
         let newSelected = [];
         if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, dealer_id);
+            newSelected = newSelected.concat(selected, creditor_id);
         } else if (selectedIndex === 0) {
             newSelected = newSelected.concat(selected.slice(1));
         } else if (selectedIndex === selected.length - 1) {
@@ -278,10 +277,10 @@ export default function ProducttypeReport() {
     };
 
     // On Delete
-    const ondeleteClick = async (dealer_id) => {
+    const ondeleteClick = async (creditor_id) => {
 
         let apiUrl, selectedArray = [];
-        if (selected && selected.length > 1 && dealer_id) {
+        if (selected && selected.length > 1 && creditor_id) {
             selectedArray = selected;
             apiUrl = 'dealer_multi_delete/' + '[' + selectedArray + ']';
         }
@@ -289,7 +288,7 @@ export default function ProducttypeReport() {
             if (selected && selected.length > 0) {
                 apiUrl = 'dealer_delete/' + selected;
             } else {
-                apiUrl = 'dealer_delete/' + dealer_id;
+                apiUrl = 'dealer_delete/' + creditor_id;
             }
         }
         swal({
@@ -315,8 +314,8 @@ export default function ProducttypeReport() {
 
     // On Edit
 
-    const oneditClick = async (dealer_id) => {
-        await setoneditedId(dealer_id);
+    const oneditClick = async (creditor_id) => {
+        await setoneditedId(creditor_id);
         await setOpen(true);
     }
     // On ChangeRowsperPage
@@ -331,11 +330,11 @@ export default function ProducttypeReport() {
     };
 
     // onStatus Change
-    const onstatusChange = async (dealer_id) => {
+    const onstatusChange = async (creditor_id) => {
 
         let apiUrl, selectedArray = [];
 
-        if (selected && selected.length > 1 && dealer_id) {
+        if (selected && selected.length > 1 && creditor_id) {
             selectedArray = selected;
             apiUrl = 'dealer_bulk_status_change/' + '[' + selectedArray + ']';
         }
@@ -343,7 +342,7 @@ export default function ProducttypeReport() {
             if (selected && selected.length > 0) {
                 apiUrl = 'dealer_change_status/' + selected;
             } else {
-                apiUrl = 'dealer_change_status/' + dealer_id;
+                apiUrl = 'dealer_change_status/' + creditor_id;
             }
         }
         swal({
@@ -386,7 +385,7 @@ export default function ProducttypeReport() {
         const title = "Producttype Report";
         const headers = [['Id', "Dealer Name", "Status"]];
 
-        const data = list.map(elt => [elt.dealer_id, elt.dealer_name, elt.status]);
+        const data = list.map(elt => [elt.creditor_id, elt.creditor_name, elt.status]);
 
         let content = {
             startY: 50,
@@ -439,13 +438,13 @@ export default function ProducttypeReport() {
                                     {filteredUsers &&
                                         filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
 
-                                            const { dealer_id, status, dealer_name, due_days } = row;
-                                            const isItemSelected = selected.indexOf(dealer_id) !== -1;
+                                            const { creditor_id, status, creditor_name, due_days } = row;
+                                            const isItemSelected = selected.indexOf(creditor_id) !== -1;
 
                                             return (
                                                 <TableRow
                                                     hover
-                                                    key={dealer_id}
+                                                    key={creditor_id}
                                                     tabIndex={-1}
                                                     role="checkbox"
                                                     selected={isItemSelected}
@@ -453,12 +452,12 @@ export default function ProducttypeReport() {
                                                 >
 
                                                     <TableCell padding="checkbox">
-                                                        <Checkbox checked={isItemSelected} onChange={(event) => handleClick(dealer_id)} />
+                                                        <Checkbox checked={isItemSelected} onChange={(event) => handleClick(creditor_id)} />
                                                     </TableCell>
 
-                                                    <TableCell align="left">{dealer_name}</TableCell>
+                                                    <TableCell align="left">{creditor_name}</TableCell>
                                                     <TableCell align="left">{due_days}</TableCell>
-                                                    <TableCell align="left" onClick={() => onstatusChange(dealer_id)}>
+                                                    <TableCell align="left" onClick={() => onstatusChange(creditor_id)}>
                                                         <Iconify
                                                             icon={status === '1' ? 'charm:cross' :
                                                                 'typcn:tick'}
@@ -471,7 +470,7 @@ export default function ProducttypeReport() {
                                                             selectedList={selected}
                                                             onDelete={ondeleteClick}
                                                             onEdit={oneditClick}
-                                                            rowId={dealer_id}
+                                                            rowId={creditor_id}
                                                         />
                                                     </TableCell>
                                                 </TableRow>

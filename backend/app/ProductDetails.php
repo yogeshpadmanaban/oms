@@ -12,6 +12,7 @@ class ProductDetails extends Model
     public $timestamps = false;
 
     protected $fillable = [
+        'creditors',
     	'category',
 		'name',
 		'product_image',

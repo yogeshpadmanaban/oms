@@ -5,14 +5,15 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class DealerDetails extends Model
+class Creditors extends Model
 {
-    protected $table = 'dealer_details';
-    protected $primaryKey= 'dealer_id';
+    protected $table = 'creditors';
+    protected $primaryKey= 'creditor_id';
     public $timestamps = false;
 
     protected $fillable = [
-    	'dealer_name',
+    	'creditor_name',
+        'due_days'
 	];
 
     use SoftDeletes;
