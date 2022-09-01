@@ -206,8 +206,8 @@ export default function CategoryReport() {
     useEffect(() => {
         const initData = async () => {
             let response = await getData('category_details');
-            if (response && response.data.rows) {
-                setList(response.data.rows);
+            if (response && response.data) {
+                setList(response.data);
             }
         }
         initData();
@@ -217,8 +217,8 @@ export default function CategoryReport() {
 
     const getRecord = async () => {
         let response = await getData('category_details');
-        if (response && response.data.rows) {
-            setList(response.data.rows);
+        if (response && response.data) {
+            setList(response.data);
         }
     }
 

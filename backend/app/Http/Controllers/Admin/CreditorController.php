@@ -13,17 +13,6 @@ use Config;
 
 class CreditorController extends Controller
 {
-    /**
-     * Display a listing of category.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-	public function listing(Request $request)
-	{
-		$data['menu'] = "dealer_list";
-		return view('admin.category.list',['menu' => $data['menu']]);
-	}
 
     /**
      * To fetch category records.
@@ -33,16 +22,9 @@ class CreditorController extends Controller
      */
 	public function fetch_dealer_details(Request $request)
 	{
-		$result = Creditors::where('deleted_at',NULL)->get(); // to get except soft-deleted data
-		$data['totalRecords'] = $result->count();
+		$creditors = Creditors::get();
 
-		$result_two= Creditors::where('deleted_at',NULL)->get();
-		$data['records'] = $result_two;
-		$data['num_rows'] = $result_two->count();
-
-		$data['table_data'] ='{"total":'.intval( $data['totalRecords'] ).',"recordsFiltered":'.intval( $data['num_rows'] ).',"rows":'.json_encode($data['records']).'}';
-
-		return ($data['table_data']);
+		return ($creditors);
 	}
 
     /**
@@ -54,8 +36,7 @@ class CreditorController extends Controller
 	public function edit_dealer($id)
 	{
 		$data['dealer'] =  Creditors::where('creditor_id',$id)->first();	
-		$data['menu'] = "dealer_list";
-		return ['dealer' => $data['dealer'],'menu'=>$data['menu']];
+		return ['dealer' => $data['dealer']];
 		exit();
 	}
 
@@ -85,8 +66,8 @@ class CreditorController extends Controller
      */
 	public function delete($id)
 	{
-		 Creditors::where('creditor_id',$id)->update(['status' => '2']);	
-		 Creditors::find($id)->delete();
+		Creditors::where('creditor_id',$id)->update(['status' => '2']);	
+		$row_data = Creditors::find($id)->delete();
 		return response()->json([
 			'success' => 'Record has been deleted successfully!',
 			'status' => $row_data

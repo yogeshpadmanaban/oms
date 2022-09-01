@@ -84,7 +84,7 @@ class OrderDetails extends Model
                             ->leftJoin('product_details AS pd', 'pd.product_id', '=', 'od.product_id')
                             ->leftJoin('customer_details AS cd', 'cd.customer_id', '=', 'od.customer_id')
                             ->leftJoin('category_details AS cat', 'cat.category_id', '=', 'pd.category')
-                            
+                            ->leftJoin('creditors AS cdt', 'cdt.creditor_id', '=', 'pd.creditors')
                             ->when($search != "" , function($result_two) use ($search){
                                 return $result_two->where('pd.name','LIKE','%'.$search.'%');
                             })
@@ -93,9 +93,11 @@ class OrderDetails extends Model
                                 return $result_two->where('od.order_creator_role',$user_role)
                                                 ->where('od.order_creator_id',$user_id);    
                             })
-                            ->where('od.deleted_at',NULL) // to get except soft-deleted data
                             ->where('od.status','!=','2')
-                            ->where('pd.deleted_at',NULL)
+                            ->where('pd.status','0')
+                            ->where('cd.status','0')
+                            ->where('cat.status','0')
+                            ->where('cdt.status','0')
                             ->when($from_date != "" && $to_date != "", function($result_two) use ($from_date, $to_date){
                                 return $result_two->whereBetween('od.delivery_date', [$from_date, $to_date]);
                             })

@@ -15,17 +15,6 @@ use Session;
 
 class CategoryController extends Controller
 {
-    /**
-     * Display a listing of category.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-	public function listing(Request $request)
-	{
-		$data['menu'] = "category_list";
-		return view('admin.category.list',['menu' => $data['menu']]);
-	}
 
     /**
      * To fetch category records.
@@ -35,16 +24,9 @@ class CategoryController extends Controller
      */
 	public function fetch_category_details(Request $request)
 	{
-		$result =CategoryDetails::where('deleted_at',NULL)->get(); // to get except soft-deleted data
-		$data['totalRecords'] = $result->count();
+		$category = CategoryDetails::get();
 
-		$result_two=CategoryDetails::where('deleted_at',NULL)->get();
-		$data['records'] = $result_two;
-		$data['num_rows'] = $result_two->count();
-
-		$data['table_data'] ='{"total":'.intval( $data['totalRecords'] ).',"recordsFiltered":'.intval( $data['num_rows'] ).',"rows":'.json_encode($data['records']).'}';
-        $data['menu'] = "cad_list";
-		return ($data['table_data']);
+		return ($category);
 	}
 
     /**
@@ -55,8 +37,7 @@ class CategoryController extends Controller
      */
 	public function create(Request $request)
 	{
-		$data['menu'] = "category_list";
-		return view('admin.category.create',['menu' => $data['menu']]);
+		return view('admin.category.create');
 	}
 
     /**
@@ -68,8 +49,7 @@ class CategoryController extends Controller
 	public function edit_category($id)
 	{
 		$data['category'] = CategoryDetails::where('category_id',$id)->first();	
-		$data['menu'] = "category_list";
-		return ['category' => $data['category'],'menu'=>$data['menu']];
+		return ['category' => $data['category']];
 		exit();
 	}
 
@@ -100,7 +80,7 @@ class CategoryController extends Controller
 	public function delete($id)
 	{
 		CategoryDetails::where('category_id',$id)->update(['status' => '2']);	
-		CategoryDetails::find($id)->delete();
+		$row_data = CategoryDetails::find($id)->delete();
 		return response()->json([
 			'success' => 'Record has been deleted successfully!',
 			'status' => $row_data

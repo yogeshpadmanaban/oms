@@ -100,8 +100,8 @@ export default function ProductReport() {
     useEffect(() => {
         const initData = async () => {
             let response = await getData('product_details');
-            if (response && response.data.rows) {
-                setList(response.data.rows);
+            if (response && response.data) {
+                setList(response.data);
             }
         }
         initData();
@@ -109,8 +109,8 @@ export default function ProductReport() {
 
     const getRecord = async () => {
         let response = await getData('product_details');
-        if (response && response.data.rows) {
-            setList(response.data.rows);
+        if (response && response.data) {
+            setList(response.data);
         }
     }
 

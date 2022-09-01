@@ -24,7 +24,6 @@ class AdminController extends Controller
      */
 	public function dashboard(Request $request)
 	{
-		$data['menu'] = "dashboard";            
 		$data['products'] = ProductDetails::limit('3')->get()->toArray(); 
 		
 		$data['category_count'] = CategoryDetails::where('status','0')->get()->count();
@@ -37,7 +36,6 @@ class AdminController extends Controller
 					'tot_customers' => $data['customers_count'],
 					'tot_orders' => $data['orders_count'],
 					'product_data' => $data['products'],
-					'menu' => $data['menu']
 				]);
 	}
 

@@ -106,8 +106,8 @@ export default function CustomerReport() {
   useEffect(() => {
     const initData = async () => {
       let response = await getData('customer_details');
-      if (response && response.data.rows) {
-        setCustomerList(response.data.rows);
+      if (response && response.data) {
+        setCustomerList(response.data);
       }
     }
     initData();
@@ -116,8 +116,8 @@ export default function CustomerReport() {
 
   const getCustomerRecord = async () => {
     let response = await getData('customer_details');
-    if (response && response.data.rows) {
-      setCustomerList(response.data.rows);
+    if (response && response.data) {
+      setCustomerList(response.data);
     }
   }
 

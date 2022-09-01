@@ -16,17 +16,6 @@ use App\OrderImages;
 
 class OrderController extends Controller
 {
-    /**
-     * Display a listing of order.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-	public function listing(Request $request)
-	{
-		$data['menu']="order_list";
-		return view('admin.order.list',['menu'=>$data['menu']]);
-	}
 
     /**
      * To fetch order records.
@@ -59,8 +48,7 @@ class OrderController extends Controller
      */
 	public function view_orders(Request $request)
 	{
-		$data['menu']="view_orders";
-		return view('admin.order.view_orders',['menu'=>$data['menu']]);
+		return view('admin.order.view_orders');
 	}
 
     /**
@@ -71,10 +59,18 @@ class OrderController extends Controller
      */ 
 	public function create(Request $request)
 	{
-		$data['menu']="order_list";
-		$data['products'] = ProductDetails::where('status','=','0')->get();
+
+		$data['products'] = DB::table('product_details',  'pd')
+								->select('pd.*')
+								->leftJoin('category_details AS cd', 'cd.category_id', '=', 'pd.category')
+								->leftJoin('creditors AS cdt', 'cdt.creditor_id', '=', 'pd.creditors')
+								->where('pd.status','!=','2')
+								->where('cd.status','0')
+								->where('cdt.status','0')
+								->get();
+
 		$data['customers'] = CustomerDetails::where('status','=','0')->get();
-		return ['products' => $data['products'] ,'customers' => $data['customers'],'order_img' => NULL,'menu'=>$data['menu']];
+		return ['products' => $data['products'] ,'customers' => $data['customers'],'order_img' => NULL];
 	}
 
     /**
@@ -85,14 +81,13 @@ class OrderController extends Controller
      */
 	public function edit_order(Request $request)
 	{
-		$data['menu']="order_list";
 		$data['orders']=OrderDetails::where('id',base64_decode($request->id))->first();
 
 		$data['orders']['design_by'] = explode(',',$data['orders']['design_by']);
 		$data['products'] = ProductDetails::where('status','=','0')->get();
 		$data['customers'] = CustomerDetails::where('status','=','0')->get();
 		$data['order_img'] = OrderImages::where('order_id','=',$data['orders']['order_id'])->get()->toArray();	
-		return ['orders'=>$data['orders'],'products' => $data['products'],'customers' => $data['customers'],'order_img' => $data['order_img'],'menu'=>$data['menu']];
+		return ['orders'=>$data['orders'],'products' => $data['products'],'customers' => $data['customers'],'order_img' => $data['order_img']];
 	}
 
 	/**

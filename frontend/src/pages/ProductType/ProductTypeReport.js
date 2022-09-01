@@ -222,8 +222,8 @@ export default function ProducttypeReport() {
         const initData = async () => {
             let response = await getData('dealer_details');
             console.log(response);
-            if (response && response.data.rows) {
-                setList(response.data.rows);
+            if (response && response.data) {
+                setList(response.data);
             }
         }
         initData();
@@ -233,8 +233,8 @@ export default function ProducttypeReport() {
 
     const getRecord = async () => {
         let response = await getData('dealer_details');
-        if (response && response.data.rows) {
-            setList(response.data.rows);
+        if (response && response.data) {
+            setList(response.data);
         }
     }
 

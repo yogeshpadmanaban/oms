@@ -15,17 +15,6 @@ use Config;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of product.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-	public function listing(Request $request)
-	{
-		$data['menu']="product_list";
-		return view('admin.product.list',['menu'=>$data['menu']]);
-	}
 
     /**
      * To fetch product records.
@@ -35,23 +24,16 @@ class ProductController extends Controller
      */
 	public function fetch_product_details(Request $request)
 	{
-		$result =ProductDetails::where('deleted_at',NULL)->get(); // to get except soft-deleted data
-		$data['totalRecords']=$result->count();
-
-		$result_two = DB::table('product_details',  'pd')
+		$product = DB::table('product_details',  'pd')
 						->select('pd.*','cd.category_name','cdt.creditor_name')
 						->leftJoin('category_details AS cd', 'cd.category_id', '=', 'pd.category')
 						->leftJoin('creditors AS cdt', 'cdt.creditor_id', '=', 'pd.creditors')
-						->where('pd.deleted_at',NULL) // to get except soft-deleted data
 						->where('pd.status','!=','2')
+						->where('cd.status','0')
+						->where('cdt.status','0')
 						->get();
 
-		$data['records'] = $result_two;
-		$data['num_rows'] = $result_two->count();
-
-		$data['table_data'] ='{"total":'.intval( $data['totalRecords'] ).',"recordsFiltered":'.intval( $data['num_rows'] ).',"rows":'.json_encode($data['records']).'}';
-        $data['menu'] = "cad_list";
-		return ($data['table_data']);
+		return ($product);
 	}
 
     /**
@@ -62,11 +44,10 @@ class ProductController extends Controller
      */
 	public function create(Request $request)
 	{
-		$data['menu'] = "product_list";
 		$data['category'] = CategoryDetails::where('status','=','0')->get();
 		$data['creditors'] = Creditors::where('status','=','0')->get();
 
-		return ['menu' => $data['menu'],'creditors' => $data['creditors'],'category' => $data['category']];
+		return ['creditors' => $data['creditors'],'category' => $data['category']];
 	}
 
     /**
@@ -80,8 +61,7 @@ class ProductController extends Controller
 		$data['product'] = ProductDetails::where('product_id',base64_decode($request->id))->first();	
 		$data['category'] = CategoryDetails::where('status','=','0')->get();
 		$data['creditors'] = Creditors::where('status','=','0')->get();
-		$data['menu'] = "product_list";
-		return ['products' => $data['product'],'menu' => $data['menu'],'creditors' => $data['creditors'],'category' => $data['category']];
+		return ['products' => $data['product'],'creditors' => $data['creditors'],'category' => $data['category']];
 	}
 
     /**
@@ -110,8 +90,8 @@ class ProductController extends Controller
      */
 	public function delete($id)
 	{
-		$row_data = ProductDetails::where('product_id',$id)->update(['status' => '2']);	
-		ProductDetails::find($id)->delete();
+		ProductDetails::where('product_id',$id)->update(['status' => '2']);	
+		$row_data = ProductDetails::find($id)->delete();
 		return response()->json([
 			'success' => 'Record has been deleted successfully!',
 			'status' => $row_data

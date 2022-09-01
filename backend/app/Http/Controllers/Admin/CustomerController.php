@@ -12,17 +12,6 @@ use App\CustomerDetails;
 
 class CustomerController extends Controller
 {
-    /**
-     * Display a listing of customer.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-	public function listing(Request $request)
-	{
-		$data['menu'] = "customer_list";
-		return $data['menu'];
-	}
 
     /**
      * To fetch customer records.
@@ -32,17 +21,9 @@ class CustomerController extends Controller
      */
 	public function fetch_customer_details(Request $request)
 	{
-		$result =CustomerDetails::where('status','!=','2')->get(); // to get except soft-deleted data
-		$data['totalRecords'] = $result->count();
-		$result_two=CustomerDetails::where('status','!=','2')->get();
+		$customer =CustomerDetails::get(); 
 
-		$data['records'] = $result_two;
-		$data['num_rows'] = $result_two->count();
-
-		$data['table_data']='{"total":'.intval( $data['totalRecords'] ).',"recordsFiltered":'.intval( $data['num_rows'] ).',"rows":'.json_encode($data['records']).'}';
-        $data['menu'] = "product_list";
-
-		return ($data['table_data']);
+		return ($customer);
 	}
 
     /**
@@ -53,8 +34,7 @@ class CustomerController extends Controller
      */
 	public function create(Request $request)
 	{
-		$data['menu'] = "customer_list";
-		return view('admin.customer.create',['menu' => $data['menu']]);
+		return view('admin.customer.create');
 	}
 
     /**
@@ -66,8 +46,7 @@ class CustomerController extends Controller
 	public function edit_customer(Request $request)
 	{
 		$data['customer'] = CustomerDetails::where('customer_id',base64_decode($request->id))->first();	
-		$data['menu'] = "customer_list";
-		return ['customer' => $data['customer'],'menu' => $data['menu']];
+		return ['customer' => $data['customer']];
 	}
 
     /**
@@ -96,8 +75,8 @@ class CustomerController extends Controller
      */
 	public function delete($id)
 	{
-		$row_data = CustomerDetails::where('customer_id',$id)->update(['status' => '2']);	
-		CustomerDetails::find($id)->delete();
+		CustomerDetails::where('customer_id',$id)->update(['status' => '2']);	
+		$row_data = CustomerDetails::find($id)->delete();
 		return response()->json([
 			'success' => 'Record has been deleted successfully!',
 			'status' => $row_data

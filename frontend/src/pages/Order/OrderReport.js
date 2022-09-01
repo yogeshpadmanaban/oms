@@ -433,7 +433,7 @@ export default function OrderReport() {
 
                                                     <TableCell align="left" onClick={() => onmetalstatusChange(id)}>
                                                         <Iconify
-                                                            icon={metal_provided === '1' ? 'charm:cross' :
+                                                            icon={metal_provided === '0' ? 'charm:cross' :
                                                                 'typcn:tick'}
                                                             sx={{ width: 25, height: 25, ml: 1 }}
                                                         />
