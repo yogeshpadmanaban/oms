@@ -38,7 +38,7 @@ import { Modal } from "react-responsive-modal";
 
 import jsPDF from "jspdf";
 
-
+import { Loader } from "react-full-page-loader-overlay";
 
 const TABLE_HEAD = [
     { id: 'category_name', label: 'Category Name', alignRight: false },
@@ -192,6 +192,7 @@ export default function CategoryReport() {
 
     const [oneditedId, setoneditedId] = useState('');
 
+    const [loading, setLoading] = useState(true);
 
     const handleOpen = async () => {
         await setoneditedId('');
@@ -208,6 +209,7 @@ export default function CategoryReport() {
             let response = await getData('category_details');
             if (response && response.data) {
                 setList(response.data);
+                setLoading(false);
             }
         }
         initData();
@@ -216,9 +218,11 @@ export default function CategoryReport() {
 
 
     const getRecord = async () => {
+        setLoading(true);
         let response = await getData('category_details');
         if (response && response.data) {
             setList(response.data);
+            setLoading(false);
         }
     }
 
@@ -390,6 +394,7 @@ export default function CategoryReport() {
 
     return (
         <Page title="Category Report">
+            <Loader show={loading} centerBorder={'#2065d1'} />
             <Container>
                 <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
                     <Typography variant="h4" gutterBottom>

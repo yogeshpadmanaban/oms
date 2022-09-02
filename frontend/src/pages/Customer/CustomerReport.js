@@ -35,6 +35,7 @@ import { postData, getData, baseUrl } from '../../Services/apiservice';
 //css
 import '../common.css';
 import jsPDF from "jspdf";
+import { Loader } from "react-full-page-loader-overlay";
 
 const TABLE_HEAD = [
   { id: 'profile_picture', label: 'Profile Picture', alignRight: false },
@@ -103,11 +104,14 @@ export default function CustomerReport() {
 
   const [customerList, setCustomerList] = useState([]);
 
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const initData = async () => {
       let response = await getData('customer_details');
       if (response && response.data) {
         setCustomerList(response.data);
+        setLoading(false);
       }
     }
     initData();
@@ -115,9 +119,11 @@ export default function CustomerReport() {
 
 
   const getCustomerRecord = async () => {
+    setLoading(true);
     let response = await getData('customer_details');
     if (response && response.data) {
       setCustomerList(response.data);
+      setLoading(false);
     }
   }
 
@@ -287,6 +293,7 @@ export default function CustomerReport() {
 
   return (
     <Page title="Customer Report">
+      <Loader show={loading} centerBorder={'#2065d1'}/>
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>

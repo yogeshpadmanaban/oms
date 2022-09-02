@@ -38,7 +38,7 @@ import { Modal } from "react-responsive-modal";
 
 import jsPDF from "jspdf";
 
-
+import { Loader } from "react-full-page-loader-overlay";
 
 const TABLE_HEAD = [
     { id: 'creditor_name', label: 'Creditors', alignRight: false },
@@ -73,10 +73,13 @@ function applySortFilter(array, comparator, query) {
         if (order !== 0) return order;
         return a[1] - b[1];
     });
-    if (query) {
-        return filter(array, (_user) =>
-            _user.creditor_name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    if (query && isNaN(query)) {
+        return filter(array, (_user) => _user.creditor_name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
     }
+    else if (query && !isNaN(query)) {
+        return filter(array, (_user) => _user.due_days == query);
+    }
+
     return stabilizedThis.map((el) => el[0]);
 }
 
@@ -85,7 +88,7 @@ function ProducttypeModal({ open, handleClose, getRecord, oneditedId }) {
     const categorySchema = Yup.object().shape({
         creditor_id: '',
         creditor_name: Yup.string().required('Creditors is required'),
-        due_days:  Yup.number()
+        due_days: Yup.number()
     });
 
     const formik = useFormik({
@@ -207,6 +210,8 @@ export default function ProducttypeReport() {
 
     const [oneditedId, setoneditedId] = useState('');
 
+    const [loading, setLoading] = useState(true);
+
 
     const handleOpen = async () => {
         await setoneditedId('');
@@ -224,6 +229,7 @@ export default function ProducttypeReport() {
             console.log(response);
             if (response && response.data) {
                 setList(response.data);
+                setLoading(false);
             }
         }
         initData();
@@ -232,9 +238,11 @@ export default function ProducttypeReport() {
 
 
     const getRecord = async () => {
+        setLoading(true);
         let response = await getData('dealer_details');
         if (response && response.data) {
             setList(response.data);
+            setLoading(false);
         }
     }
 
@@ -406,6 +414,7 @@ export default function ProducttypeReport() {
 
     return (
         <Page title="Creditors Report">
+            <Loader show={loading} centerBorder={'#2065d1'} />
             <Container>
                 <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
                     <Typography variant="h4" gutterBottom>
