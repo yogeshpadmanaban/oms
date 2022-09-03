@@ -12,6 +12,8 @@ import { AppWidgetSummary } from '../sections/@dashboard/app';
 // apiservice
 import { getData } from '../Services/apiservice';
 
+import { Loader } from "react-full-page-loader-overlay";
+import './../pages/common.css';
 
 // ----------------------------------------------------------------------
 
@@ -19,13 +21,14 @@ export default function DashboardApp() {
   // const theme = useTheme();
 
   const [count, setCount] = useState({});
-
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const initData = async () => {
       let response = await getData('dashboard');
       if (response) {
         setCount(response.data);
+        setLoading(false);
       }
     }
     initData();
@@ -34,6 +37,7 @@ export default function DashboardApp() {
 
   return (
     <Page title="Dashboard">
+        <Loader show={loading} centerBorder={'#2065d1'}/>
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 5 }}>
           Hi, Welcome back

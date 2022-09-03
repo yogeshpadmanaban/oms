@@ -34,6 +34,8 @@ import { postData, getData, baseUrl } from '../../Services/apiservice';
 
 import jsPDF from "jspdf";
 
+import { Loader } from "react-full-page-loader-overlay";
+
 const TABLE_HEAD = [
     { id: 'product_type', label: 'Creditors', alignRight: false },
     { id: 'category_name', label: 'Product Category', alignRight: false },
@@ -71,11 +73,10 @@ function applySortFilter(array, comparator, query) {
     });
     if (query) {
         return filter(array, (_user) =>
-            _user.product_type && _user.product_type.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+            _user.creditor_name && _user.creditor_name.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
             _user.category_name && _user.category_name.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
             _user.name && _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
             _user.product_details && _user.product_details.toLowerCase().indexOf(query.toLowerCase()) !== -1
-
         );
     }
     return stabilizedThis.map((el) => el[0]);
@@ -87,30 +88,35 @@ export default function ProductReport() {
 
     const [selected, setSelected] = useState([]); // checkBox selected
 
-    const [order, setOrder] = useState('asc');  
+    const [order, setOrder] = useState('asc');
 
     const [orderBy, setOrderBy] = useState('name');
 
-    const [filterName, setFilterName] = useState(''); 
-    
+    const [filterName, setFilterName] = useState('');
+
     const [rowsPerPage, setRowsPerPage] = useState(5);  // setrowsPerPage
 
     const [list, setList] = useState([]);
+
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const initData = async () => {
             let response = await getData('product_details');
             if (response && response.data) {
                 setList(response.data);
+                setLoading(false);
             }
         }
         initData();
     }, []);
 
     const getRecord = async () => {
+        setLoading(true);
         let response = await getData('product_details');
         if (response && response.data) {
             setList(response.data);
+            setLoading(false);
         }
     }
 
@@ -281,6 +287,7 @@ export default function ProductReport() {
 
     return (
         <Page title="Product Report">
+            <Loader show={loading} centerBorder={'#2065d1'} />
             <Container>
                 <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
                     <Typography variant="h4" gutterBottom>

@@ -17,7 +17,7 @@ import Page from '../../components/Page';
 // Serive
 import { postData, getData, baseUrl} from '../../Services/apiservice';
 import { toast } from 'react-toastify';
-import '../common.css'
+import '../common.css';
 
 // ----------------------------------------------------------------------
 

@@ -90,12 +90,24 @@ function applySortFilter(array, comparator, query) {
         if (order !== 0) return order;
         return a[1] - b[1];
     });
-    if (query) {
+
+    if (query && isNaN(query)) {
         return filter(array, (_user) =>
             _user.customer_name && _user.customer_name.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
-            _user.name && _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1 
+            _user.name && _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+            _user.design_by && _user.design_by.toLowerCase().indexOf(query.toLowerCase()) !== -1
         );
     }
+
+    else if (query && !isNaN(query)) {
+        return filter(array, (_user) =>
+            _user.weight && _user.weight == query ||
+            _user.purity && _user.purity == query ||
+            _user.jc_number && _user.jc_number == query ||
+            _user.quantity && _user.quantity == query
+        )
+    }
+
     return stabilizedThis.map((el) => el[0]);
 }
 
@@ -354,7 +366,7 @@ export default function OrderReport() {
 
     return (
         <Page title="Order Report">
-            <Loader show={loading} centerBorder={'#4647f1'}/>
+            <Loader show={loading} centerBorder={'#2065d1'} />
 
             <Container>
                 <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
@@ -396,7 +408,7 @@ export default function OrderReport() {
                                             var new_date = moment(order_due_date).subtract(due_days, 'days');
 
                                             let clsname = '';
-                                            
+
                                             if (new Date() > new Date(order_due_date)) {
                                                 clsname = 'setmark';
                                             }
