@@ -132,11 +132,12 @@ class CreditorController extends Controller
 		$creditor_id =$request['id'];
 
 		$dealer_data = [
-			'dealer_name' => $request->input('dealer_name'),
+			'creditor_name' => $request->input('creditor_name'),
 			'due_days' => $request->input('due_days')
 		];
 
 		$res =  Creditors::updateOrCreate(['creditor_id' => $creditor_id],$dealer_data); 
+		$res['status'] = $res['creditor_id'] != '' ? 200 : '';
 		$res['message'] = 'Dealer data updated successfully!';
 		return $res;	
 	}

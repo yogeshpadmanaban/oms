@@ -101,8 +101,7 @@ function ProducttypeModal({ open, handleClose, getRecord, oneditedId }) {
             getRecord(); // Record Get
 
             let response = await postData('store_dealer', values);
-            console.log("response", response);
-            if (response.status === 200) {
+            if (response.data.status === 200) {
                 handleClose(); // Modal close
                 resetForm(); // Reset form
                 toast.success(response.data.message);

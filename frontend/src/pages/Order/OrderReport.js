@@ -93,8 +93,7 @@ function applySortFilter(array, comparator, query) {
     if (query) {
         return filter(array, (_user) =>
             _user.customer_name && _user.customer_name.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
-            _user.weight && _user.weight.toLowerCase().indexOf(query.toLowerCase()) !== -1
-
+            _user.name && _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1 
         );
     }
     return stabilizedThis.map((el) => el[0]);
@@ -393,8 +392,8 @@ export default function OrderReport() {
                                             const isItemSelected = selected.indexOf(id) !== -1;
 
                                           
-                                            let due_day = 2;
-                                            var new_date = moment(order_due_date).subtract(due_day, 'days');
+                                            // let due_days = 2;
+                                            var new_date = moment(order_due_date).subtract(due_days, 'days');
 
                                             let clsname = '';
                                             
@@ -433,7 +432,7 @@ export default function OrderReport() {
 
                                                     <TableCell align="left" onClick={() => onmetalstatusChange(id)}>
                                                         <Iconify
-                                                            icon={metal_provided === '0' ? 'charm:cross' :
+                                                            icon={metal_provided === null || metal_provided === '0' ? 'charm:cross' :
                                                                 'typcn:tick'}
                                                             sx={{ width: 25, height: 25, ml: 1 }}
                                                         />

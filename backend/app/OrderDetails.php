@@ -80,7 +80,7 @@ class OrderDetails extends Model
 
         $result_two= DB::table('order_details',  'od')
 
-                            ->select('od.*','cat.category_name', 'pd.name','pd.category','pd.product_type','pd.product_image','cd.name as customer_name')
+                            ->select('od.*','cat.category_name', 'pd.name','pd.category','pd.product_type','pd.product_image','cd.name as customer_name','cdt.due_days')
                             ->leftJoin('product_details AS pd', 'pd.product_id', '=', 'od.product_id')
                             ->leftJoin('customer_details AS cd', 'cd.customer_id', '=', 'od.customer_id')
                             ->leftJoin('category_details AS cat', 'cat.category_id', '=', 'pd.category')

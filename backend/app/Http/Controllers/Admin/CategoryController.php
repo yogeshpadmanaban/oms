@@ -168,6 +168,7 @@ class CategoryController extends Controller
 		];
 
 		$res = CategoryDetails::updateOrCreate(['category_id' => $category_id],$category_data); 
+		$res['status'] = $res['category_id'] != '' ? 200 : '';
 		$res['message'] = 'Category data updated successfully!';
 		return $res;	
 	}
