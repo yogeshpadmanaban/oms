@@ -35,6 +35,8 @@ import { postData, getData, baseUrl } from '../../Services/apiservice';
 //css
 import '../common.css';
 import jsPDF from "jspdf";
+import 'jspdf-autotable'
+
 import { Loader } from "react-full-page-loader-overlay";
 
 const TABLE_HEAD = [

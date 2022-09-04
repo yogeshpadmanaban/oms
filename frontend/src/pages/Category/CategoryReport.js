@@ -37,6 +37,7 @@ import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
 
 import jsPDF from "jspdf";
+import 'jspdf-autotable'
 
 import { Loader } from "react-full-page-loader-overlay";
 

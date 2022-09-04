@@ -40,6 +40,9 @@ import jsPDF from "jspdf";
 
 import { Loader } from "react-full-page-loader-overlay";
 
+import { EditText, EditTextarea } from 'react-edit-text';
+import 'react-edit-text/dist/index.css';
+
 const TABLE_HEAD = [
 
     { id: 'customer_name', label: 'Customer Name', alignRight: false },
@@ -129,6 +132,9 @@ export default function OrderReport() {
     const [List, setList] = useState([]);
 
     const [loading, setLoading] = useState(true);
+
+    const [text, setText] = React.useState('');
+    const [id, setId] = React.useState('');
 
     useEffect(() => {
         const initData = async (data) => {
@@ -221,11 +227,13 @@ export default function OrderReport() {
         })
             .then(async (willDelete) => {
                 if (willDelete) {
+                    setLoading(true);
                     let responseData = await postData(apiUrl)
                     if (responseData) {
                         toast.success("Deleted Successfully");
                         await getRecord('');
                         await handletableReset();
+                        setLoading(false);
                     } else {
                         toast.error("Oops ! Somewithing wen wrong");
                     }
@@ -268,11 +276,13 @@ export default function OrderReport() {
         })
             .then(async (willchangeStatus) => {
                 if (willchangeStatus) {
+                    setLoading(true);
                     let responseData = await postData(apiUrl);
                     if (responseData) {
                         toast.success("Status Changed Successfully");
                         await getRecord('');
                         await handletableReset();
+                        setLoading(false);
                     } else {
                         toast.error("Oops ! Somewithing wen wrong");
                     }
@@ -305,11 +315,13 @@ export default function OrderReport() {
         })
             .then(async (willchangeStatus) => {
                 if (willchangeStatus) {
+                    setLoading(true);
                     let responseData = await postData(apiUrl);
                     if (responseData) {
                         toast.success("Metal Status Changed Successfully");
                         await getRecord('');
                         await handletableReset();
+                        setLoading(false);
                     } else {
                         toast.error("Oops ! Somewithing wen wrong");
                     }
@@ -357,6 +369,23 @@ export default function OrderReport() {
         doc.autoTable(content);
         doc.save("order_report.pdf")
     }
+
+
+    const handleChange = (event, id) => {
+        setText(moment(event.target.value).format('DD/MM/YYYY'));
+        setId(id);
+
+        // Need api
+
+
+    }
+
+
+    const handleSave = () => {
+        console.log("id", id);
+        console.log("text", text);
+        getRecord();
+    };
 
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - List.length) : 0;
 
@@ -438,7 +467,7 @@ export default function OrderReport() {
                                                             <Avatar className="img_enlarge" alt={customer_name} src={baseUrl + order_image} />
                                                         </Stack>
                                                     </TableCell>
-                                                    <TableCell align="left">{delivery_date ? moment(delivery_date).format('YYYY/MM/DD') : '-'}</TableCell>
+                                                    <TableCell align="left">{delivery_date ? moment(delivery_date).format('DD/MM/YYYY') : '-'}</TableCell>
 
                                                     {/* <TableCell align="left">{metal_provided === '1' ? 'Yes' : 'No'}</TableCell> */}
 
@@ -460,9 +489,23 @@ export default function OrderReport() {
                                                     {/* <TableCell align="left">{order_details}</TableCell> */}
 
 
-                                                    <TableCell align="left">{metal_provided_date ? moment(metal_provided_date).format('YYYY/MM/DD') : '-'}
+                                                    {/* <TableCell align="left">{metal_provided_date ? moment(metal_provided_date).format('YYYY/MM/DD') : '-'}
+                                                    </TableCell> */}
+
+                                                    <TableCell align="left">
+                                                        <EditText
+                                                            name="metal_provided_date"
+                                                            type="date"
+                                                            value={text ? text : setText(moment(metal_provided_date).format('DD/MM/YYYY'))}
+                                                            inputClassName='bg-success'
+                                                            onChange={(e) => handleChange(e, id)}
+                                                            onSave={handleSave}
+                                                        />
                                                     </TableCell>
-                                                    <TableCell align="left">{order_due_date ? moment(order_due_date).format('YYYY/MM/DD') : '-'}
+
+
+
+                                                    <TableCell align="left">{order_due_date ? moment(order_due_date).format('DD/MM/YYYY') : '-'}
                                                     </TableCell>
                                                     <TableCell align="left" onClick={() => onstatusChange(id)}>
                                                         <Iconify

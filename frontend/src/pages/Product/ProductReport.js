@@ -33,6 +33,7 @@ import { UserListHead, UserListToolbar, UserMoreMenu } from '../../sections/@das
 import { postData, getData, baseUrl } from '../../Services/apiservice';
 
 import jsPDF from "jspdf";
+import 'jspdf-autotable'
 
 import { Loader } from "react-full-page-loader-overlay";
 
