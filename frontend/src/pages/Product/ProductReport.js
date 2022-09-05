@@ -81,7 +81,7 @@ function applySortFilter(array, comparator, query) {
     }
     return stabilizedThis.map((el) => el[0]);
 }
-
+    
 export default function ProductReport() {
 
     const [page, setPage] = useState(0); // By default set page number
@@ -347,7 +347,7 @@ export default function ProductReport() {
                                                             <Avatar className="img_enlarge" alt={name} src={baseUrl + product_image} />
                                                         </Stack>
                                                     </TableCell>
-                                                    <TableCell align="left">{product_details}</TableCell>
+                                                    <TableCell align="left">{product_details ?? '-'}</TableCell>
                                                     <TableCell align="left" onClick={() => onstatusChange(product_id)}>
                                                         <Iconify
                                                             icon={status === '1' ? 'charm:cross' :

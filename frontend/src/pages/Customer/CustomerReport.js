@@ -345,11 +345,11 @@ export default function CustomerReport() {
                             </Stack>
                           </TableCell>
                           <TableCell align="left">{name}</TableCell>
-                          <TableCell align="left">{address}</TableCell>
-                          <TableCell align="left">{city}</TableCell>
-                          <TableCell align="left">{state}</TableCell>
-                          <TableCell align="left">{gst_no}</TableCell>
-                          <TableCell align="left">{pan_no}</TableCell>
+                          <TableCell align="left">{address ?? '-'}</TableCell>
+                          <TableCell align="left">{city ?? '-'}</TableCell>
+                          <TableCell align="left">{state ?? '-'}</TableCell>
+                          <TableCell align="left">{gst_no ?? '-'}</TableCell>
+                          <TableCell align="left">{pan_no ?? '-'}</TableCell>
                           <TableCell component="th" scope="row" padding="none">
                             <Stack direction="row" alignItems="center" spacing={2}>
                               <Avatar className="img_enlarge" alt={name} src={ baseUrl + other_upload} />

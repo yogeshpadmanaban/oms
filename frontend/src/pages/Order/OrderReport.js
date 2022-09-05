@@ -432,7 +432,7 @@ export default function OrderReport() {
                                                     </TableCell>
                                                     <TableCell align="left">{customer_name}</TableCell>
                                                     <TableCell align="left">{name}</TableCell>
-                                                    <TableCell align="left">{weight}</TableCell>
+                                                    <TableCell align="left">{weight ?? '-'}</TableCell>
                                                     <TableCell component="th" scope="row" padding="none">
                                                         <Stack direction="row" alignItems="center" spacing={2}>
                                                             <Avatar className="img_enlarge" alt={customer_name} src={baseUrl + order_image} />

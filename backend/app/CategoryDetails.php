@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class CategoryDetails extends Model
 {
     protected $table = 'category_details';
-    protected $primaryKey= 'category_id';
+    // protected $primaryKey= 'category_id';
     public $timestamps = false;
 
     protected $fillable = [
@@ -26,6 +26,6 @@ class CategoryDetails extends Model
 
     public function ProductDetails()    
     {
-        return $this->belongsTo('App\ProductDetails');
+        return $this->belongsTo(ProductDetails::class);
     }
 }

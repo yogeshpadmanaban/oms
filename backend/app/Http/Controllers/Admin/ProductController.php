@@ -24,14 +24,16 @@ class ProductController extends Controller
      */
 	public function fetch_product_details(Request $request)
 	{
-		$product = DB::table('product_details',  'pd')
-						->select('pd.*','cd.category_name','cdt.creditor_name')
-						->leftJoin('category_details AS cd', 'cd.category_id', '=', 'pd.category')
-						->leftJoin('creditors AS cdt', 'cdt.creditor_id', '=', 'pd.creditors')
-						->where('pd.status','!=','2')
-						->where('cd.status','0')
-						->where('cdt.status','0')
-						->get();
+		// $product = DB::table('product_details',  'pd')
+		// 				->select('pd.*','cd.category_name','cdt.creditor_name')
+		// 				->leftJoin('category_details AS cd', 'cd.category_id', '=', 'pd.category')
+		// 				->leftJoin('creditors AS cdt', 'cdt.creditor_id', '=', 'pd.creditors')
+		// 				->where('pd.status','!=','2')
+		// 				->where('cd.status','0')
+		// 				->where('cdt.status','0')
+		// 				->get();
+
+						$product =ProductDetails::get();
 
 		return ($product);
 	}

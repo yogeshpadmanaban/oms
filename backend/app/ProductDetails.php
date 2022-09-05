@@ -4,16 +4,17 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\CategoryDetails;
 
 class ProductDetails extends Model
 {
     protected $table = 'product_details';
-    protected $primaryKey= 'product_id';
+    // protected $primaryKey= 'product_id';
     public $timestamps = false;
 
     protected $fillable = [
         'creditors',
-    	'category',
+    	// 'category',
 		'name',
 		'product_image',
         'product_details',
@@ -29,8 +30,12 @@ class ProductDetails extends Model
         return $query->where('type', $type);
     }
 
-    public function category_details()
+    // public function CategoryDetails(){
+    //     return $this->belongsTo();
+    // }
+
+    public function CategoryDetails()
     {
-        return $this->hasOne('App\CategoryDetails');
+        return $this->hasOne(CategoryDetails::class);
     }
 }

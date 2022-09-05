@@ -164,21 +164,21 @@ export default function OrderForm() {
                     const { id, product_id, customer_id, purity, jc_number, weight,
                         quantity, design_by, delivery_date, order_image, order_details, metal_provided, metal_provided_date, order_due_date, order_id } = responseData.data.orders;
 
-                    formik.setFieldValue("id", id ? id : '');
-                    formik.setFieldValue("product_id", product_id ? product_id : '');
-                    formik.setFieldValue("customer_id", customer_id ? customer_id : '');
-                    formik.setFieldValue("purity", purity ? purity : '');
-                    formik.setFieldValue("metal_provided", metal_provided ? metal_provided : '');
-                    formik.setFieldValue("metal_provided_date", metal_provided_date ? metal_provided_date : '');
-                    formik.setFieldValue("order_due_date", order_due_date ? order_due_date : '');
-                    formik.setFieldValue("jc_number", jc_number ? jc_number : '');
-                    formik.setFieldValue("weight", weight ? weight : '');
-                    formik.setFieldValue("quantity", quantity ? quantity : '');
-                    formik.setFieldValue("design_by", design_by ? design_by : '');
-                    formik.setFieldValue("delivery_date", delivery_date ? delivery_date : '');
-                    formik.setFieldValue("order_details", order_details ? order_details : '');
-                    formik.setFieldValue("order_id", order_id ? order_id : '');
-                    formik.setFieldValue("temp_order_img", order_image ? order_image : '');
+                    formik.setFieldValue("id", id ? id : null);
+                    formik.setFieldValue("product_id", product_id ? product_id : null);
+                    formik.setFieldValue("customer_id", customer_id ? customer_id : null);
+                    formik.setFieldValue("purity", purity ? purity : null);
+                    formik.setFieldValue("metal_provided", metal_provided ? metal_provided : null);
+                    formik.setFieldValue("metal_provided_date", metal_provided_date ? metal_provided_date : null);
+                    formik.setFieldValue("order_due_date", order_due_date ? order_due_date : null);
+                    formik.setFieldValue("jc_number", jc_number ? jc_number : null);
+                    formik.setFieldValue("weight", weight ? weight : null);
+                    formik.setFieldValue("quantity", quantity ? quantity : null);
+                    formik.setFieldValue("design_by", design_by ? design_by : null);
+                    formik.setFieldValue("delivery_date", delivery_date ? delivery_date : null);
+                    formik.setFieldValue("order_details", order_details ? order_details : null);
+                    formik.setFieldValue("order_id", order_id ? order_id : null);
+                    formik.setFieldValue("temp_order_img", order_image ? order_image : null);
 
                     if (order_image) {
                         setImage("order_image", baseUrl + order_image);
