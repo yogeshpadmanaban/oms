@@ -371,13 +371,26 @@ export default function OrderReport() {
     }
 
 
-    const handleChange = (event, id) => {
+    const handleChange = async (event, id) => {
+
         setText(moment(event.target.value).format('DD/MM/YYYY'));
         setId(id);
 
-        // Need api
-
-
+        setLoading(true);
+        let responseData = await postData('update_metal_date/',
+        {
+            id: id,
+            date: event.target.value
+        }
+        )
+        if (responseData) {
+            toast.success(responseData.data.success);
+            await getRecord('');
+            await handletableReset();
+            setLoading(false);
+        } else {
+            toast.error("Oops ! Somewithing wen wrong");
+        }
     }
 
 

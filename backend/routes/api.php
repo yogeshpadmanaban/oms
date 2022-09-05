@@ -96,7 +96,8 @@ Route::post('/login/admin', [LoginController::class,'login'])->name('login.submi
         Route::post('/admin/order_delete/{id}', [OrderController::class,'delete']);
         Route::post('/admin/order_bulk_status_change/{data}', [OrderController::class,'bulk_status_change']);
         Route::post('/admin/order_multi_delete/{data}', [OrderController::class,'multiple_delete']);
-
+        Route::post('/admin/update_metal_date', [OrderController::class,'update_metal_date'])->name('update_metal_date');
+        
         Route::post('/admin/store_order', [PublicController::class,'store'])->name('store_order');
 
    

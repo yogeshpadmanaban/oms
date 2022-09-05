@@ -6,9 +6,9 @@ const config = {
     headers: { Authorization: `Bearer ${token}` }
 };
 
-// export const baseUrl = 'http://localhost:8000/';
+export const baseUrl = 'http://localhost:8000/';
 
-export const baseUrl = 'https://api.omsmdu.com/';
+// export const baseUrl = 'https://api.omsmdu.com/';
 
 let environment = {};
 

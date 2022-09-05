@@ -215,4 +215,24 @@ class OrderController extends Controller
 		]);
 	}
 
+
+	/**
+     * To update metal provided date 
+     *
+     * @param  int  $data
+     * @return \Illuminate\Http\Response
+     */
+	public function update_metal_date(Request $request)
+	{
+
+		$order_id = $request['id'];
+		$date = $request['date'];
+		$status = OrderDetails::where('id',$order_id)->update(['metal_provided_date'=>$date]);
+
+		return response()->json([
+			'success' => 'Date Updated Successfully!',
+			'status' => $status
+		]);
+	}
+
 }
