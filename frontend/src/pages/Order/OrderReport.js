@@ -133,8 +133,9 @@ export default function OrderReport() {
 
     const [loading, setLoading] = useState(true);
 
-    const [text, setText] = React.useState('');
-    const [id, setId] = React.useState('');
+    const [text, setText] = useState('');
+    const [id, setId] = useState('');
+    const [currentId, setcurrentId] = useState('');
 
     useEffect(() => {
         const initData = async (data) => {
@@ -372,17 +373,17 @@ export default function OrderReport() {
 
 
     const handleChange = async (event, id) => {
-
-        setText(moment(event.target.value).format('DD/MM/YYYY'));
+        setText(moment(event.target.value).format('YYYY-MM-DD'));
         setId(id);
+        setcurrentId(id)
+    }
 
+
+    const handleSave = async () => {
+        console.log("id", id);
+        console.log("text", text);
         setLoading(true);
-        let responseData = await postData('update_metal_date/',
-        {
-            id: id,
-            date: event.target.value
-        }
-        )
+        let responseData = await postData('update_metal_date/', { id: id, date: text })
         if (responseData) {
             toast.success(responseData.data.success);
             await getRecord('');
@@ -391,13 +392,6 @@ export default function OrderReport() {
         } else {
             toast.error("Oops ! Somewithing wen wrong");
         }
-    }
-
-
-    const handleSave = () => {
-        console.log("id", id);
-        console.log("text", text);
-        getRecord();
     };
 
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - List.length) : 0;
@@ -445,7 +439,7 @@ export default function OrderReport() {
 
                                             const isItemSelected = selected.indexOf(id) !== -1;
 
-                                          
+
                                             // let due_days = 2;
                                             var new_date = moment(order_due_date).subtract(due_days, 'days');
 
@@ -509,7 +503,7 @@ export default function OrderReport() {
                                                         <EditText
                                                             name="metal_provided_date"
                                                             type="date"
-                                                            value={text ? text : setText(moment(metal_provided_date).format('DD/MM/YYYY'))}
+                                                            value={text && id === currentId ? text : metal_provided_date ? setText(moment(metal_provided_date).format('YYYY-MM-DD')) : 'Enter your date'}
                                                             inputClassName='bg-success'
                                                             onChange={(e) => handleChange(e, id)}
                                                             onSave={handleSave}
