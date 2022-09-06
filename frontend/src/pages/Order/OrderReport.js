@@ -373,17 +373,15 @@ export default function OrderReport() {
 
 
     const handleChange = async (event, id) => {
-        setText(moment(event.target.value).format('YYYY-MM-DD'));
+        setText(event.target.value);
         setId(id);
-        setcurrentId(id)
+        setcurrentId(id);
     }
 
 
     const handleSave = async () => {
-        console.log("id", id);
-        console.log("text", text);
         setLoading(true);
-        let responseData = await postData('update_metal_date/', { id: id, date: text })
+        let responseData = await postData('update_metal_date', { id: id, date: text })
         if (responseData) {
             toast.success(responseData.data.success);
             await getRecord('');
@@ -503,7 +501,7 @@ export default function OrderReport() {
                                                         <EditText
                                                             name="metal_provided_date"
                                                             type="date"
-                                                            value={text && id === currentId ? text : metal_provided_date ? setText(moment(metal_provided_date).format('YYYY-MM-DD')) : 'Enter your date'}
+                                                            value={id === currentId ? text : metal_provided_date ? moment(metal_provided_date).format('YYYY-MM-DD') : 'Enter your date'}
                                                             inputClassName='bg-success'
                                                             onChange={(e) => handleChange(e, id)}
                                                             onSave={handleSave}
