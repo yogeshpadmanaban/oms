@@ -37,6 +37,7 @@ export default function OrderForm() {
 
     const [productnameList, setproductnameList] = useState([]);
     const [customernameList, setcustomernameList] = useState([]);
+    const [workernameList, setworkernameList] = useState([]);
     const [temp_order_img, set_orderImage] = useState('');
 
     const purity_options = [
@@ -62,6 +63,7 @@ export default function OrderForm() {
         order_id: '',
         product_id: Yup.string().required('Product Name is requried'),
         customer_id: Yup.string().required('Customer Name is requried'),
+        worker_id: Yup.string().required('Worker Name is requried'),
         purity: '',
         metal_provided: '',
         metal_provided_date: '',
@@ -87,6 +89,7 @@ export default function OrderForm() {
             id: '',
             order_id: '',
             product_id: '',
+            worker_id: '',
             customer_id: '',
             purity: '',
             metal_provided: '',
@@ -114,6 +117,7 @@ export default function OrderForm() {
             formData.append("id", values.id);
             formData.append("hdn_rdm_order_id", values.order_id);
             formData.append("product_id", values.product_id);
+            formData.append("worker_id", values.worker_id);
             formData.append("customer_id", values.customer_id);
             formData.append("purity", values.purity);
             formData.append("metal_provided", values.metal_provided);
@@ -162,10 +166,11 @@ export default function OrderForm() {
                 if (responseData && responseData.data.orders) {
                     console.log(responseData.data.orders);
                     const { id, product_id, customer_id, purity, jc_number, weight,
-                        quantity, design_by, delivery_date, order_image, order_details, metal_provided, metal_provided_date, order_due_date, order_id } = responseData.data.orders;
+                        quantity, design_by, delivery_date, order_image, order_details, metal_provided, metal_provided_date, order_due_date, order_id, worker_id } = responseData.data.orders;
 
                     formik.setFieldValue("id", id ? id : null);
                     formik.setFieldValue("product_id", product_id ? product_id : null);
+                    formik.setFieldValue("worker_id", worker_id ? worker_id : null);
                     formik.setFieldValue("customer_id", customer_id ? customer_id : null);
                     formik.setFieldValue("purity", purity ? purity : null);
                     formik.setFieldValue("metal_provided", metal_provided ? metal_provided : null);
@@ -195,6 +200,7 @@ export default function OrderForm() {
         let responseData = await getData("add_order");
         let productnameList = responseData.data.products;
         let customernameList = responseData.data.customers;
+        let workernameList = responseData.data.workers ? responseData.data.workers : [];
 
         productnameList.unshift({
             "product_id": '',
@@ -206,12 +212,20 @@ export default function OrderForm() {
             "name": "Select Customer",
         })
 
+        workernameList.unshift({
+            "worker_id": '',
+            "name": "Select Worker",
+        })
+
+
         if (params.id === null || params.id === '') {
             formik.setFieldValue("product_id", productnameList[0].product_id);
             formik.setFieldValue("customer_id", customernameList[0].customer_id);
+            formik.setFieldValue("worker_id", customernameList[0].worker_id);
         }
         setproductnameList(productnameList);
         setcustomernameList(customernameList);
+        setworkernameList(workernameList);
     }
 
 
@@ -323,6 +337,28 @@ export default function OrderForm() {
                                     </select>
                                     {errors.product_id && touched.product_id &&
                                         <div className="selerr">{errors.product_id}</div>
+                                    }
+
+
+                                    <div className="required lbl">Worker Name:</div>
+                                    <select name="worker_id" value={values.worker_id}
+                                        onChange={(event) => {
+                                            setFieldValue("worker_id", event.target.value)
+                                        }}
+                                        className="selectfield"
+                                    >
+                                        {
+                                            workernameList &&
+                                            workernameList.map((list, index) => {
+                                                return (
+                                                    <option className="seloptionfield" value={list.worker_id} label={list.name}> </option>
+                                                )
+                                            })
+
+                                        }
+                                    </select>
+                                    {errors.worker_id && touched.worker_id &&
+                                        <div className="selerr">{errors.worker_id}</div>
                                     }
 
                                     <TextField

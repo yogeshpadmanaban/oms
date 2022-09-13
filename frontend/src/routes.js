@@ -23,6 +23,8 @@ import ProducttypeReport from './pages/ProductType/ProductTypeReport';
 import ProductReport from './pages/Product/ProductReport';
 import ProductForm from './pages/Product/productForm';
 
+import WorkersReport from './pages/Workers/WorkdersReport';
+
 
 import OrderReport from './pages/Order/OrderReport';
 import OrderForm from './pages/Order/OrderForm';
@@ -55,6 +57,8 @@ export default function Router() {
         { path: 'add_product', element: <ProductForm /> },
         { path: 'edit_product/:id', element: <ProductForm /> },
 
+
+        { path: 'workers_report', element: <WorkersReport /> },
 
         { path: 'order_report', element: <OrderReport /> },
         { path: 'add_order', element: <OrderForm /> },

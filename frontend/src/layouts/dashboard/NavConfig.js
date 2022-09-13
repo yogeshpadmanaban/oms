@@ -37,6 +37,12 @@ const navConfig = [
     icon: getIcon('ant-design:unordered-list-outlined'),
   },
   {
+    title: 'Workers Report',
+    path: '/admin/workers_report',
+    activePath: ['/admin/workers_report'],
+    icon: getIcon('ant-design:unordered-list-outlined'),
+  },
+  {
     title: 'Order Report',
     path: '/admin/order_report',
     activePath: ['/admin/order_report', '/admin/add_order', 'edit_order'],
