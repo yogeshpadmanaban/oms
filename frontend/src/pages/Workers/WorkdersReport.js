@@ -42,7 +42,7 @@ import 'jspdf-autotable'
 import { Loader } from "react-full-page-loader-overlay";
 
 const TABLE_HEAD = [
-    { id: 'workers_name', label: 'Workers Name', alignRight: false },
+    { id: 'worker_name', label: 'Workers Name', alignRight: false },
     { id: 'status', label: 'Status', alignRight: false },
     { id: '', label: 'Action', alignRight: false },
 ];
@@ -75,24 +75,24 @@ function applySortFilter(array, comparator, query) {
     });
     if (query) {
         return filter(array, (_user) =>
-            _user.workers_name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+            _user.worker_name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
     }
     return stabilizedThis.map((el) => el[0]);
 }
 
 
 function WorkersModal({ open, handleClose, getRecord, oneditedId }) {
-    const categorySchema = Yup.object().shape({
-        workers_id: '',
-        workers_name: Yup.string().required('Workers Name is required')
+    const workerSchema = Yup.object().shape({
+        worker_id: '',
+        worker_name: Yup.string().required('Workers Name is required')
     });
 
     const formik = useFormik({
         initialValues: {
             id: '',
-            workers_name: '',
+            worker_name: '',
         },
-        validationSchema: categorySchema,
+        validationSchema: workerSchema,
         onSubmit: async (values, { resetForm }) => {
             handleClose(); // Modal close
             resetForm(); // Reset form
@@ -117,14 +117,14 @@ function WorkersModal({ open, handleClose, getRecord, oneditedId }) {
             if (oneditedId) {
                 let url = 'edit_worker/' + oneditedId;
                 let responseData = await getData(url);
-                if (responseData && responseData.data.category) {
-                    const { workers_id, workers_name } = responseData.data.category;
-                    formik.setFieldValue("id", workers_id);
-                    formik.setFieldValue("workers_name", workers_name);
+                if (responseData && responseData.data.worker) {
+                    const { worker_id, worker_name } = responseData.data.worker;
+                    formik.setFieldValue("id", worker_id);
+                    formik.setFieldValue("worker_name", worker_name);
                 }
             } else {
                 formik.setFieldValue("id", '');
-                formik.setFieldValue("workers_name", '');
+                formik.setFieldValue("worker_name", '');
             }
         }
         initData()
@@ -146,9 +146,9 @@ function WorkersModal({ open, handleClose, getRecord, oneditedId }) {
                             <TextField
                                 type="text"
                                 label="Workers Name"
-                                {...getFieldProps('workers_name')}
-                                error={Boolean(touched.workers_name && errors.workers_name)}
-                                helperText={touched.workers_name && errors.workers_name}
+                                {...getFieldProps('worker_name')}
+                                error={Boolean(touched.worker_name && errors.worker_name)}
+                                helperText={touched.worker_name && errors.worker_name}
                             />
 
                             <Stack direction="row" alignItems="center" justifyContent="center">
@@ -180,7 +180,7 @@ export default function WorkersReport() {
 
     const [order, setOrder] = useState('asc');  // asc || dsc
 
-    const [orderBy, setOrderBy] = useState('workers_name');
+    const [orderBy, setOrderBy] = useState('worker_name');
 
     const [filterName, setFilterName] = useState('');
 
@@ -236,7 +236,7 @@ export default function WorkersReport() {
     // all checkbox Click
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelecteds = list.map((n) => n.workers_id);
+            const newSelecteds = list.map((n) => n.worker_id);
             setSelected(newSelecteds);
             return;
         }
@@ -244,11 +244,11 @@ export default function WorkersReport() {
     };
 
     // Single checkbox Click
-    const handleClick = (workers_id) => {
-        const selectedIndex = selected.indexOf(workers_id);
+    const handleClick = (worker_id) => {
+        const selectedIndex = selected.indexOf(worker_id);
         let newSelected = [];
         if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, workers_id);
+            newSelected = newSelected.concat(selected, worker_id);
         } else if (selectedIndex === 0) {
             newSelected = newSelected.concat(selected.slice(1));
         } else if (selectedIndex === selected.length - 1) {
@@ -265,10 +265,10 @@ export default function WorkersReport() {
     };
 
     // On Delete
-    const ondeleteClick = async (workers_id) => {
+    const ondeleteClick = async (worker_id) => {
 
         let apiUrl, selectedArray = [];
-        if (selected && selected.length > 1 && workers_id) {
+        if (selected && selected.length > 1 && worker_id) {
             selectedArray = selected;
             apiUrl = 'worker_multi_delete/' + '[' + selectedArray + ']';
         }
@@ -276,7 +276,7 @@ export default function WorkersReport() {
             if (selected && selected.length > 0) {
                 apiUrl = 'worker_delete/' + selected;
             } else {
-                apiUrl = 'worker_delete/' + workers_id;
+                apiUrl = 'worker_delete/' + worker_id;
             }
         }
         swal({
@@ -302,8 +302,8 @@ export default function WorkersReport() {
 
     // On Edit
 
-    const oneditClick = async (workers_id) => {
-        await setoneditedId(workers_id);
+    const oneditClick = async (worker_id) => {
+        await setoneditedId(worker_id);
         await setOpen(true);
     }
     // On ChangeRowsperPage
@@ -318,11 +318,11 @@ export default function WorkersReport() {
     };
 
     // onStatus Change
-    const onstatusChange = async (workers_id) => {
+    const onstatusChange = async (worker_id) => {
 
         let apiUrl, selectedArray = [];
 
-        if (selected && selected.length > 1 && workers_id) {
+        if (selected && selected.length > 1 && worker_id) {
             selectedArray = selected;
             apiUrl = 'worker_bulk_status_change/' + '[' + selectedArray + ']';
         }
@@ -330,7 +330,7 @@ export default function WorkersReport() {
             if (selected && selected.length > 0) {
                 apiUrl = 'worker_change_status/' + selected;
             } else {
-                apiUrl = 'worker_change_status/' + workers_id;
+                apiUrl = 'worker_change_status/' + worker_id;
             }
         }
         swal({
@@ -373,7 +373,7 @@ export default function WorkersReport() {
         const title = "Workers Report";
         const headers = [['Id', "Workers Name", "Status"]];
 
-        const data = list.map(elt => [elt.workers_id, elt.workers_name, elt.status]);
+        const data = list.map(elt => [elt.worker_id, elt.worker_name, elt.status]);
 
         let content = {
             startY: 50,
@@ -427,13 +427,13 @@ export default function WorkersReport() {
                                     {filteredUsers &&
                                         filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
 
-                                            const { workers_id, status, workers_name } = row;
-                                            const isItemSelected = selected.indexOf(workers_id) !== -1;
+                                            const { worker_id, status, worker_name } = row;
+                                            const isItemSelected = selected.indexOf(worker_id) !== -1;
 
                                             return (
                                                 <TableRow
                                                     hover
-                                                    key={workers_id}
+                                                    key={worker_id}
                                                     tabIndex={-1}
                                                     role="checkbox"
                                                     selected={isItemSelected}
@@ -441,11 +441,11 @@ export default function WorkersReport() {
                                                 >
 
                                                     <TableCell padding="checkbox">
-                                                        <Checkbox checked={isItemSelected} onChange={(event) => handleClick(workers_id)} />
+                                                        <Checkbox checked={isItemSelected} onChange={(event) => handleClick(worker_id)} />
                                                     </TableCell>
 
-                                                    <TableCell align="left">{workers_name}</TableCell>
-                                                    <TableCell align="left" onClick={() => onstatusChange(workers_id)}>
+                                                    <TableCell align="left">{worker_name}</TableCell>
+                                                    <TableCell align="left" onClick={() => onstatusChange(worker_id)}>
                                                         <Iconify
                                                             icon={status === '1' ? 'charm:cross' :
                                                                 'typcn:tick'}
@@ -458,7 +458,7 @@ export default function WorkersReport() {
                                                             selectedList={selected}
                                                             onDelete={ondeleteClick}
                                                             onEdit={oneditClick}
-                                                            rowId={workers_id}
+                                                            rowId={worker_id}
                                                         />
                                                     </TableCell>
                                                 </TableRow>

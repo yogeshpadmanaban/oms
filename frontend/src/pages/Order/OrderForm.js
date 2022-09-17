@@ -200,7 +200,7 @@ export default function OrderForm() {
         let responseData = await getData("add_order");
         let productnameList = responseData.data.products;
         let customernameList = responseData.data.customers;
-        let workernameList = responseData.data.workers ? responseData.data.workers : [];
+        let workernameList = responseData.data.workers;
 
         productnameList.unshift({
             "product_id": '',
@@ -214,14 +214,14 @@ export default function OrderForm() {
 
         workernameList.unshift({
             "worker_id": '',
-            "name": "Select Worker",
+            "worker_name": "Select Worker",
         })
 
 
         if (params.id === null || params.id === '') {
             formik.setFieldValue("product_id", productnameList[0].product_id);
             formik.setFieldValue("customer_id", customernameList[0].customer_id);
-            formik.setFieldValue("worker_id", customernameList[0].worker_id);
+            formik.setFieldValue("worker_id", workernameList[0].worker_id);
         }
         setproductnameList(productnameList);
         setcustomernameList(customernameList);
@@ -351,7 +351,7 @@ export default function OrderForm() {
                                             workernameList &&
                                             workernameList.map((list, index) => {
                                                 return (
-                                                    <option className="seloptionfield" value={list.worker_id} label={list.name}> </option>
+                                                    <option className="seloptionfield" value={list.worker_id} label={list.worker_name}> </option>
                                                 )
                                             })
 

@@ -97,6 +97,7 @@ function applySortFilter(array, comparator, query) {
     if (query && isNaN(query)) {
         return filter(array, (_user) =>
             _user.customer_name && _user.customer_name.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+            _user.worker_name && _user.worker_name.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
             _user.name && _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
             _user.design_by && _user.design_by.toLowerCase().indexOf(query.toLowerCase()) !== -1
         );

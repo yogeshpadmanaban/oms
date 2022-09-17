@@ -9,7 +9,7 @@ use App\CategoryDetails;
 class ProductDetails extends Model
 {
     protected $table = 'product_details';
-    // protected $primaryKey= 'product_id';
+    protected $primaryKey= 'product_id';
     public $timestamps = false;
 
     protected $fillable = [

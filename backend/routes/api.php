@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CreditorController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\WorkerController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\Auth\LoginController;
@@ -82,6 +83,15 @@ Route::post('/login/admin', [LoginController::class,'login'])->name('login.submi
         Route::post('/admin/product_bulk_status_change/{data}', [ProductController::class,'bulk_status_change']);
         Route::post('/admin/product_multi_delete/{id}', [ProductController::class,'multiple_delete']);
         Route::post('/admin/product_name_check', [ProductController::class,'product_name_check']);
+
+        Route::post('/admin/store_worker', [WorkerController::class, 'store_worker'])->name('store_worker');
+        Route::post('/admin/worker_name_check', [WorkerController::class, 'worker_name_check']);
+        Route::get('/admin/worker_details', [WorkerController::class, 'fetch_worker_details']);
+        Route::get('/admin/edit_worker/{id}', [WorkerController::class, 'edit_worker']);
+        Route::post('/admin/worker_delete/{id}', [WorkerController::class, 'delete']);
+        Route::post('/admin/worker_change_status/{id}', [WorkerController::class, 'status_change']);
+        Route::post('/admin/worker_bulk_status_change/{data}', [WorkerController::class, 'bulk_status_change']);
+        Route::post('/admin/worker_multi_delete/{id}', [WorkerController::class, 'multiple_delete']);
 
         Route::get('/admin/add_order', [OrderController::class,'create']);
         Route::get('/admin/order_listing', [OrderController::class,'listing']);

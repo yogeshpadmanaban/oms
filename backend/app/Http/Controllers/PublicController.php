@@ -184,6 +184,7 @@ class PublicController extends Controller
             'product_type' => $product_type['product_type'],
             'product_id' => $request->input('product_id'),
             'customer_id' => $request->input('customer_id'),
+            'worker_id' => $request->input('worker_id'),
             // 'mould_id' => $request->input('mould_name'),
             'purity' => $request->input('purity') == 'null' ? NULL : $request->input('purity'),
             'jc_number' => $request->input('jc_number') == 'null' ? NULL : $request->input('jc_number'),

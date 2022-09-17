@@ -11,6 +11,7 @@ use Config;
 use App\Cad;
 use App\ProductDetails;
 use App\CustomerDetails;
+use App\WorkerDetails;
 use App\OrderDetails;
 use App\OrderImages;
 
@@ -70,7 +71,8 @@ class OrderController extends Controller
 								->get();
 
 		$data['customers'] = CustomerDetails::where('status','=','0')->get();
-		return ['products' => $data['products'] ,'customers' => $data['customers'],'order_img' => NULL];
+		$data['workers'] = WorkerDetails::where('status','=','0')->get();
+		return ['products' => $data['products'] ,'customers' => $data['customers'],'workers' => $data['workers'],'order_img' => NULL];
 	}
 
     /**
@@ -219,7 +221,7 @@ class OrderController extends Controller
 	/**
      * To update metal provided date 
      *
-     * @param  int  $data
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
 	public function update_metal_date(Request $request)

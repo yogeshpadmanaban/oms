@@ -16,6 +16,7 @@ class OrderDetails extends Model
         'order_id',
 		'product_id',
 		'customer_id',
+        'worker_id',
         'mould_id',
         'cad_id',
         'purity',
@@ -80,11 +81,12 @@ class OrderDetails extends Model
 
         $result_two= DB::table('order_details',  'od')
 
-                            ->select('od.*','cat.category_name', 'pd.name','pd.category','pd.product_type','pd.product_image','cd.name as customer_name','cdt.due_days')
+                            ->select('od.*','cat.category_name', 'pd.name','pd.category','pd.product_type','pd.product_image','cd.name as customer_name','cdt.due_days','wd.worker_name')
                             ->leftJoin('product_details AS pd', 'pd.product_id', '=', 'od.product_id')
                             ->leftJoin('customer_details AS cd', 'cd.customer_id', '=', 'od.customer_id')
                             ->leftJoin('category_details AS cat', 'cat.category_id', '=', 'pd.category')
                             ->leftJoin('creditors AS cdt', 'cdt.creditor_id', '=', 'pd.creditors')
+                            ->leftJoin('worker_details AS wd', 'wd.worker_id', '=', 'od.worker_id')
                             ->when($search != "" , function($result_two) use ($search){
                                 return $result_two->where('pd.name','LIKE','%'.$search.'%');
                             })
