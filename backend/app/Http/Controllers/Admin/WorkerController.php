@@ -172,4 +172,22 @@ class WorkerController extends Controller
 		$res['message'] = 'worker data updated successfully!';
 		return $res;	
 	}
+
+	/**
+     * To update pending metal weight 
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+	public function update_pending_metal(Request $request)
+	{
+		$worker_id = $request['id'];
+		$metal_pending = $request['metal_pending'];
+		$status = WorkerDetails::where('worker_id',$worker_id)->update(['metal_pending'=>$metal_pending]);
+
+		return response()->json([
+			'success' => 'Date Updated Successfully!',
+			'status' => $status
+		]);
+	}
 }

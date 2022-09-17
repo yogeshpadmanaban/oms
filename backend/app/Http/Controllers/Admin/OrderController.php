@@ -134,6 +134,48 @@ class OrderController extends Controller
 		]);
 	}
 
+	/**
+     * To change status of metal.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+	public function order_received_status($id)
+	{
+		$order_status = OrderDetails::find($id);
+		$status = $order_status->order_received == '1' ? '0' : '1';
+		$row_data = OrderDetails::where('id',$id)->update(['order_received' => $status]);
+		
+		return response()->json([
+			'success' => 'order received status changed successfully!',
+			'status' => $status
+		]);
+	}
+
+	/**
+     * To change multiple metal status 
+     *
+     * @param  int  $data
+     * @return \Illuminate\Http\Response
+     */
+	public function order_bulk_received_change($data)
+	{
+		$data = json_decode(stripslashes($data));
+		$data_len = count($data);
+
+		for($i=0; $i<$data_len; $i++){
+			$order_status = OrderDetails::find($data[$i]);
+
+			$status = $order_status->order_received == '1' ? '0' : '1';
+			$row_data = OrderDetails::where('id',$data[$i])->update(['order_received' => $status]);
+		}
+
+		return response()->json([
+			'success' => 'status changed successfully!',
+			'status' => $status
+		]);
+	}
+
     /**
      * To change status of order.
      *
@@ -226,7 +268,6 @@ class OrderController extends Controller
      */
 	public function update_metal_date(Request $request)
 	{
-
 		$order_id = $request['id'];
 		$date = $request['date'];
 		$status = OrderDetails::where('id',$order_id)->update(['metal_provided_date'=>$date]);
@@ -236,5 +277,4 @@ class OrderController extends Controller
 			'status' => $status
 		]);
 	}
-
 }

@@ -41,8 +41,12 @@ import 'jspdf-autotable'
 
 import { Loader } from "react-full-page-loader-overlay";
 
+import { EditText, EditTextarea } from 'react-edit-text';
+import 'react-edit-text/dist/index.css';
+
 const TABLE_HEAD = [
-    { id: 'worker_name', label: 'Workers Name', alignRight: false },
+    { id: 'worker_name', label: 'Worker Name', alignRight: false },
+    { id: 'metal_pending', label: 'Metal Pending', alignRight: false },
     { id: 'status', label: 'Status', alignRight: false },
     { id: '', label: 'Action', alignRight: false },
 ];
@@ -168,10 +172,6 @@ function WorkersModal({ open, handleClose, getRecord, oneditedId }) {
     )
 }
 
-
-
-
-
 export default function WorkersReport() {
 
     const [page, setPage] = useState(0); // By default set page number
@@ -194,6 +194,10 @@ export default function WorkersReport() {
 
     const [loading, setLoading] = useState(true);
 
+    const [text, setText] = useState('');
+    const [id, setId] = useState('');
+    const [currentId, setcurrentId] = useState('');
+
     const handleOpen = async () => {
         await setoneditedId('');
         await setOpen(true);
@@ -201,8 +205,6 @@ export default function WorkersReport() {
     const handleClose = () => {
         setOpen(false);
     };
-
-
 
     useEffect(() => {
         const initData = async () => {
@@ -214,8 +216,6 @@ export default function WorkersReport() {
         }
         initData();
     }, []);
-
-
 
     const getRecord = async () => {
         setLoading(true);
@@ -360,6 +360,26 @@ export default function WorkersReport() {
         setFilterName('');
     }
 
+    const handleChange = async (event, id) => {
+        console.log(event.target.value);    
+        setText(event.target.value);
+        setId(id);
+        setcurrentId(id);
+    }
+
+    const handleSave = async () => {
+        setLoading(true);
+        let responseData = await postData('update_pending_metal', { id: id, metal_pending: text })
+        if (responseData) {
+            toast.success(responseData.data.success);
+            await getRecord('');
+            await handletableReset();
+            setLoading(false);
+        } else {
+            toast.error("Oops ! Somewithing wen wrong");
+        }
+    };
+
     const exportPDF = () => {
         const unit = "pt";
         const size = "A4"; // Use A1, A2, A3 or A4
@@ -427,7 +447,7 @@ export default function WorkersReport() {
                                     {filteredUsers &&
                                         filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
 
-                                            const { worker_id, status, worker_name } = row;
+                                            const { worker_id, status, worker_name, metal_pending } = row;
                                             const isItemSelected = selected.indexOf(worker_id) !== -1;
 
                                             return (
@@ -445,6 +465,20 @@ export default function WorkersReport() {
                                                     </TableCell>
 
                                                     <TableCell align="left">{worker_name}</TableCell>
+
+
+                                                    <TableCell align="left">
+                                                        <EditText
+                                                            name="metal_pending"
+                                                            type="number"
+                                                            value={worker_id === currentId ? text : metal_pending ?? 'Enter weight'}
+                                                            inputClassName='bg-success'
+                                                            onChange={(e) => handleChange(e, worker_id)}
+                                                            onSave={handleSave}
+                                                        />
+                                                    </TableCell>
+
+
                                                     <TableCell align="left" onClick={() => onstatusChange(worker_id)}>
                                                         <Iconify
                                                             icon={status === '1' ? 'charm:cross' :

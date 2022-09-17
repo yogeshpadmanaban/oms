@@ -42,7 +42,7 @@ import 'jspdf-autotable';
 import { Loader } from "react-full-page-loader-overlay";
 
 const TABLE_HEAD = [
-    { id: 'creditor_name', label: 'Creditors', alignRight: false },
+    { id: 'creditor_name', label: 'Creditor', alignRight: false },
     { id: 'due_days', label: 'Due Days', alignRight: false },
     { id: 'status', label: 'Status', alignRight: false },
     { id: '', label: 'Action', alignRight: false },

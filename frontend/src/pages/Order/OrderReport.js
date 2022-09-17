@@ -52,6 +52,7 @@ const TABLE_HEAD = [
     { id: 'delivery_date', label: 'Order Date', alignRight: false },
     { id: 'metal_provided', label: 'Metal Provided', alignRight: false },
     { id: 'metal_provided_date', label: 'Metal Provided Date', alignRight: false },
+    { id: 'order_received', label: 'Order Received', alignRight: false },
     { id: 'order_due_date', label: 'Due Date', alignRight: false },
     { id: 'status', label: 'Status', alignRight: false },
     { id: '', label: 'Action', alignRight: false }
@@ -315,20 +316,58 @@ export default function OrderReport() {
             buttons: true,
             dangerMode: true,
         })
-            .then(async (willchangeStatus) => {
-                if (willchangeStatus) {
-                    setLoading(true);
-                    let responseData = await postData(apiUrl);
-                    if (responseData) {
-                        toast.success("Metal Status Changed Successfully");
-                        await getRecord('');
-                        await handletableReset();
-                        setLoading(false);
-                    } else {
-                        toast.error("Oops ! Somewithing wen wrong");
-                    }
+        .then(async (willchangeStatus) => {
+            if (willchangeStatus) {
+                setLoading(true);
+                let responseData = await postData(apiUrl);
+                if (responseData) {
+                    toast.success("Metal Status Changed Successfully");
+                    await getRecord('');
+                    await handletableReset();
+                    setLoading(false);
+                } else {
+                    toast.error("Oops ! Somewithing wen wrong");
                 }
-            });
+            }
+        });
+    }
+
+    // on order received Change
+    const on_order_received = async (id) => {
+
+        let apiUrl, selectedArray = [];
+
+        if (selected && selected.length > 1 && id) {
+            selectedArray = selected;
+            apiUrl = 'order_bulk_received_change/' + '[' + selectedArray + ']';
+        }
+        else {
+            if (selected && selected.length > 0) {
+                apiUrl = 'order_received_status/' + selected;
+            } else {
+                apiUrl = 'order_received_status/' + id;
+            }
+        }
+        swal({
+            title: "Are you sure you want to change Order Received Status?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+        .then(async (willchangeStatus) => {
+            if (willchangeStatus) {
+                setLoading(true);
+                let responseData = await postData(apiUrl);
+                if (responseData) {
+                    toast.success("Order Received Status Changed Successfully");
+                    await getRecord('');
+                    await handletableReset();
+                    setLoading(false);
+                } else {
+                    toast.error("Oops ! Somewithing wen wrong");
+                }
+            }
+        });
     }
 
 
@@ -415,7 +454,7 @@ export default function OrderReport() {
 
                 <Card>
                     <UserListToolbar data={List.length} numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName}
-                        onDelete={ondeleteClick} onstausChange={onstatusChange} getRecord={getRecord} onexport={exportPDF} onmetalstatusChange={onmetalstatusChange} />
+                        onDelete={ondeleteClick} onstausChange={onstatusChange} getRecord={getRecord} onexport={exportPDF} onmetalstatusChange={onmetalstatusChange} on_order_received={on_order_received}/>
 
                     <Scrollbar>
                         <TableContainer sx={{ minWidth: 800 }}>
@@ -434,7 +473,7 @@ export default function OrderReport() {
                                         filteredList.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
 
                                             const { id, order_id, jc_number, product_type, category_name, name, customer_name, purity, weight, quantity, design_by, order_details,
-                                                order_image, delivery_date, status, metal_provided, metal_provided_date, order_due_date, due_days } = row;
+                                                order_image, delivery_date, status, metal_provided, metal_provided_date, order_received, order_due_date, due_days } = row;
 
                                             const isItemSelected = selected.indexOf(id) !== -1;
 
@@ -509,7 +548,13 @@ export default function OrderReport() {
                                                         />
                                                     </TableCell>
 
-
+                                                    <TableCell align="left" onClick={() => on_order_received(id)}>
+                                                        <Iconify
+                                                            icon={order_received === null || order_received === '0' ? 'charm:cross' :
+                                                                'typcn:tick'}
+                                                            sx={{ width: 25, height: 25, ml: 1 }}
+                                                        />
+                                                    </TableCell>
 
                                                     <TableCell align="left">{order_due_date ? moment(order_due_date).format('DD/MM/YYYY') : '-'}
                                                     </TableCell>

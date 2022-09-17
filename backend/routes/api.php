@@ -92,6 +92,7 @@ Route::post('/login/admin', [LoginController::class,'login'])->name('login.submi
         Route::post('/admin/worker_change_status/{id}', [WorkerController::class, 'status_change']);
         Route::post('/admin/worker_bulk_status_change/{data}', [WorkerController::class, 'bulk_status_change']);
         Route::post('/admin/worker_multi_delete/{id}', [WorkerController::class, 'multiple_delete']);
+        Route::post('/admin/update_pending_metal', [WorkerController::class,'update_pending_metal'])->name('update_pending_metal');
 
         Route::get('/admin/add_order', [OrderController::class,'create']);
         Route::get('/admin/order_listing', [OrderController::class,'listing']);
@@ -102,6 +103,8 @@ Route::post('/login/admin', [LoginController::class,'login'])->name('login.submi
         Route::get('/admin/order_details/{user_id?}/{user_role?}', [OrderController::class,'fetch_order_details']);
         Route::post('/admin/order_metal_change_status/{id}', [OrderController::class,'metal_status_change']);
         Route::post('/admin/order_bulk_metal_status_change/{data}', [OrderController::class,'bulk_metal_status_change']);
+        Route::post('/admin/order_received_status/{id}', [OrderController::class,'order_received_status']);
+        Route::post('/admin/order_bulk_received_change/{data}', [OrderController::class,'order_bulk_received_change']);
         Route::post('/admin/order_change_status/{id}', [OrderController::class,'status_change']);
         Route::post('/admin/order_delete/{id}', [OrderController::class,'delete']);
         Route::post('/admin/order_bulk_status_change/{data}', [OrderController::class,'bulk_status_change']);
