@@ -316,20 +316,20 @@ export default function OrderReport() {
             buttons: true,
             dangerMode: true,
         })
-        .then(async (willchangeStatus) => {
-            if (willchangeStatus) {
-                setLoading(true);
-                let responseData = await postData(apiUrl);
-                if (responseData) {
-                    toast.success("Metal Status Changed Successfully");
-                    await getRecord('');
-                    await handletableReset();
-                    setLoading(false);
-                } else {
-                    toast.error("Oops ! Somewithing wen wrong");
+            .then(async (willchangeStatus) => {
+                if (willchangeStatus) {
+                    setLoading(true);
+                    let responseData = await postData(apiUrl);
+                    if (responseData) {
+                        toast.success("Metal Status Changed Successfully");
+                        await getRecord('');
+                        await handletableReset();
+                        setLoading(false);
+                    } else {
+                        toast.error("Oops ! Somewithing wen wrong");
+                    }
                 }
-            }
-        });
+            });
     }
 
     // on order received Change
@@ -354,20 +354,20 @@ export default function OrderReport() {
             buttons: true,
             dangerMode: true,
         })
-        .then(async (willchangeStatus) => {
-            if (willchangeStatus) {
-                setLoading(true);
-                let responseData = await postData(apiUrl);
-                if (responseData) {
-                    toast.success("Order Received Status Changed Successfully");
-                    await getRecord('');
-                    await handletableReset();
-                    setLoading(false);
-                } else {
-                    toast.error("Oops ! Somewithing wen wrong");
+            .then(async (willchangeStatus) => {
+                if (willchangeStatus) {
+                    setLoading(true);
+                    let responseData = await postData(apiUrl);
+                    if (responseData) {
+                        toast.success("Order Received Status Changed Successfully");
+                        await getRecord('');
+                        await handletableReset();
+                        setLoading(false);
+                    } else {
+                        toast.error("Oops ! Somewithing wen wrong");
+                    }
                 }
-            }
-        });
+            });
     }
 
 
@@ -454,7 +454,7 @@ export default function OrderReport() {
 
                 <Card>
                     <UserListToolbar data={List.length} numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName}
-                        onDelete={ondeleteClick} onstausChange={onstatusChange} getRecord={getRecord} onexport={exportPDF} onmetalstatusChange={onmetalstatusChange} on_order_received={on_order_received}/>
+                        onDelete={ondeleteClick} onstausChange={onstatusChange} getRecord={getRecord} onexport={exportPDF} onmetalstatusChange={onmetalstatusChange} on_order_received={on_order_received} />
 
                     <Scrollbar>
                         <TableContainer sx={{ minWidth: 800 }}>
@@ -538,14 +538,20 @@ export default function OrderReport() {
                                                     </TableCell> */}
 
                                                     <TableCell align="left">
-                                                        <EditText
-                                                            name="metal_provided_date"
-                                                            type="date"
-                                                            value={id === currentId ? text : metal_provided_date ? moment(metal_provided_date).format('YYYY-MM-DD') : 'Enter your date'}
-                                                            inputClassName='bg-success'
-                                                            onChange={(e) => handleChange(e, id)}
-                                                            onSave={handleSave}
-                                                        />
+                                                        <div style={{ display: "flex" }}>
+                                                            <EditText
+                                                                name="metal_provided_date"
+                                                                type="date"
+                                                                value={id === currentId ? text : metal_provided_date ? moment(metal_provided_date).format('YYYY-MM-DD') : 'Enter your date'}
+                                                                inputClassName='bg-success'
+                                                                onChange={(e) => handleChange(e, id)}
+                                                            // onSave={handleSave}
+                                                            />
+                                                            <Iconify align="right" onClick={handleSave}
+                                                                icon='typcn:tick'
+                                                                sx={{ width: 25, height: 25, mb: 1 }}
+                                                            />
+                                                        </div>
                                                     </TableCell>
 
                                                     <TableCell align="left" onClick={() => on_order_received(id)}>
