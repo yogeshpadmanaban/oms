@@ -38,17 +38,13 @@ export default function ProductForm() {
     const [creditors, setcreditorsList] = useState([]);
     const [temp_pdt_img, set_product_image_img] = useState('');
 
-    // const radioOptions = [
-    //     { label: 'Vigat Product', value: 'Vigat Product' },
-    //     { label: 'Customized product', value: 'Customized product' },
-    // ];
 
 
     const ustomerformSchema = Yup.object().shape({
         product_id: '',
         creditors: Yup.string().required('Creditors is required'),
         category: Yup.string().required('Product category is required'),
-        name: Yup.string().required('Name is required'),
+        name: Yup.mixed().required('Name is required'),
         product_image: '',
         temp_pdt_img: '',
         product_details: ''
