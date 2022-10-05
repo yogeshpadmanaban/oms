@@ -22,6 +22,9 @@ import { toast } from 'react-toastify';
 //css
 import '../common.css';
 
+import { default as ReactSelect } from "react-select";
+import { components } from "react-select";
+
 // ----------------------------------------------------------------------
 
 const RootStyle = styled('div')(({ theme }) => ({
@@ -29,6 +32,19 @@ const RootStyle = styled('div')(({ theme }) => ({
         display: 'flex',
     },
 }));
+
+const fileldOptions = [
+    { value: "weight", label: "Weight" },
+    { value: "order_image", label: "OrderImage" },
+    { value: "delivery_date", label: "OrderDate" },
+    { value: "metal_provided_date", label: "MetalStatusDate" },
+    { value: "order_due_date", label: "OrderDueDate" },
+    { value: "purity", label: "Purity" },
+    { value: "jc_number", label: "JcNumber" },
+    { value: "quantity", label: "Quantity" },
+    { value: "design_by", label: "TobeDesign" },
+];
+
 
 export default function OrderForm() {
 
@@ -39,6 +55,7 @@ export default function OrderForm() {
     const [customernameList, setcustomernameList] = useState([]);
     const [workernameList, setworkernameList] = useState([]);
     const [temp_order_img, set_orderImage] = useState('');
+    const [selectedFields, setSelectedFields] = useState([]);
 
     const purity_options = [
         { label: '95', value: '95' },
@@ -75,12 +92,7 @@ export default function OrderForm() {
         delivery_date: '',
         order_image: '',
         order_details: '',
-        temp_order_img: '',
-
-        // multi:'',
-        // files:'',
-        // hdn_rdm_order_id: '',
-        // hidden_order_count: ''
+        temp_order_img: ''
 
     });
 
@@ -102,12 +114,7 @@ export default function OrderForm() {
             delivery_date: '',
             order_image: '',
             order_details: '',
-            temp_order_img: '',
-
-            // files: '',
-            // multi: '',
-            // hdn_rdm_order_id: '',
-            // hidden_order_count: 1
+            temp_order_img: ''
 
         },
         validationSchema: ustomerformSchema,
@@ -129,16 +136,6 @@ export default function OrderForm() {
             formData.append("design_by", values.design_by);
             formData.append("delivery_date", values.delivery_date);
             formData.append("order_details", values.order_details);
-
-            // formData.append("hidden_order_count", values.hidden_order_count);
-            // formData.append("multi", values.files);
-
-            // if (values.order_image && values.order_image.length > 0) {
-            //     console.log("values.order_image", values.order_image);
-            //     formData.append("order_image", values.order_image);
-            // } else {
-            //     formData.append("temp_order_img", values.temp_order_img);
-            // }
 
             if (values.order_image) {
                 formData.append("order_image", values.order_image);
@@ -279,6 +276,28 @@ export default function OrderForm() {
     //     }
     // }
 
+    const Option = (props) => {
+        return (
+            <div>
+                <components.Option {...props}>
+                    <input
+                        type="checkbox"
+                        checked={props.isSelected}
+                        onChange={() => null}
+                    />{" "}
+                    <label>{props.label}</label>
+                </components.Option>
+            </div>
+        );
+    };
+
+    const handleChange = async (selected) => {
+        console.log("selected", selected);
+        setSelectedFields(selected);
+        // Need api her for updating fileds
+
+    };
+
     const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps, setFieldValue } = formik;
 
     return (
@@ -291,6 +310,19 @@ export default function OrderForm() {
                             {params && params.id ? "Edit Order" : "Add Order"}
                         </Typography>
                     </Stack>
+
+
+                    <ReactSelect
+                        options={fileldOptions}
+                        isMulti
+                        closeMenuOnSelect={false}
+                        hideSelectedOptions={false}
+                        components={{ Option }}
+                        onChange={handleChange}
+                        allowSelectAll={true}
+                        value={selectedFields}
+                        className="multi-drpdown"
+                    />
 
                     <Card>
                         <FormikProvider value={formik}>
@@ -361,28 +393,34 @@ export default function OrderForm() {
                                         <div className="selerr">{errors.worker_id}</div>
                                     }
 
-                                    <TextField
-                                        fullWidth
-                                        type="number"
-                                        label="Weight"
-                                        {...getFieldProps('weight')}
-                                        error={Boolean(touched.jc_number && errors.jc_number)}
-                                        helperText={touched.jc_number && errors.jc_number}
-                                    />
+                                    {
+                                        selectedFields.find(ele => ele.value === "weight") &&
+                                        <TextField
+                                            fullWidth
+                                            type="number"
+                                            label="Weight"
+                                            {...getFieldProps('weight')}
+                                            error={Boolean(touched.jc_number && errors.jc_number)}
+                                            helperText={touched.jc_number && errors.jc_number}
+                                        />
+                                    }
 
-                                    <TextField
-                                        fullWidth
-                                        type="file"
-                                        label="Upload Order Image"
-                                        name="order_image"
-                                        InputLabelProps={{ shrink: true }}
-                                        onChange={(event) => {
-                                            console.log(event.currentTarget.files[0]);
-                                            onfileupload('order_image', event.currentTarget.files[0]);
-                                        }}
-                                        error={Boolean(touched.order_image && errors.order_image)}
-                                        helperText={touched.order_image && errors.order_image}
-                                    />
+                                    {
+                                        selectedFields.find(ele => ele.value === "order_image") &&
+                                        <TextField
+                                            fullWidth
+                                            type="file"
+                                            label="Upload Order Image"
+                                            name="order_image"
+                                            InputLabelProps={{ shrink: true }}
+                                            onChange={(event) => {
+                                                console.log(event.currentTarget.files[0]);
+                                                onfileupload('order_image', event.currentTarget.files[0]);
+                                            }}
+                                            error={Boolean(touched.order_image && errors.order_image)}
+                                            helperText={touched.order_image && errors.order_image}
+                                        />
+                                    }
 
                                     {/* {
                                         temp_order_img &&
@@ -395,7 +433,7 @@ export default function OrderForm() {
 
                                     {
                                         temp_order_img &&
-                                        <div className="image-area">
+                                        < div className="image-area">
                                             <img src={temp_order_img} alt="Preview" />
                                             <a onClick={(event) => {
                                                 onDeleteImg('order_image')
@@ -418,15 +456,18 @@ export default function OrderForm() {
 
                                         ))} */}
 
-                                    <TextField
-                                        fullWidth
-                                        type="date"
-                                        label="Order Date"
-                                        {...getFieldProps('delivery_date')}
-                                        InputLabelProps={{ shrink: true }}
-                                        error={Boolean(touched.delivery_date && errors.delivery_date)}
-                                        helperText={touched.delivery_date && errors.delivery_date}
-                                    />
+                                    {
+                                        selectedFields.find(ele => ele.value === "delivery_date") &&
+                                        <TextField
+                                            fullWidth
+                                            type="date"
+                                            label="Order Date"
+                                            {...getFieldProps('delivery_date')}
+                                            InputLabelProps={{ shrink: true }}
+                                            error={Boolean(touched.delivery_date && errors.delivery_date)}
+                                            helperText={touched.delivery_date && errors.delivery_date}
+                                        />
+                                    }
 
 
                                     {/* <div className="lbl">Metal Status:</div>
@@ -444,73 +485,96 @@ export default function OrderForm() {
                                     </div> */}
 
 
-                                    <TextField
-                                        fullWidth
-                                        type="date"
-                                        label="Metal Status Date"
-                                        {...getFieldProps('metal_provided_date')}
-                                        InputLabelProps={{ shrink: true }}
-                                        error={Boolean(touched.metal_provided_date && errors.metal_provided_date)}
-                                        helperText={touched.metal_provided_date && errors.metal_provided_date}
-                                    />
+                                    {
+                                        selectedFields.find(ele => ele.value === "metal_provided_date") &&
+                                        <TextField
+                                            fullWidth
+                                            type="date"
+                                            label="Metal Status Date"
+                                            {...getFieldProps('metal_provided_date')}
+                                            InputLabelProps={{ shrink: true }}
+                                            error={Boolean(touched.metal_provided_date && errors.metal_provided_date)}
+                                            helperText={touched.metal_provided_date && errors.metal_provided_date}
+                                        />
+                                    }
 
-                                    <TextField
-                                        fullWidth
-                                        type="date"
-                                        label="Order Due Date"
-                                        {...getFieldProps('order_due_date')}
-                                        InputLabelProps={{ shrink: true }}
-                                        error={Boolean(touched.order_due_date && errors.order_due_date)}
-                                        helperText={touched.order_due_date && errors.order_due_date}
-                                    />
+                                    {
+                                        selectedFields.find(ele => ele.value === "order_due_date") &&
+                                        <TextField
+                                            fullWidth
+                                            type="date"
+                                            label="Order Due Date"
+                                            {...getFieldProps('order_due_date')}
+                                            InputLabelProps={{ shrink: true }}
+                                            error={Boolean(touched.order_due_date && errors.order_due_date)}
+                                            helperText={touched.order_due_date && errors.order_due_date}
+                                        />
+                                    }
 
-                                    <div className="lbl">Purity:</div>
-                                    <div role="group" aria-labelledby="my-radio-group">
-                                        {
-                                            purity_options &&
-                                            purity_options.map((option, index) => {
-                                                return (
-                                                    <div className="ml10">
-                                                        <label className='mb-2'><Field type="radio" name="purity" value={option.value} /> {option.label}</label>
-                                                    </div>
-                                                )
-                                            })
-                                        }
-                                    </div>
+                                    {
+                                        selectedFields.find(ele => ele.value === "purity") &&
+                                        <div>
+                                            <div className="lbl">Purity:</div>
+                                            <div role="group" aria-labelledby="my-radio-group">
+                                                {
+                                                    purity_options &&
+                                                    purity_options.map((option, index) => {
+                                                        return (
+                                                            <div className="ml10">
+                                                                <label className='mb-2'><Field type="radio" name="purity" value={option.value} /> {option.label}</label>
+                                                            </div>
+                                                        )
+                                                    })
+                                                }
+                                            </div>
+                                        </div>
 
-                                    <TextField
-                                        fullWidth
-                                        type="number"
-                                        label="Jc Number"
-                                        {...getFieldProps('jc_number')}
-                                        error={Boolean(touched.jc_number && errors.jc_number)}
-                                        helperText={touched.jc_number && errors.jc_number}
-                                    />
+                                    }
 
+                                    {
+                                        selectedFields.find(ele => ele.value === "jc_number") &&
+                                        <TextField
+                                            fullWidth
+                                            type="number"
+                                            label="Jc Number"
+                                            {...getFieldProps('jc_number')}
+                                            error={Boolean(touched.jc_number && errors.jc_number)}
+                                            helperText={touched.jc_number && errors.jc_number}
+                                        />
 
-                                    <TextField
-                                        fullWidth
-                                        type="number"
-                                        label="Quantity"
-                                        {...getFieldProps('quantity')}
-                                        error={Boolean(touched.quantity && errors.quantity)}
-                                        helperText={touched.quantity && errors.quantity}
-                                    />
+                                    }
 
+                                    {
+                                        selectedFields.find(ele => ele.value === "Quantity") &&
+                                        <TextField
+                                            fullWidth
+                                            type="number"
+                                            label="Quantity"
+                                            {...getFieldProps('quantity')}
+                                            error={Boolean(touched.quantity && errors.quantity)}
+                                            helperText={touched.quantity && errors.quantity}
+                                        />
+                                    }
 
-                                    <div className="lbl">To be Design:</div>
-                                    <div role="group" aria-labelledby="my-radio-group">
-                                        {
-                                            design_options &&
-                                            design_options.map((option, index) => {
-                                                return (
-                                                    <div className="ml10">
-                                                        <label className='mb-2'><Field type="checkbox" name="design_by" value={option.value} /> {option.label}</label>
-                                                    </div>
-                                                )
-                                            })
-                                        }
-                                    </div>
+                                    {
+                                        selectedFields.find(ele => ele.value === "design_by") &&
+                                        <div>
+                                            <div className="lbl">To be Design:</div>
+                                            <div role="group" aria-labelledby="my-radio-group">
+                                                {
+                                                    design_options &&
+                                                    design_options.map((option, index) => {
+                                                        return (
+                                                            <div className="ml10">
+                                                                <label className='mb-2'><Field type="checkbox" name="design_by" value={option.value} /> {option.label}</label>
+                                                            </div>
+                                                        )
+                                                    })
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+
 
 
 
@@ -539,6 +603,6 @@ export default function OrderForm() {
                     </Card>
                 </Container>
             </RootStyle>
-        </Page>
+        </Page >
     );
 }

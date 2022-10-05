@@ -118,7 +118,11 @@
 
 .react-loader-container-main {
     left: 50% !important;
-    top : 50% !important
+    top: 50% !important
+}
+
+.multi-drpdown {
+    margin-bottom: 3%;
 }
 
 /* Customised Form Css end*/
