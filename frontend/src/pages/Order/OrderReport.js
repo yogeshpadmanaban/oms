@@ -48,46 +48,24 @@ import { components } from "react-select";
 
 
 const fileldOptions = [
-    { id: 'customer_name', value: 'customer_name', label: 'Customer Name', alignRight: false },
-    { id: 'product_id', value: 'product_id', label: 'Product Name', alignRight: false },
-    { id: 'weight', value: 'weight', label: 'Product Weight', alignRight: false },
-    { id: 'order_image', value: 'order_image', label: 'Order Image', alignRight: false },
-    { id: 'delivery_date', value: 'delivery_date', label: 'Order Date', alignRight: false },
-    { id: 'metal_provided', value: 'metal_provided', label: 'Metal Provided', alignRight: false },
-    { id: 'metal_provided_date', value: 'metal_provided_date', label: 'Metal Provided Date', alignRight: false },
-    { id: 'order_received', value: 'order_received', label: 'Order Received', alignRight: false },
-    { id: 'order_due_date', value: 'order_due_date', label: 'Due Date', alignRight: false },
-    { id: 'status', value: 'status', label: 'Status', alignRight: false },
-    { id: '', value: 'action', label: 'Action', alignRight: false }
+    { id: 'jc_number', label: 'Jc Number', alignRight: false },
 ];
 
-// Initially get this data from api
 
-// const TABLE_HEAD = [
 
-//     { id: 'customer_name', label: 'Customer Name', alignRight: false },
-//     { id: 'product_id', label: 'Product Name', alignRight: false },
-//     { id: 'weight', label: 'Product Weight', alignRight: false },
-//     { id: 'order_image', label: 'Order Image', alignRight: false },
-//     { id: 'delivery_date', label: 'Order Date', alignRight: false },
-//     { id: 'metal_provided', label: 'Metal Provided', alignRight: false },
-//     { id: 'metal_provided_date', label: 'Metal Provided Date', alignRight: false },
-//     { id: 'order_received', label: 'Order Received', alignRight: false },
-//     { id: 'order_due_date', label: 'Due Date', alignRight: false },
-//     { id: 'status', label: 'Status', alignRight: false },
-//     { id: '', label: 'Action', alignRight: false }
-
-//     // { id: 'order_id', label: 'Order Id', alignRight: false },
-//     // { id: 'jc_number', label: 'Jc Number', alignRight: false },
-//     // { id: 'product_type', label: 'Product Type', alignRight: false },
-//     // { id: 'category_name', label: 'Product Category', alignRight: false },
-//     // { id: 'purity', label: 'Purity', alignRight: false },
-//     // { id: 'quantity', label: 'Quantity', alignRight: false },
-//     // { id: 'design_by', label: 'Design Using', alignRight: false },
-//     // { id: 'order_details', label: 'Order Details', alignRight: false },
-//     // { id: 'user_status', label: 'Assigner Status', alignRight: false },
-
-// ];
+const INTIAL_TABLE_HEAD = [
+    { id: 'customer_name', label: 'Customer Name', alignRight: false },
+    { id: 'product_id', label: 'Product Name', alignRight: false },
+    { id: 'weight', label: 'Product Weight', alignRight: false },
+    { id: 'order_image', label: 'Order Image', alignRight: false },
+    { id: 'delivery_date', label: 'Order Date', alignRight: false },
+    { id: 'metal_provided', label: 'Metal Provided', alignRight: false },
+    { id: 'metal_provided_date', label: 'Metal Provided Date', alignRight: false },
+    { id: 'order_received', label: 'Order Received', alignRight: false },
+    { id: 'order_due_date', label: 'Due Date', alignRight: false },
+    { id: 'status', label: 'Status', alignRight: false },
+    { id: '', label: 'Action', alignRight: false }
+];
 
 
 
@@ -167,7 +145,7 @@ export default function OrderReport() {
         const initData = async (data) => {
 
             setSelectedFields([]) // initially get filedOption form api
-            SetTableHead([])  // Set fields option into table head
+            SetTableHead(INTIAL_TABLE_HEAD)
 
             let response = await getorderData('order_details', data);
             if (response && response.data.rows) {
@@ -461,10 +439,10 @@ export default function OrderReport() {
     };
 
     const handlefieldChange = async (selected) => {
-        console.log("selected", selected);
         setSelectedFields(selected);
-        SetTableHead(selected)
-        // Need api her for updating fileds
+        let updateTableHEAD = [...TABLE_HEAD, ...selected];
+        console.log("updateTableHEAD", updateTableHEAD);
+        SetTableHead(updateTableHEAD);
 
     };
 
@@ -565,52 +543,61 @@ export default function OrderReport() {
                                                     selected={isItemSelected}
                                                     aria-checked={isItemSelected}
                                                 >
-                                                    {
-                                                        selectedFields.find(ele => ele.id === "customer_name") &&
-                                                        <TableCell padding="checkbox">
-                                                            <Checkbox checked={isItemSelected} onChange={(event) => handleClick(id)} />
-                                                        </TableCell>
-                                                    }
 
-                                                    {
-                                                        selectedFields.find(ele => ele.id === "customer_name") &&
-                                                        <TableCell align="left">{customer_name}</TableCell>
-                                                    }
-
-                                                    {
-                                                        selectedFields.find(ele => ele.id === "product_id") &&
-                                                        <TableCell align="left">{name}</TableCell>
-                                                    }
-
-                                                    {
-                                                        selectedFields.find(ele => ele.id === "weight") &&
-                                                        <TableCell align="left">{weight ?? '-'}</TableCell>
-                                                    }
-
-                                                    {
-                                                        selectedFields.find(ele => ele.id === "order_image") &&
-                                                        <TableCell component="th" scope="row" padding="none">
-                                                            <Stack direction="row" alignItems="center" spacing={2}>
-                                                                <Avatar className="img_enlarge" alt={customer_name} src={baseUrl + order_image} />
-                                                            </Stack>
-                                                        </TableCell>
-                                                    }
-
-                                                    {
-                                                        selectedFields.find(ele => ele.id === "delivery_date") &&
-                                                        <TableCell align="left">{delivery_date ? moment(delivery_date).format('DD/MM/YYYY') : '-'}</TableCell>
-                                                    }
-
-                                                    {
-                                                        selectedFields.find(ele => ele.id === "metal_provided") &&
-                                                        <TableCell align="left" onClick={() => onmetalstatusChange(id)}>
-                                                            <Iconify
-                                                                icon={metal_provided === null || metal_provided === '0' ? 'charm:cross' :
-                                                                    'typcn:tick'}
-                                                                sx={{ width: 25, height: 25, ml: 1 }}
+                                                    <TableCell padding="checkbox">
+                                                        <Checkbox checked={isItemSelected} onChange={(event) => handleClick(id)} />
+                                                    </TableCell>
+                                                    <TableCell align="left">{customer_name}</TableCell>
+                                                    <TableCell align="left">{name}</TableCell>
+                                                    <TableCell align="left">{weight ?? '-'}</TableCell>
+                                                    <TableCell component="th" scope="row" padding="none">
+                                                        <Stack direction="row" alignItems="center" spacing={2}>
+                                                            <Avatar className="img_enlarge" alt={customer_name} src={baseUrl + order_image} />
+                                                        </Stack>
+                                                    </TableCell>
+                                                    <TableCell align="left">{delivery_date ? moment(delivery_date).format('DD/MM/YYYY') : '-'}</TableCell>
+                                                    <TableCell align="left" onClick={() => onmetalstatusChange(id)}>
+                                                        <Iconify
+                                                            icon={metal_provided === null || metal_provided === '0' ? 'charm:cross' :
+                                                                'typcn:tick'}
+                                                            sx={{ width: 25, height: 25, ml: 1 }}
+                                                        />
+                                                    </TableCell>
+                                                    <TableCell align="left">
+                                                        <div style={{ display: "flex" }}>
+                                                            <EditText
+                                                                name="metal_provided_date"
+                                                                type="date"
+                                                                value={id === currentId ? text : metal_provided_date ? moment(metal_provided_date).format('YYYY-MM-DD') : 'Enter your date'}
+                                                                inputClassName='bg-success'
+                                                                onChange={(e) => handleChange(e, id)}
+                                                            // onSave={handleSave}
                                                             />
-                                                        </TableCell>
-                                                    }
+                                                            <Iconify align="right" onClick={handleSave}
+                                                                icon='typcn:tick'
+                                                                sx={{ width: 25, height: 25, mb: 1 }}
+                                                            />
+                                                        </div>
+                                                    </TableCell>
+
+                                                    <TableCell align="left" onClick={() => on_order_received(id)}>
+                                                        <Iconify
+                                                            icon={order_received === null || order_received === '0' ? 'charm:cross' :
+                                                                'typcn:tick'}
+                                                            sx={{ width: 25, height: 25, ml: 1 }}
+                                                        />
+                                                    </TableCell>
+
+                                                    <TableCell align="left">{order_due_date ? moment(order_due_date).format('DD/MM/YYYY') : '-'}
+                                                    </TableCell>
+
+                                                    <TableCell align="left" onClick={() => onstatusChange(id)}>
+                                                        <Iconify
+                                                            icon={status === '1' ? 'charm:cross' :
+                                                                'typcn:tick'}
+                                                            sx={{ width: 25, height: 25, ml: 1 }}
+                                                        />
+                                                    </TableCell>
 
                                                     {/* <TableCell className='highlight_cell' align="left">{order_id}</TableCell>
                                                     <TableCell align="left">{jc_number}</TableCell>
@@ -620,79 +607,25 @@ export default function OrderReport() {
                                                     <TableCell align="left">{quantity}</TableCell>
                                                     <TableCell align="left">{design_by}</TableCell> */}
                                                     {/* <TableCell align="left">{order_details}</TableCell> */}
-
-
                                                     {/* <TableCell align="left">{metal_provided_date ? moment(metal_provided_date).format('YYYY/MM/DD') : '-'}
                                                     </TableCell> */}
 
-                                                    {
-                                                        selectedFields.find(ele => ele.id === "metal_provided_date") &&
-                                                        <div>
-                                                            <TableCell align="left">
-                                                                <div style={{ display: "flex" }}>
-                                                                    <EditText
-                                                                        name="metal_provided_date"
-                                                                        type="date"
-                                                                        value={id === currentId ? text : metal_provided_date ? moment(metal_provided_date).format('YYYY-MM-DD') : 'Enter your date'}
-                                                                        inputClassName='bg-success'
-                                                                        onChange={(e) => handleChange(e, id)}
-                                                                    // onSave={handleSave}
-                                                                    />
-                                                                    <Iconify align="right" onClick={handleSave}
-                                                                        icon='typcn:tick'
-                                                                        sx={{ width: 25, height: 25, mb: 1 }}
-                                                                    />
-                                                                </div>
-                                                            </TableCell>
-                                                        </div>
 
-                                                    }
 
+                                                    <TableCell align="center">
+                                                        <UserMoreMenu
+                                                            url={'/admin/edit_order/' + base64_encode(id)}
+                                                            selectedList={selected}
+                                                            onDelete={ondeleteClick}
+                                                            rowId={id}
+                                                        />
+                                                    </TableCell>
 
                                                     {
-                                                        selectedFields.find(ele => ele.id === "order_received") &&
-                                                        <TableCell align="left" onClick={() => on_order_received(id)}>
-                                                            <Iconify
-                                                                icon={order_received === null || order_received === '0' ? 'charm:cross' :
-                                                                    'typcn:tick'}
-                                                                sx={{ width: 25, height: 25, ml: 1 }}
-                                                            />
-                                                        </TableCell>
+                                                        TABLE_HEAD.find(ele => ele.id === "jc_number") &&
+                                                        <TableCell align="left">{jc_number}</TableCell>
                                                     }
 
-
-
-                                                    {
-                                                        selectedFields.find(ele => ele.id === "order_due_date") &&
-                                                        <div>
-                                                            <TableCell align="left">{order_due_date ? moment(order_due_date).format('DD/MM/YYYY') : '-'}
-                                                            </TableCell>
-
-                                                        </div>
-                                                    }
-
-                                                    {
-                                                        selectedFields.find(ele => ele.id === "status") &&
-                                                        <TableCell align="left" onClick={() => onstatusChange(id)}>
-                                                            <Iconify
-                                                                icon={status === '1' ? 'charm:cross' :
-                                                                    'typcn:tick'}
-                                                                sx={{ width: 25, height: 25, ml: 1 }}
-                                                            />
-                                                        </TableCell>
-                                                    }
-
-                                                    {
-                                                        selectedFields.find(ele => ele.value === "action") &&
-                                                        <TableCell align="center">
-                                                            <UserMoreMenu
-                                                                url={'/admin/edit_order/' + base64_encode(id)}
-                                                                selectedList={selected}
-                                                                onDelete={ondeleteClick}
-                                                                rowId={id}
-                                                            />
-                                                        </TableCell>
-                                                    }
 
                                                 </TableRow>
                                             );
