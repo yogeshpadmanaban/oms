@@ -17,6 +17,7 @@ use App\ProductDetails;
 use App\CustomerDetails;
 use App\OrderDetails;
 use App\OrderImages;
+use App\WorkerDetails;
 use Symfony\Component\Finder\SplFileInfo;
 
 
@@ -177,6 +178,8 @@ class PublicController extends Controller
             }
         }
 
+        $worker_id = $request->input('worker_id');
+
         $product_type = ProductDetails::select('product_type')->where('product_id','=',$pdt_id)->first();
 
         $order_data = [
@@ -184,7 +187,7 @@ class PublicController extends Controller
             'product_type' => $product_type['product_type'],
             'product_id' => $request->input('product_id'),
             'customer_id' => $request->input('customer_id'),
-            'worker_id' => $request->input('worker_id'),
+            'worker_id' => $worker_id,
             // 'mould_id' => $request->input('mould_name'),
             'purity' => $request->input('purity') == 'null' ? NULL : $request->input('purity'),
             'jc_number' => $request->input('jc_number') == 'null' ? NULL : $request->input('jc_number'),
@@ -208,7 +211,18 @@ class PublicController extends Controller
             OrderImages::insert(['order_id'=>$order_data['order_id'],'order_image'=>$image]);
         }
 
+
+
         $res = OrderDetails::updateOrCreate(['id'=>$id],$order_data); 
+
+        // To get worker pending metal
+		$metal_pending = OrderDetails::get_pending_metal($worker_id);
+
+
+        // return $metal_pending;
+
+        WorkerDetails::where('worker_id',$worker_id)->update(['metal_pending' => $metal_pending]);
+
 		$res['message'] = 'Order data updated successfully!';
 
         return $res;   

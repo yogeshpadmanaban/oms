@@ -467,15 +467,15 @@ export default function WorkersReport() {
                                                     <TableCell align="left">{worker_name}</TableCell>
 
 
-                                                    <TableCell align="left">
-                                                        <EditText
+                                                    <TableCell align="left">{metal_pending}
+                                                        {/* <EditText
                                                             name="metal_pending"
                                                             type="number"
                                                             value={worker_id === currentId ? text : metal_pending ?? 'Enter weight'}
                                                             inputClassName='bg-success'
                                                             onChange={(e) => handleChange(e, worker_id)}
                                                             onSave={handleSave}
-                                                        />
+                                                        /> */}
                                                     </TableCell>
 
 

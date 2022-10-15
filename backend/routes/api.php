@@ -103,8 +103,8 @@ Route::post('/login/admin', [LoginController::class,'login'])->name('login.submi
         Route::get('/admin/order_details/{user_id?}/{user_role?}', [OrderController::class,'fetch_order_details']);
         Route::post('/admin/order_metal_change_status/{id}', [OrderController::class,'metal_status_change']);
         Route::post('/admin/order_bulk_metal_status_change/{data}', [OrderController::class,'bulk_metal_status_change']);
-        Route::post('/admin/order_received_status/{id}', [OrderController::class,'order_received_status']);
-        Route::post('/admin/order_bulk_received_change/{data}', [OrderController::class,'order_bulk_received_change']);
+        // Route::post('/admin/order_received_status/{id}', [OrderController::class,'order_received_status']);
+        // Route::post('/admin/order_bulk_received_change/{data}', [OrderController::class,'order_bulk_received_change']);
         Route::post('/admin/order_change_status/{id}', [OrderController::class,'status_change']);
         Route::post('/admin/order_delete/{id}', [OrderController::class,'delete']);
         Route::post('/admin/order_bulk_status_change/{data}', [OrderController::class,'bulk_status_change']);

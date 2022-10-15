@@ -103,7 +103,15 @@ class OrderController extends Controller
 		$order_status = OrderDetails::find($id);
 		$status = $order_status->metal_provided == '1' ? '0' : '1';
 		$row_data = OrderDetails::where('id',$id)->update(['metal_provided' => $status]);
-		
+
+		if($status == '1'){
+			// To get worker pending metal
+			$worker_id = $order_status->worker_id;
+			$metal_pending = OrderDetails::get_pending_metal($worker_id );
+
+			WorkerDetails::where('worker_id',$worker_id)->update(['metal_pending' => $metal_pending-$order_status->weight]);			
+		}
+
 		return response()->json([
 			'success' => 'metal status changed successfully!',
 			'status' => $status
@@ -126,6 +134,14 @@ class OrderController extends Controller
 
 			$status = $order_status->metal_provided == '1' ? '0' : '1';
 			$row_data = OrderDetails::where('id',$data[$i])->update(['metal_provided' => $status]);
+
+			if($status == '1'){
+				// To get worker pending metal
+				$worker_id = $order_status->worker_id;
+				$metal_pending = OrderDetails::get_pending_metal($worker_id );
+	
+				WorkerDetails::where('worker_id',$worker_id)->update(['metal_pending' => $metal_pending-$order_status->weight]);			
+			}
 		}
 
 		return response()->json([

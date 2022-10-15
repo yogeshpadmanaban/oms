@@ -34,14 +34,9 @@ const RootStyle = styled('div')(({ theme }) => ({
 }));
 
 const fileldOptions = [
-    { value: "weight", label: "Weight" },
-    { value: "order_image", label: "OrderImage" },
-    { value: "delivery_date", label: "OrderDate" },
     { value: "metal_provided_date", label: "MetalStatusDate" },
-    { value: "order_due_date", label: "OrderDueDate" },
     { value: "purity", label: "Purity" },
     { value: "jc_number", label: "JcNumber" },
-    { value: "quantity", label: "Quantity" },
     { value: "design_by", label: "TobeDesign" },
 ];
 
@@ -74,7 +69,7 @@ export default function OrderForm() {
         { label: 'Cutting', value: 'cutting' },
     ];
 
-    const ustomerformSchema = Yup.object().shape({
+    const customerformSchema = Yup.object().shape({
 
         id: '',
         order_id: '',
@@ -86,7 +81,7 @@ export default function OrderForm() {
         metal_provided_date: '',
         order_due_date: '',
         jc_number: '',
-        weight: '',
+        weight: Yup.string().required('Weight is requried'),
         quantity: '',
         design_by: '',
         delivery_date: '',
@@ -117,7 +112,7 @@ export default function OrderForm() {
             temp_order_img: ''
 
         },
-        validationSchema: ustomerformSchema,
+        validationSchema: customerformSchema,
         onSubmit: async (values) => {
 
             let formData = new FormData();
@@ -393,34 +388,34 @@ export default function OrderForm() {
                                         <div className="selerr">{errors.worker_id}</div>
                                     }
 
-                                    {
-                                        selectedFields.find(ele => ele.value === "weight") &&
-                                        <TextField
-                                            fullWidth
-                                            type="number"
-                                            label="Weight"
-                                            {...getFieldProps('weight')}
-                                            error={Boolean(touched.jc_number && errors.jc_number)}
-                                            helperText={touched.jc_number && errors.jc_number}
-                                        />
+
+                                    <TextField
+                                        fullWidth
+                                        type="number"
+                                        label="Weight"
+                                        {...getFieldProps('weight')}
+                                        error={Boolean(touched.jc_number && errors.jc_number)}
+                                        helperText={touched.jc_number && errors.jc_number}
+                                    />
+                                    
+                                    {errors.weight && touched.weight &&
+                                        <div className="selerr">{errors.weight}</div>
                                     }
 
-                                    {
-                                        selectedFields.find(ele => ele.value === "order_image") &&
-                                        <TextField
-                                            fullWidth
-                                            type="file"
-                                            label="Upload Order Image"
-                                            name="order_image"
-                                            InputLabelProps={{ shrink: true }}
-                                            onChange={(event) => {
-                                                console.log(event.currentTarget.files[0]);
-                                                onfileupload('order_image', event.currentTarget.files[0]);
-                                            }}
-                                            error={Boolean(touched.order_image && errors.order_image)}
-                                            helperText={touched.order_image && errors.order_image}
-                                        />
-                                    }
+                                    <TextField
+                                        fullWidth
+                                        type="file"
+                                        label="Upload Order Image"
+                                        name="order_image"
+                                        InputLabelProps={{ shrink: true }}
+                                        onChange={(event) => {
+                                            console.log(event.currentTarget.files[0]);
+                                            onfileupload('order_image', event.currentTarget.files[0]);
+                                        }}
+                                        error={Boolean(touched.order_image && errors.order_image)}
+                                        helperText={touched.order_image && errors.order_image}
+                                    />
+
 
                                     {/* {
                                         temp_order_img &&
@@ -456,8 +451,6 @@ export default function OrderForm() {
 
                                         ))} */}
 
-                                    {
-                                        selectedFields.find(ele => ele.value === "delivery_date") &&
                                         <TextField
                                             fullWidth
                                             type="date"
@@ -467,8 +460,6 @@ export default function OrderForm() {
                                             error={Boolean(touched.delivery_date && errors.delivery_date)}
                                             helperText={touched.delivery_date && errors.delivery_date}
                                         />
-                                    }
-
 
                                     {/* <div className="lbl">Metal Status:</div>
                                     <div role="group" aria-labelledby="my-radio-group1">
@@ -498,18 +489,15 @@ export default function OrderForm() {
                                         />
                                     }
 
-                                    {
-                                        selectedFields.find(ele => ele.value === "order_due_date") &&
-                                        <TextField
-                                            fullWidth
-                                            type="date"
-                                            label="Order Due Date"
-                                            {...getFieldProps('order_due_date')}
-                                            InputLabelProps={{ shrink: true }}
-                                            error={Boolean(touched.order_due_date && errors.order_due_date)}
-                                            helperText={touched.order_due_date && errors.order_due_date}
-                                        />
-                                    }
+                                    <TextField
+                                        fullWidth
+                                        type="date"
+                                        label="Order Due Date"
+                                        {...getFieldProps('order_due_date')}
+                                        InputLabelProps={{ shrink: true }}
+                                        error={Boolean(touched.order_due_date && errors.order_due_date)}
+                                        helperText={touched.order_due_date && errors.order_due_date}
+                                    />
 
                                     {
                                         selectedFields.find(ele => ele.value === "purity") &&
@@ -544,17 +532,14 @@ export default function OrderForm() {
 
                                     }
 
-                                    {
-                                        selectedFields.find(ele => ele.value === "Quantity") &&
-                                        <TextField
-                                            fullWidth
-                                            type="number"
-                                            label="Quantity"
-                                            {...getFieldProps('quantity')}
-                                            error={Boolean(touched.quantity && errors.quantity)}
-                                            helperText={touched.quantity && errors.quantity}
-                                        />
-                                    }
+                                    <TextField
+                                        fullWidth
+                                        type="number"
+                                        label="Quantity"
+                                        {...getFieldProps('quantity')}
+                                        error={Boolean(touched.quantity && errors.quantity)}
+                                        helperText={touched.quantity && errors.quantity}
+                                    />
 
                                     {
                                         selectedFields.find(ele => ele.value === "design_by") &&

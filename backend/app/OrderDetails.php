@@ -139,4 +139,15 @@ class OrderDetails extends Model
         $data['menu']="order_list";
 		return ($data['table_data']);
     }
+
+    public static function get_pending_metal($worker_id = '')
+    {
+        // To update total metal pendings for worker
+        $metal_pending = DB::table('worker_details','wd')
+                            ->leftjoin('order_details AS od','od.worker_id','=','wd.worker_id')
+                            ->where('wd.worker_id',$worker_id)
+                            ->sum('od.weight');
+        
+        return $metal_pending;
+    }
 }
