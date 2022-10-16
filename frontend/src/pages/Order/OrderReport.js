@@ -48,7 +48,8 @@ import { components } from "react-select";
 
 
 const fileldOptions = [
-    { id: 'weight', label: 'Product Weight', alignRight: false },
+    { id: 'weight', value: "weight", label: 'Product Weight', alignRight: false },
+    { id: 'jc_number', value: "jc_number", label: 'Jc Number', alignRight: false }
 ];
 
 const INTIAL_TABLE_HEAD = [
@@ -436,10 +437,9 @@ export default function OrderReport() {
 
     const handlefieldChange = async (selected) => {
         setSelectedFields(selected);
-        let updateTableHEAD = [...TABLE_HEAD, ...selected];
+        let updateTableHEAD = [...INTIAL_TABLE_HEAD, ...selected];
         console.log("updateTableHEAD", updateTableHEAD);
         SetTableHead(updateTableHEAD);
-
     };
 
     const Option = (props) => {
@@ -545,7 +545,6 @@ export default function OrderReport() {
                                                     </TableCell>
                                                     <TableCell align="left">{customer_name}</TableCell>
                                                     <TableCell align="left">{name}</TableCell>
-                                                    {/* <TableCell align="left">{weight ?? '-'}</TableCell> */}
                                                     <TableCell component="th" scope="row" padding="none">
                                                         <Stack direction="row" alignItems="center" spacing={2}>
                                                             <Avatar className="img_enlarge" alt={customer_name} src={baseUrl + order_image} />
@@ -567,12 +566,12 @@ export default function OrderReport() {
                                                                 value={id === currentId ? text : metal_provided_date ? moment(metal_provided_date).format('YYYY-MM-DD') : 'Enter your date'}
                                                                 inputClassName='bg-success'
                                                                 onChange={(e) => handleChange(e, id)}
-                                                            // onSave={handleSave}
+                                                                onSave={handleSave}
                                                             />
-                                                            <Iconify align="right" onClick={handleSave}
+                                                            {/* <Iconify align="right" onClick={handleSave}
                                                                 icon='typcn:tick'
                                                                 sx={{ width: 25, height: 25, mb: 1 }}
-                                                            />
+                                                            /> */}
                                                         </div>
                                                     </TableCell>
 
@@ -589,7 +588,7 @@ export default function OrderReport() {
                                                     </TableCell>
 
                                                     {/* <TableCell className='highlight_cell' align="left">{order_id}</TableCell>
-                                                    <TableCell align="left">{jc_number}</TableCell>
+                                                    
                                                     <TableCell align="left">{product_type}</TableCell>
                                                     <TableCell align="left">{category_name}</TableCell>
                                                     <TableCell align="left">{purity}</TableCell>
@@ -613,6 +612,11 @@ export default function OrderReport() {
                                                     {
                                                         TABLE_HEAD.find(ele => ele.id === "weight") &&
                                                         <TableCell align="left">{weight}</TableCell>
+                                                    }
+
+                                                    {
+                                                        TABLE_HEAD.find(ele => ele.id === "jc_number") &&
+                                                        <TableCell align="left">{jc_number}</TableCell>
                                                     }
 
 
