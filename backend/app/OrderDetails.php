@@ -146,7 +146,8 @@ class OrderDetails extends Model
         $metal_pending = DB::table('worker_details','wd')
                             ->leftjoin('order_details AS od','od.worker_id','=','wd.worker_id')
                             ->where('wd.worker_id',$worker_id)
-                            ->sum('od.weight');
+                            ->where('od.metal_provided','0');
+                            
         
         return $metal_pending;
     }

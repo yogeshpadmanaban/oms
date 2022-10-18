@@ -107,9 +107,9 @@ class OrderController extends Controller
 		if($status == '1'){
 			// To get worker pending metal
 			$worker_id = $order_status->worker_id;
-			$metal_pending = OrderDetails::get_pending_metal($worker_id );
+			$metal_pending = OrderDetails::get_pending_metal($worker_id )->sum('wd.metal_pending');
 
-			WorkerDetails::where('worker_id',$worker_id)->update(['metal_pending' => $metal_pending-$order_status->weight]);			
+			WorkerDetails::where('worker_id',$worker_id)->update(['metal_pending' => $metal_pending]);			
 		}
 
 		return response()->json([
@@ -156,17 +156,17 @@ class OrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-	public function order_received_status($id)
-	{
-		$order_status = OrderDetails::find($id);
-		$status = $order_status->order_received == '1' ? '0' : '1';
-		$row_data = OrderDetails::where('id',$id)->update(['order_received' => $status]);
+	// public function order_received_status($id)
+	// {
+	// 	$order_status = OrderDetails::find($id);
+	// 	$status = $order_status->order_received == '1' ? '0' : '1';
+	// 	$row_data = OrderDetails::where('id',$id)->update(['order_received' => $status]);
 		
-		return response()->json([
-			'success' => 'order received status changed successfully!',
-			'status' => $status
-		]);
-	}
+	// 	return response()->json([
+	// 		'success' => 'order received status changed successfully!',
+	// 		'status' => $status
+	// 	]);
+	// }
 
 	/**
      * To change multiple metal status 
@@ -174,23 +174,23 @@ class OrderController extends Controller
      * @param  int  $data
      * @return \Illuminate\Http\Response
      */
-	public function order_bulk_received_change($data)
-	{
-		$data = json_decode(stripslashes($data));
-		$data_len = count($data);
+	// public function order_bulk_received_change($data)
+	// {
+	// 	$data = json_decode(stripslashes($data));
+	// 	$data_len = count($data);
 
-		for($i=0; $i<$data_len; $i++){
-			$order_status = OrderDetails::find($data[$i]);
+	// 	for($i=0; $i<$data_len; $i++){
+	// 		$order_status = OrderDetails::find($data[$i]);
 
-			$status = $order_status->order_received == '1' ? '0' : '1';
-			$row_data = OrderDetails::where('id',$data[$i])->update(['order_received' => $status]);
-		}
+	// 		$status = $order_status->order_received == '1' ? '0' : '1';
+	// 		$row_data = OrderDetails::where('id',$data[$i])->update(['order_received' => $status]);
+	// 	}
 
-		return response()->json([
-			'success' => 'status changed successfully!',
-			'status' => $status
-		]);
-	}
+	// 	return response()->json([
+	// 		'success' => 'status changed successfully!',
+	// 		'status' => $status
+	// 	]);
+	// }
 
     /**
      * To change status of order.

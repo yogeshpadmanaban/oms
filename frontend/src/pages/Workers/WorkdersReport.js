@@ -467,7 +467,7 @@ export default function WorkersReport() {
                                                     <TableCell align="left">{worker_name}</TableCell>
 
 
-                                                    <TableCell align="left">{metal_pending}
+                                                    <TableCell align="left">{metal_pending ?? '-'}
                                                         {/* <EditText
                                                             name="metal_pending"
                                                             type="number"

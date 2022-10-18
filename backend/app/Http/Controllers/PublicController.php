@@ -216,7 +216,7 @@ class PublicController extends Controller
         $res = OrderDetails::updateOrCreate(['id'=>$id],$order_data); 
 
         // To get worker pending metal
-		$metal_pending = OrderDetails::get_pending_metal($worker_id);
+		$metal_pending = OrderDetails::get_pending_metal($worker_id)->sum('od.weight');
 
 
         // return $metal_pending;

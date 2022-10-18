@@ -14,7 +14,7 @@ class ProductDetails extends Model
 
     protected $fillable = [
         'creditors',
-    	// 'category',
+    	'category',
 		'name',
 		'product_image',
         'product_details',
