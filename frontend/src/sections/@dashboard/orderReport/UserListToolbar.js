@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
-
+import React, { useEffect, useState, useRef } from "react";
 // material
 import { styled } from '@mui/material/styles';
 import {
@@ -51,12 +51,13 @@ UserListToolbar.propTypes = {
   onstausChange: PropTypes.func,
   onmetalstatusChange: PropTypes.func,
   getRecord: PropTypes.func,
-  onexport: PropTypes.func
+  onexport: PropTypes.func,
+  onmetalProvide: PropTypes.func
 };
 
 
 export default function UserListToolbar({ numSelected, filterName, onFilterName,
-  onDelete, onstausChange, getRecord, onexport, data, onmetalstatusChange }) {
+  onDelete, onstausChange, getRecord, onexport, data, onmetalstatusChange, onmetalProvide }) {
 
   const filterSchema = Yup.object().shape({
     from_date: Yup.string(),
@@ -81,7 +82,34 @@ export default function UserListToolbar({ numSelected, filterName, onFilterName,
     },
   });
 
-  const { errors, touched, handleSubmit, getFieldProps } = formik;
+  const { errors, touched, values, handleSubmit, getFieldProps, setFieldValue } = formik;
+  const [metalprovided, setmetalprovided] = useState([]);
+
+  useEffect(() => {
+
+    initData();
+  }, []);
+
+  const initData = () => {
+
+    const metalprovided = [
+      {
+        "id": '2',
+        "name": "All",
+      },
+      {
+        "id": '0',
+        "name": "No",
+      },
+      {
+        "id": '1',
+        "name": "Yes",
+      }
+    ];
+
+    setmetalprovided(metalprovided);
+  }
+
 
   return (
     <div>
@@ -136,7 +164,7 @@ export default function UserListToolbar({ numSelected, filterName, onFilterName,
           </div>
 
         }
-        
+
         {
           data > 0 && numSelected === 0 &&
           <Tooltip title="Export PDF">
@@ -171,6 +199,25 @@ export default function UserListToolbar({ numSelected, filterName, onFilterName,
               error={Boolean(touched.to_date && errors.to_date)}
               helperText={touched.to_date && errors.to_date}
             />
+
+            <div>
+              {/* <div className="lbl">Metal Provided</div> */}
+              <select name="metalstatus" value={values.id}
+                onChange={(event) => {
+                  onmetalProvide(event.target.value)
+                }}
+                className="selectfield"
+              >
+                {
+                  metalprovided &&
+                  metalprovided.map((list, index) => {
+                    return (
+                      <option className="seloptionfield" value={list.id} label={list.name}> </option>
+                    )
+                  })
+                }
+              </select>
+            </div>
 
             <Button variant="contained" type="submit">
               Search by Date

@@ -127,6 +127,7 @@ export default function OrderReport() {
     const [rowsPerPage, setRowsPerPage] = useState(5);  // setrowsPerPage
 
     const [List, setList] = useState([]);
+    const [originalList, setoriginalList] = useState([]);
 
     const [loading, setLoading] = useState(true);
 
@@ -151,6 +152,7 @@ export default function OrderReport() {
                     return new Date(a.order_due_date) - new Date(b.order_due_date);
                 });
                 setList(responseData);
+                setoriginalList(responseData);
                 setLoading(false);
             }
         }
@@ -442,6 +444,18 @@ export default function OrderReport() {
         SetTableHead(updateTableHEAD);
     };
 
+    const onmetalProvide = async (value) => {
+        let list;
+        if (Number(value) === 0 || Number(value) === 1) {
+            list = originalList.filter(x => Number(x.metal_provided) === Number(value));
+            setList(list)
+        }
+        else {
+            list = originalList;
+            setList(list)
+        }
+    }
+
     const Option = (props) => {
         return (
             <div>
@@ -481,7 +495,7 @@ export default function OrderReport() {
 
                 <Card>
                     <UserListToolbar data={List.length} numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName}
-                        onDelete={ondeleteClick} onstausChange={onstatusChange} getRecord={getRecord} onexport={exportPDF} onmetalstatusChange={onmetalstatusChange} />
+                        onDelete={ondeleteClick} onstausChange={onstatusChange} getRecord={getRecord} onexport={exportPDF} onmetalstatusChange={onmetalstatusChange} onmetalProvide={onmetalProvide} />
 
                     <Scrollbar>
                         <TableContainer sx={{ minWidth: 800 }}>
