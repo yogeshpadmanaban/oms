@@ -217,6 +217,7 @@ export default function UserListToolbar({ numSelected, filterName, onFilterName,
                   })
                 }
               </select>
+
             </div>
 
             <Button variant="contained" type="submit">

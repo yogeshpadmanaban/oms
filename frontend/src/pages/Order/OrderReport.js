@@ -441,7 +441,8 @@ export default function OrderReport() {
     const handlefieldChange = async (selected) => {
         setSelectedFields(selected);
         let updateTableHEAD = [...INTIAL_TABLE_HEAD, ...selected];
-        console.log("updateTableHEAD", updateTableHEAD);
+        let actionHEAD = updateTableHEAD.splice('8','1');
+        updateTableHEAD.push(...actionHEAD);
         SetTableHead(updateTableHEAD);
     };
 
@@ -613,15 +614,6 @@ export default function OrderReport() {
                                                     {/* <TableCell align="left">{metal_provided_date ? moment(metal_provided_date).format('YYYY/MM/DD') : '-'}
                                                     </TableCell> */}
 
-                                                    <TableCell align="center">
-                                                        <UserMoreMenu
-                                                            url={'/admin/edit_order/' + base64_encode(id)}
-                                                            selectedList={selected}
-                                                            onDelete={ondeleteClick}
-                                                            rowId={id}
-                                                        />
-                                                    </TableCell>
-
                                                     {
                                                         TABLE_HEAD.find(ele => ele.id === "worker_name") &&
                                                         <TableCell align="left">{worker_name}</TableCell>
@@ -636,6 +628,15 @@ export default function OrderReport() {
                                                         TABLE_HEAD.find(ele => ele.id === "jc_number") &&
                                                         <TableCell align="left">{jc_number ?? '-'}</TableCell>
                                                     }
+
+                                                    <TableCell align="center">
+                                                        <UserMoreMenu
+                                                            url={'/admin/edit_order/' + base64_encode(id)}
+                                                            selectedList={selected}
+                                                            onDelete={ondeleteClick}
+                                                            rowId={id}
+                                                        />
+                                                    </TableCell>
 
                                                 </TableRow>
                                             );
