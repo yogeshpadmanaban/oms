@@ -48,6 +48,7 @@ import { components } from "react-select";
 
 
 const fileldOptions = [
+    { id: 'worker_name', value: "worker_name", label: 'Worker Name', alignRight: false },
     { id: 'weight', value: "weight", label: 'Product Weight', alignRight: false },
     { id: 'jc_number', value: "jc_number", label: 'Jc Number', alignRight: false }
 ];
@@ -513,7 +514,7 @@ export default function OrderReport() {
                                     {filteredList &&
                                         filteredList.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
 
-                                            const { id, order_id, jc_number, product_type, category_name, name, customer_name, purity, weight, quantity, design_by, order_details,
+                                            const { id, order_id, jc_number, product_type, category_name, name, customer_name, purity, worker_name, weight, quantity, design_by, order_details,
                                                 order_image, delivery_date, status, metal_provided, metal_provided_date, order_due_date, due_days } = row;
 
                                             const isItemSelected = selected.indexOf(id) !== -1;
@@ -598,8 +599,6 @@ export default function OrderReport() {
                                                     {/* <TableCell align="left">{metal_provided_date ? moment(metal_provided_date).format('YYYY/MM/DD') : '-'}
                                                     </TableCell> */}
 
-
-
                                                     <TableCell align="center">
                                                         <UserMoreMenu
                                                             url={'/admin/edit_order/' + base64_encode(id)}
@@ -610,15 +609,19 @@ export default function OrderReport() {
                                                     </TableCell>
 
                                                     {
+                                                        TABLE_HEAD.find(ele => ele.id === "worker_name") &&
+                                                        <TableCell align="left">{worker_name}</TableCell>
+                                                    }
+
+                                                    {
                                                         TABLE_HEAD.find(ele => ele.id === "weight") &&
                                                         <TableCell align="left">{weight}</TableCell>
                                                     }
 
                                                     {
                                                         TABLE_HEAD.find(ele => ele.id === "jc_number") &&
-                                                        <TableCell align="left">{jc_number}</TableCell>
+                                                        <TableCell align="left">{jc_number ?? '-'}</TableCell>
                                                     }
-
 
                                                 </TableRow>
                                             );

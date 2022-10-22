@@ -17,7 +17,6 @@ use App\ProductDetails;
 use App\CustomerDetails;
 use App\OrderDetails;
 use App\OrderImages;
-use App\WorkerDetails;
 use Symfony\Component\Finder\SplFileInfo;
 
 
@@ -196,7 +195,7 @@ class PublicController extends Controller
             'weight' => $request->input('weight') == 'null' ? NULL : $request->input('weight'),
             'design_by' => $request->input('design_by'),
             'delivery_date' => $request->input('delivery_date') == 'null' ? NULL : $request->input('delivery_date'),
-            'metal_provided' => $request->input('metal_provided') == 'null' ? NULL : $request->input('metal_provided'),
+            'metal_provided' => $request->input('metal_provided') == '' ? '0' : $request->input('metal_provided'),
             'metal_provided_date' => $request->input('metal_provided_date') == 'null' ? NULL : $request->input('metal_provided_date'),
             'order_due_date' => $request->input('order_due_date') == 'null' ? NULL : $request->input('order_due_date'),
             'order_image' => $image,
@@ -211,17 +210,10 @@ class PublicController extends Controller
             OrderImages::insert(['order_id'=>$order_data['order_id'],'order_image'=>$image]);
         }
 
-
-
         $res = OrderDetails::updateOrCreate(['id'=>$id],$order_data); 
 
-        // To get worker pending metal
-		$metal_pending = OrderDetails::get_pending_metal($worker_id)->sum('od.weight');
-
-
-        // return $metal_pending;
-
-        WorkerDetails::where('worker_id',$worker_id)->update(['metal_pending' => $metal_pending]);
+		// To update worker pending metal
+		$pending_weight = OrderDetails::update_weight($worker_id );
 
 		$res['message'] = 'Order data updated successfully!';
 

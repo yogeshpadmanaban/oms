@@ -101,16 +101,13 @@ class OrderController extends Controller
 	public function metal_status_change($id)
 	{
 		$order_status = OrderDetails::find($id);
+		$worker_id = $order_status->worker_id;
+
 		$status = $order_status->metal_provided == '1' ? '0' : '1';
 		$row_data = OrderDetails::where('id',$id)->update(['metal_provided' => $status]);
 
-		if($status == '1'){
-			// To get worker pending metal
-			$worker_id = $order_status->worker_id;
-			$metal_pending = OrderDetails::get_pending_metal($worker_id )->sum('wd.metal_pending');
-
-			WorkerDetails::where('worker_id',$worker_id)->update(['metal_pending' => $metal_pending]);			
-		}
+		// To update worker pending metal
+		$pending_weight = OrderDetails::update_weight($worker_id );	
 
 		return response()->json([
 			'success' => 'metal status changed successfully!',
@@ -131,17 +128,13 @@ class OrderController extends Controller
 
 		for($i=0; $i<$data_len; $i++){
 			$order_status = OrderDetails::find($data[$i]);
+			$worker_id = $order_status->worker_id;
 
 			$status = $order_status->metal_provided == '1' ? '0' : '1';
 			$row_data = OrderDetails::where('id',$data[$i])->update(['metal_provided' => $status]);
 
-			if($status == '1'){
-				// To get worker pending metal
-				$worker_id = $order_status->worker_id;
-				$metal_pending = OrderDetails::get_pending_metal($worker_id );
-	
-				WorkerDetails::where('worker_id',$worker_id)->update(['metal_pending' => $metal_pending-$order_status->weight]);			
-			}
+			// To update worker pending metal
+			$pending_weight = OrderDetails::update_weight($worker_id );	
 		}
 
 		return response()->json([

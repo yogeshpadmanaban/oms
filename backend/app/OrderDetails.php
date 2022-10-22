@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
+use App\WorkerDetails;
 
 class OrderDetails extends Model
 {
@@ -140,15 +141,18 @@ class OrderDetails extends Model
 		return ($data['table_data']);
     }
 
-    public static function get_pending_metal($worker_id = '')
+    public static function update_weight($worker_id = '')
     {
         // To update total metal pendings for worker
         $metal_pending = DB::table('worker_details','wd')
                             ->leftjoin('order_details AS od','od.worker_id','=','wd.worker_id')
                             ->where('wd.worker_id',$worker_id)
-                            ->where('od.metal_provided','0');
+                            ->where('od.metal_provided','0')
+                            ->sum('od.weight');
+
+        // To update metal pending weight
+        WorkerDetails::where('worker_id',$worker_id)->update(['metal_pending' => $metal_pending]);
                             
-        
-        return $metal_pending;
+        return $metal_pending;  
     }
 }
